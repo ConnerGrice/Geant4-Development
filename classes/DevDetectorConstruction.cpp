@@ -24,12 +24,14 @@ void DevDetectorConstruction::DefineMaterials(){
 }
 
 void DevDetectorConstruction::ConstructStave(G4int numOfHCIs,G4String name) {
+	//Constants for all staves
 	const G4double HCIWidth = 15.0*mm;
 	const G4double plateLength = 160.0*mm;
 	const G4double plateThickness = 3*mm;
 	const G4double angle = M_PI/3.0;
 	const G4int sides = 6;
 
+	//Parameter calculations
 	const G4double plateWidth = getPlateWidth(numOfHCIs,HCIWidth);
 	const G4double plateRadius = getPlateRadius(plateWidth,angle,plateThickness);
 
@@ -52,7 +54,10 @@ void DevDetectorConstruction::ConstructStave(G4int numOfHCIs,G4String name) {
 
 	//Moves each cold plate to the correct position
 	for (int i = 0; i < sides; i++) {
+		//Copy assembly
 		pStave->MakeImprint(pLogicalWorld,translation,rotation);
+
+		//Rotate assembly
 		rotation->rotateZ(angle);
 		x = platePosition.getX()*sin(i*angle);
 		y = platePosition.getX()*cos(i*angle);
