@@ -1,0 +1,7 @@
+/run/numberOfThreads 1
+/run/initialize
+/control/verbose 0
+#/control/saveHistory
+/run/verbose 0
+
+/control/execute ../vis.mac

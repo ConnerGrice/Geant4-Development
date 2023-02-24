@@ -1,0 +1,33 @@
+#Sets dimensions and drivers for visualization window
+/vis/open OGL 600x600-0+0
+
+/vis/viewer/set/autoRefresh false
+/vis/verbose errors
+
+#Draws the geometries of detector  
+/vis/drawVolume
+
+#Sets the viewpoint position and light source position
+/vis/viewer/set/viewpointVector 0 0 0
+/vis/viewer/set/lightsVector -1 0 0
+
+#Defines the drawing of the particle trajectories
+/vis/scene/add/trajectories smooth
+/vis/modeling/trajectories/create/drawByParticleID
+/vis/modeling/trajectories/drawByParticleID-0/default/setDrawStepPts false
+
+/vis/scene/endOfEventAction accumulate
+
+#Adds a scale line to the enviroment
+#/vis/scene/add/scale
+/vis/scene/add/axes 0 0 0 1 cm
+
+#Makes the "World" shape invisible
+#/vis/geometry/set/visibility World 0 false
+
+
+#Draws detector as smooth surface
+/vis/viewer/set/style wireframe
+
+/vis/viewer/set/autoRefresh true
+/vis/verbose warnings
