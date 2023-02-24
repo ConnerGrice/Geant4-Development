@@ -1,3 +1,0 @@
-/home/local1/eclipse-workspace/Dev/build/CMakeFiles/rebuild_cache.dir
-/home/local1/eclipse-workspace/Dev/build/CMakeFiles/Dev.dir
-/home/local1/eclipse-workspace/Dev/build/CMakeFiles/edit_cache.dir
