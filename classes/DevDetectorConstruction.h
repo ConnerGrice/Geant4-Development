@@ -34,7 +34,7 @@ private:
 
 	//Methods for constructing a stave
 	inline G4double getPlateWidth(G4int numOfHCIs,G4double HCIWidth){
-		return (HCIWidth*numOfHCIs)/2.0;
+		return (HCIWidth*numOfHCIs)/2.0 + 4;
 	}
 	inline G4double getPlateRadius(G4double plateWidth, G4double angle, G4double plateThickness){
 		return (plateWidth/tan(angle/2.0))+plateThickness;
