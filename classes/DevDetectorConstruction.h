@@ -39,7 +39,7 @@ private:
 	inline G4double getPlateRadius(G4double plateWidth, G4double angle, G4double plateThickness){
 		return (plateWidth/tan(angle/2.0))+plateThickness;
 	}
-	void ConstructStave(G4int numOfHCIs, G4String name);
+	void ConstructStaves(G4int numOfHCIs, G4String name);
 
 	G4LogicalVolume* pLogicalWorld;
 	G4Material* pWorldMat;

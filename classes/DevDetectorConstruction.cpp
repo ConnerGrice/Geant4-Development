@@ -8,7 +8,7 @@
 #include "DevDetectorConstruction.h"
 
 DevDetectorConstruction::DevDetectorConstruction(){
-
+	//Defines that maertial variables
 	DefineMaterials();
 }
 
@@ -23,11 +23,11 @@ void DevDetectorConstruction::DefineMaterials(){
 	pPlateMat = pNist->FindOrBuildMaterial("G4_Si");
 }
 
-void DevDetectorConstruction::ConstructStave(G4int numOfHCIs,G4String name) {
+void DevDetectorConstruction::ConstructStaves(G4int numOfHCIs,G4String name) {
 	//Constants for all staves
 	const G4double HCIWidth = 15.0*mm;
 	const G4double plateLength = 160.0*mm;
-	const G4double plateThickness = 3*mm;
+	const G4double plateThickness = 240*um;
 	const G4double angle = M_PI/3.0;
 	const G4int sides = 6;
 
@@ -73,8 +73,9 @@ G4VPhysicalVolume* DevDetectorConstruction::Construct(){
 	G4PVPlacement* pPhysicalWorld = new G4PVPlacement(0,G4ThreeVector(0,0,0),pLogicalWorld,"WorldP",0,false,0,true);
 
 	//Generate staves
-	ConstructStave(3,"StaveC");
-	ConstructStave(4,"StaveD");
+	ConstructStaves(3,"StaveC");
+	ConstructStaves(4,"StaveD");
+	ConstructStaves(2,"StaveB");
 
 	return pPhysicalWorld;
 }
