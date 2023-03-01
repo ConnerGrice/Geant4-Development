@@ -27,6 +27,7 @@ DevPhysicsList::~DevPhysicsList() {
 }
 
 void DevPhysicsList::ConstructParticle(){
+
 	G4BaryonConstructor bConstructor;
 	bConstructor.ConstructParticle();
 

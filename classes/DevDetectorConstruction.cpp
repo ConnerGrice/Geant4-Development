@@ -35,15 +35,12 @@ void DevDetectorConstruction::ConstructStaves(G4int numOfHCIs,G4String name) {
 	const G4double plateWidth = getPlateWidth(numOfHCIs,HCIWidth);
 	const G4double plateRadius = getPlateRadius(plateWidth,angle,plateThickness);
 
-	//Initial position of Stave section
-	G4ThreeVector platePosition = G4ThreeVector(0*mm,plateRadius,0*mm);
-	G4RotationMatrix* rotation = new G4RotationMatrix(0,0,0);
-
 	//Initialise assembly
 	G4AssemblyVolume* pStave = new G4AssemblyVolume();
-	G4ThreeVector translation;
-	G4double x;
-	G4double y;
+
+	//Initial position of Stave section inside assembly
+	G4ThreeVector platePosition = G4ThreeVector(plateRadius,0*mm,0*mm);
+	G4RotationMatrix* rotation = new G4RotationMatrix(0,0,M_PI/2);
 
 	//Defining a single cold plate.
 	G4Box* pSolidPlate = new G4Box(name+"S",plateWidth,plateThickness,plateLength);
@@ -52,16 +49,17 @@ void DevDetectorConstruction::ConstructStaves(G4int numOfHCIs,G4String name) {
 	//Add geometery to assembly
 	pStave->AddPlacedVolume(pLogicalPlate,platePosition,rotation);
 
+	//Variables used to move assembly
+	G4RotationMatrix* rotateAssembly = new G4RotationMatrix;
+	G4ThreeVector translateAssembly;
+
 	//Moves each cold plate to the correct position
 	for (int i = 0; i < sides; i++) {
-		//Copy assembly
-		pStave->MakeImprint(pLogicalWorld,translation,rotation);
-
+		//MOve and paste assembly
+		pStave->MakeImprint(pLogicalWorld,translateAssembly,rotateAssembly);
 		//Rotate assembly
-		rotation->rotateZ(angle);
-		x = platePosition.getX()*sin(i*angle);
-		y = platePosition.getX()*cos(i*angle);
-		translation = G4ThreeVector(x,y,0);
+		rotateAssembly->rotateZ(angle);
+		//NOTE: Assembly is centered at the center of the world so it does not need to be translated
 	}
 
 }

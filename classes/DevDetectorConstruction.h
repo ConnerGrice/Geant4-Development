@@ -15,6 +15,7 @@
 #include <G4Box.hh>
 #include <G4SystemOfUnits.hh>
 #include <G4AssemblyVolume.hh>
+#include <G4Transform3D.hh>
 
 #include <cmath>
 
