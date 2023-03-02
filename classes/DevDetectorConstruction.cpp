@@ -27,7 +27,7 @@ void DevDetectorConstruction::ConstructStaves(G4int numOfHCIs,G4String name) {
 	//Constants for all staves
 	const G4double HCIWidth = 15.0*mm;
 	const G4double plateLength = 160.0*mm;
-	const G4double plateThickness = 240*um;
+	const G4double plateThickness = 120*um;
 	const G4double angle = M_PI/3.0;
 	const G4int sides = 6;
 
