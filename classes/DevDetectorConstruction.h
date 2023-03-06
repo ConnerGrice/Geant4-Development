@@ -11,6 +11,7 @@
 #include <G4VPhysicalVolume.hh>
 #include <G4LogicalVolume.hh>
 #include <G4PVPlacement.hh>
+#include <G4PVReplica.hh>
 #include <G4NistManager.hh>
 #include <G4Box.hh>
 #include <G4SystemOfUnits.hh>
@@ -18,6 +19,7 @@
 #include <G4Transform3D.hh>
 
 #include <cmath>
+#include <vector>
 
 #include <G4VUserDetectorConstruction.hh>
 
@@ -33,6 +35,16 @@ private:
 	//Initialises material definitions
 	void DefineMaterials();
 
+	//Constructs a single layer of 9 segments in the HCI
+	void ConstructHCILayer(G4String name,
+							G4double width,
+							G4double thickness,
+							G4Material* material,
+							G4RotationMatrix* rot,
+							G4ThreeVector trans,
+							G4int copyNo);
+	void ConstructHCI(G4RotationMatrix* initRotation,G4ThreeVector initPosition);
+
 	//Methods for constructing a stave
 	inline G4double getPlateWidth(G4int numOfHCIs,G4double HCIWidth){
 		return (HCIWidth*numOfHCIs)/2.0 + 4;
@@ -40,6 +52,7 @@ private:
 	inline G4double getPlateRadius(G4double plateWidth, G4double angle, G4double plateThickness){
 		return (plateWidth/tan(angle/2.0))+plateThickness;
 	}
+
 	void ConstructStaves(G4int numOfHCIs, G4String name);
 
 	G4LogicalVolume* pLogicalWorld;

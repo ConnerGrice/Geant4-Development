@@ -8,8 +8,7 @@
 #include "DevDetectorConstruction.h" //Class that generates the objects
 #include "DevPhysicsList.h"			//Class that defines the physical processes
 
-int main(int argc,char** argv)
-{
+int main(int argc,char** argv) {
 
 	#ifdef G4MULTITHREADED
 		G4MTRunManager* runManager = new G4MTRunManager;
