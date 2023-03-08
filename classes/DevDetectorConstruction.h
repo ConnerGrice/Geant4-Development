@@ -35,28 +35,41 @@ private:
 	//Initialises material definitions
 	void DefineMaterials();
 
-	//Constructs a single layer of 9 segments in the HCI
-	void ConstructHCILayer(G4String name,
-							G4double width,
-							G4double thickness,
-							G4Material* material,
-							G4RotationMatrix* rot,
-							G4ThreeVector trans,
-							G4int copyNo);
-	void ConstructHCI(G4RotationMatrix* initRotation,G4ThreeVector initPosition);
-
 	//Methods for constructing a stave
-	inline G4double getPlateWidth(G4int numOfHCIs,G4double HCIWidth){
+	inline G4double getPlateWidth(G4int numOfHCIs){
 		return (HCIWidth*numOfHCIs)/2.0 + 4;
 	}
-	inline G4double getPlateRadius(G4double plateWidth, G4double angle, G4double plateThickness){
+	inline G4double getPlateRadius(G4double plateWidth, G4double plateThickness){
 		return (plateWidth/tan(angle/2.0))+plateThickness;
 	}
+
+	G4LogicalVolume* staveMother(G4double width);
+	G4LogicalVolume* coldPlate(G4double width);
+	G4LogicalVolume* fleece(G4double width);
+	G4LogicalVolume* HCIUnitMother();
+	G4LogicalVolume* HCILayerMother(G4double thickness,G4String name);
+	G4LogicalVolume* HCISegment(G4double thickness,G4String name,G4Material* material);
+	void buildHCILayer(G4String name,G4double thickness, G4Material* mat,G4ThreeVector pos);
+	void buildHCI(G4String name);
 
 	void ConstructStaves(G4int numOfHCIs, G4String name);
 
 	G4LogicalVolume* pLogicalWorld;
+	G4LogicalVolume* HCIUnitL;
 	G4Material* pWorldMat;
 	G4Material* pPlateMat;
+	G4Material* pFleeceMat;
+	G4Material* pGlue;
+	G4Material* pChips;
+	G4Material* pSolder;
+	G4Material* pConducting;
+	G4Material* pSubstrate;
+	//Constants for all staves
+	G4double HCIWidth;
+	G4double staveLength;
+	G4double HCILength;
+	G4double HCIUnitThickness;
+	G4int sides;
+	G4double angle;
 };
 #endif /* INCLUDE_DEVDETECTORCONSTRUCTION_H_ */

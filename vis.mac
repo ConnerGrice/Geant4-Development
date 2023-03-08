@@ -20,16 +20,38 @@
 
 #Adds a scale line to the enviroment
 #/vis/scene/add/scale
-/vis/scene/add/axes 0 0 0 33 mm
-/vis/scene/add/axes 0 0 0 46 mm
-/vis/scene/add/axes 0 0 0 59 mm
+#/vis/scene/add/axes 0 0 0 33 mm
+#/vis/scene/add/axes 0 0 0 46 mm
+#/vis/scene/add/axes 0 0 0 59 mm
 
 #Makes the "World" shape invisible
-#/vis/geometry/set/visibility World 0 false
+/vis/geometry/set/visibility WorldL 0 false
+/vis/geometry/set/visibility StaveL 0 false
+/vis/geometry/set/visibility GlueAL 0 false
+/vis/geometry/set/visibility ChipsL 0 false
+/vis/geometry/set/visibility GlueBL 0 false
+/vis/geometry/set/visibility SolderAL 0 false
+/vis/geometry/set/visibility ConductingAL 0 false
+/vis/geometry/set/visibility SubstrateL 0 false
+/vis/geometry/set/visibility ConductingBL 0 false
+/vis/geometry/set/visibility SolderBL 0 false
+/vis/geometry/set/visibility HCIUnitL 0 false
+
+/vis/geometry/set/colour PlateL 0 192 192 192
+/vis/geometry/set/colour FleeceL 0 128 128 128
+/vis/geometry/set/colour GlueASegL 0 0 0 255
+/vis/geometry/set/colour ChipsSegL 0 0 255 0
+/vis/geometry/set/colour GlueBSegL 0 0 0 255
+/vis/geometry/set/colour SolderASegL 0 255 0 255
+/vis/geometry/set/colour ConductingASegL 0 0 255 255
+/vis/geometry/set/colour SubstrateSegL 0 255 0 0
+/vis/geometry/set/colour ConductingBSegL 0 0 255 255
+/vis/geometry/set/colour SolderBSegL 0 255 0 255
 
 
 #Draws detector as smooth surface
-/vis/viewer/set/style wireframe
+/vis/viewer/set/style surface
+/vis/viewer/set/hiddenEdge
 
 /vis/viewer/set/autoRefresh true
 /vis/verbose warnings
