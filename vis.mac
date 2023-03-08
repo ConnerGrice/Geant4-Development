@@ -20,9 +20,9 @@
 
 #Adds a scale line to the enviroment
 #/vis/scene/add/scale
-#/vis/scene/add/axes 0 0 0 33 mm
-#/vis/scene/add/axes 0 0 0 46 mm
-#/vis/scene/add/axes 0 0 0 59 mm
+#/vis/scene/add/axes 0 0 0 120 mm
+#/vis/scene/add/axes 0 0 0 140 mm
+#/vis/scene/add/axes 22.5 0 0 4 mm
 
 #Makes the "World" shape invisible
 /vis/geometry/set/visibility WorldL 0 false
