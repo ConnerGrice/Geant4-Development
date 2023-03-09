@@ -101,10 +101,12 @@ void DevDetectorConstruction::buildHCILayer(G4String name, G4double thickness, G
 void DevDetectorConstruction::buildHCI() {
 	G4ThreeVector height= G4ThreeVector(0,-HCIUnitThickness/2,0);
 
+	//Parameters for each layer of the unit
 	std::vector<G4double> thicknesses {40*um,50*um,40*um,30*um,10*um,75*um,10*um,30*um};
 	std::vector<G4String> names {"GlueA","Chips","GlueB","SolderA","ConductingA","Substrate","ConductingB","SolderB"};
 	std::vector<G4Material*> materials {pGlue,pChips,pGlue,pSolder,pConducting,pSubstrate,pConducting,pSolder};
 
+	//Build each layer
 	for (unsigned int i=0; i<thicknesses.size();i++) {
 		buildHCILayer(names[i],thicknesses[i],materials[i],height);
 		height += G4ThreeVector(0,thicknesses[i],0);
@@ -115,7 +117,6 @@ void DevDetectorConstruction::buildHCI() {
 void DevDetectorConstruction::ConstructStaves(G4int numOfHCIs,G4String name) {
 	//Parameter calculations
 	const G4double staveWidth = getPlateWidth(numOfHCIs);
-	const G4double plateRadius = getPlateRadius(staveWidth);
 
 	//Initialise stave mother volume
 	staveL = staveMother(staveWidth);
@@ -151,8 +152,20 @@ void DevDetectorConstruction::ConstructStaves(G4int numOfHCIs,G4String name) {
 		new G4PVPlacement(HCIRotation,HCIPosition,HCIUnitL,"HCI"+(G4String)i,staveL,false,(10*numOfHCIs)+i);
 	}
 
-	//Place lowest level stave mother volume
-	new G4PVPlacement(0,G4ThreeVector(0,0,0),staveL,"Stave"+name+"P",pLogicalWorld,false,5);
+	//Stave location parameters
+	const G4double plateRadius = getPlateRadius(staveWidth);
+	G4RotationMatrix* staveRotation;;
+	G4ThreeVector staveTranslation = G4ThreeVector(plateRadius,0,0);
+
+	//Creates a stave for each side of the detector
+	for (int i=0; i < sides; i++) {
+		staveRotation = new G4RotationMatrix(0,0,(M_PI/2)+(angle*i));
+
+		//Place lowest level stave mother volume
+		new G4PVPlacement(staveRotation,staveTranslation,staveL,"Stave"+name+"P",pLogicalWorld,false,5+i);
+
+		staveTranslation.rotateZ(angle);
+	}
 }
 
 G4VPhysicalVolume* DevDetectorConstruction::Construct(){
@@ -163,8 +176,8 @@ G4VPhysicalVolume* DevDetectorConstruction::Construct(){
 
 	//Generate staves
 	ConstructStaves(3,"C");
-	//ConstructStaves(4,"StaveD");
-	//ConstructStaves(2,"StaveB");
+	ConstructStaves(4,"D");
+	ConstructStaves(2,"B");
 
 	return pPhysicalWorld;
 }
