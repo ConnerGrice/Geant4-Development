@@ -18,10 +18,15 @@
 #include <G4AssemblyVolume.hh>
 #include <G4Transform3D.hh>
 
+#include <G4Colour.hh>
+#include <G4VisAttributes.hh>
+
 #include <cmath>
 #include <vector>
 
 #include <G4VUserDetectorConstruction.hh>
+
+#include "DevSensitiveDetector.h"
 
 class DevDetectorConstruction: public G4VUserDetectorConstruction {
 public:
@@ -30,6 +35,7 @@ public:
 
 public:
 	G4VPhysicalVolume* Construct() override;
+	void ConstructSDandField() override;
 
 private:
 	//Initialises material definitions
@@ -61,13 +67,13 @@ private:
 
 	//Defines volume that will contain a layer a segment of that layer
 	G4LogicalVolume* HCILayerMother(G4double thickness,G4String name);
-	G4LogicalVolume* HCISegment(G4double thickness,G4String name,G4Material* material);
+	G4LogicalVolume* HCISegment(G4double thickness,G4String name,G4Material* material,G4VisAttributes* visual);
 
 	//Generates physical volumes for a HCI layer
-	void buildHCILayer(G4String name,G4double thickness, G4Material* mat,G4ThreeVector pos);
+	void buildHCILayer(G4String name,G4double thickness, G4Material* mat,G4VisAttributes* visual,G4ThreeVector pos);
 
 	//Builds a single HCI unit
-	void buildHCI();
+	void buildHCI(G4String name);
 
 	//Builds all staves
 	void ConstructStaves(G4int numOfHCIs, G4String name);
@@ -84,7 +90,6 @@ private:
 	G4Material* pSolder;
 	G4Material* pConducting;
 	G4Material* pSubstrate;
-
 
 	G4double HCIWidth;
 	G4double staveLength;

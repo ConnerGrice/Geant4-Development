@@ -32,34 +32,52 @@ void DevDetectorConstruction::DefineMaterials(){
 }
 
 G4LogicalVolume* DevDetectorConstruction::staveMother(G4double width){
+	//Volume definition
 	G4double thickness = 850*um;
 	G4Box* staveS = new G4Box("StaveS",width,thickness/2,staveLength/2);
 	G4LogicalVolume* staveOut = new G4LogicalVolume(staveS,pWorldMat,"StaveL");
+
+	//Visual parameters
+	G4VisAttributes* visAtt = new G4VisAttributes(false); //Invisible
+	staveOut->SetVisAttributes(visAtt);
 
 	return staveOut;
 }
 
 G4LogicalVolume* DevDetectorConstruction::coldPlate(G4double width) {
+	//Volume definition
 	G4Box* plateS = new G4Box("PlateS",width,plateThickness/2,staveLength/2);
 	G4LogicalVolume* plateL = new G4LogicalVolume(plateS,pPlateMat,"PlateL");
+
+	//Visual parameters
+	G4VisAttributes* visAtt = new G4VisAttributes(true,G4Colour(0.75,0.75,0.75));
+	plateL->SetVisAttributes(visAtt);
 
 	return plateL;
 }
 
 G4LogicalVolume* DevDetectorConstruction::fleece(G4double width) {
+	//Volume definition
 	G4double thickness = 20*um;
 	G4Box* fleeceS = new G4Box("FleeceS",width,thickness/2,staveLength/2);
 	G4LogicalVolume* fleeceL = new G4LogicalVolume(fleeceS,pFleeceMat,"FleeceL");
+
+	//Visual parameters
+	G4VisAttributes* visAtt = new G4VisAttributes(true,G4Colour(0.5,0.5,0.5));
+	fleeceL->SetVisAttributes(visAtt);
 
 	return fleeceL;
 }
 
 void DevDetectorConstruction::buildPlate(G4double width) {
+	//Padding of plate anf fleece
 	G4double offset = plateThickness/2+10*um;
 
+	//Get volumes
 	G4LogicalVolume* plateL = coldPlate(width);
 	G4LogicalVolume* fleeceL = fleece(width);
 
+	//PLace volumes
 	//Bottom fleece layer
 	new G4PVPlacement(0,G4ThreeVector(0,-offset,0),fleeceL,"FleecePBot",staveL,false,2);
 	//Cold plate layer
@@ -69,46 +87,71 @@ void DevDetectorConstruction::buildPlate(G4double width) {
 }
 
 G4LogicalVolume* DevDetectorConstruction::HCIUnitMother() {
+	//Volume Definition
 	G4Box* HCIS = new G4Box("HCIUnitS",HCIWidth/2,HCIUnitThickness/2,HCILength/2);
 	G4LogicalVolume* HCIL = new G4LogicalVolume(HCIS,pWorldMat,"HCIUnitL");
 
+	//Visual parameters
+	G4VisAttributes* visAtt = new G4VisAttributes(false);
+	HCIL->SetVisAttributes(visAtt);
 	return HCIL;
 }
 
 G4LogicalVolume* DevDetectorConstruction::HCILayerMother(G4double thickness,G4String name) {
+	//Volume definition
 	G4Box* stripS = new G4Box(name+"S",HCIWidth/2.0,thickness/2.0,HCILength/2.0);
 	G4LogicalVolume* stripL = new G4LogicalVolume(stripS,pWorldMat,name+"L");
 
+	//Visual parameters
+	G4VisAttributes* visAtt = new G4VisAttributes(false);
+	stripL->SetVisAttributes(visAtt);
 	return stripL;
 }
 
-G4LogicalVolume* DevDetectorConstruction::HCISegment(G4double thickness,G4String name,G4Material* material) {
+G4LogicalVolume* DevDetectorConstruction::HCISegment(G4double thickness,G4String name,G4Material* material, G4VisAttributes* visual) {
+	//Volume definition
 	G4double length = HCILength/9.0;
 	G4Box* segmentS = new G4Box(name+"SegS",HCIWidth/2.0,thickness/2.0,length/2.0);
 	G4LogicalVolume* segmentL = new G4LogicalVolume(segmentS,material,name+"SegL");
 
+	//Visual parameters
+	segmentL->SetVisAttributes(visual);
+
 	return segmentL;
 }
 
-void DevDetectorConstruction::buildHCILayer(G4String name, G4double thickness, G4Material* mat, G4ThreeVector pos) {
+void DevDetectorConstruction::buildHCILayer(G4String name, G4double thickness, G4Material* mat,G4VisAttributes* visual, G4ThreeVector pos) {
+	//Get volumes
 	G4LogicalVolume* layerStripL = HCILayerMother(thickness,name);
-	G4LogicalVolume* layerSegmentL = HCISegment(thickness,name,mat);
+	G4LogicalVolume* layerSegmentL = HCISegment(thickness,name,mat,visual);
 
+	//Place volumes
 	new G4PVReplica(name+"Replica",layerSegmentL,layerStripL,kZAxis,9,(HCILength/9));
 	new G4PVPlacement(0,pos+G4ThreeVector(0,thickness/2,0),layerStripL,name+"StripP",HCIUnitL,false,100);
 }
 
-void DevDetectorConstruction::buildHCI() {
+void DevDetectorConstruction::buildHCI(G4String name) {
+	//Position of leftmost unit
 	G4ThreeVector height= G4ThreeVector(0,-HCIUnitThickness/2,0);
+
+	//Layer colours
+	G4Colour glueCol(0.0,0.0,1.0);
+	G4Colour chipsCol(0.0,1.0,0.0);
+	G4Colour solderCol(1.0,0.0,1.0);
+	G4Colour conductingCol(0.0,1.0,1.0);
+	G4Colour substrateCol(1.0,0.0,0.0);
+	G4VisAttributes* visAttr;;
 
 	//Parameters for each layer of the unit
 	std::vector<G4double> thicknesses {40*um,50*um,40*um,30*um,10*um,75*um,10*um,30*um};
 	std::vector<G4String> names {"GlueA","Chips","GlueB","SolderA","ConductingA","Substrate","ConductingB","SolderB"};
 	std::vector<G4Material*> materials {pGlue,pChips,pGlue,pSolder,pConducting,pSubstrate,pConducting,pSolder};
+	std::vector<G4Colour> colours {glueCol,chipsCol,glueCol,solderCol,conductingCol,substrateCol,conductingCol,solderCol};
 
 	//Build each layer
 	for (unsigned int i=0; i<thicknesses.size();i++) {
-		buildHCILayer(names[i],thicknesses[i],materials[i],height);
+		visAttr = new G4VisAttributes(true,colours[i]);
+		buildHCILayer(name+names[i],thicknesses[i],materials[i],visAttr,height);
 		height += G4ThreeVector(0,thicknesses[i],0);
 	}
 
@@ -128,7 +171,7 @@ void DevDetectorConstruction::ConstructStaves(G4int numOfHCIs,G4String name) {
 	HCIUnitL = HCIUnitMother();
 
 	//Creates and places entire HCI unit
-	buildHCI();
+	buildHCI(name);
 
 	//Left-most HCI unit position
 	G4ThreeVector HCIPosition = G4ThreeVector(-(HCIWidth*numOfHCIs/2)-HCIWidth/2,0,0);
@@ -168,7 +211,7 @@ void DevDetectorConstruction::ConstructStaves(G4int numOfHCIs,G4String name) {
 	}
 }
 
-G4VPhysicalVolume* DevDetectorConstruction::Construct(){
+G4VPhysicalVolume* DevDetectorConstruction::Construct() {
 	//Defining world volume
 	G4Box* pSolidWorld = new G4Box("WorldS",500*cm,500*cm,500*cm);
 	pLogicalWorld = new G4LogicalVolume(pSolidWorld,pWorldMat,"WorldL");
@@ -180,5 +223,12 @@ G4VPhysicalVolume* DevDetectorConstruction::Construct(){
 	ConstructStaves(2,"B");
 
 	return pPhysicalWorld;
+}
+
+void DevDetectorConstruction::ConstructSDandField() {
+	auto CSensDet = new DevSensitiveDetector("StaveC","StaveCCollection");
+	G4SDManager::GetSDMpointer()->AddNewDetector(CSensDet);
+	SetSensitiveDetector("CChipsL",CSensDet);
+
 }
 
