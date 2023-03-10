@@ -26,52 +26,6 @@
 
 #Makes the Mother volumes invisible
 /vis/geometry/set/visibility WorldL 0 false
-#/vis/geometry/set/visibility StaveL 0 false
-
-#/vis/geometry/set/visibility GlueAL 0 false
-#/vis/geometry/set/visibility ChipsL 0 false
-#/vis/geometry/set/visibility GlueBL 0 false
-#/vis/geometry/set/visibility SolderAL 0 false
-#/vis/geometry/set/visibility ConductingAL 0 false
-#/vis/geometry/set/visibility SubstrateL 0 false
-#/vis/geometry/set/visibility ConductingBL 0 false
-#/vis/geometry/set/visibility SolderBL 0 false
-#/vis/geometry/set/visibility HCIUnitL 0 false
-
-#Stave plate and fleece
-#/vis/geometry/set/colour PlateL 0 192 192 192
-#/vis/geometry/set/colour FleeceL 0 128 128 128
-
-#StaveB HCI Units
-#/vis/geometry/set/colour BGlueASegL 0 0 0 255
-#/vis/geometry/set/colour BChipsSegL 0 0 255 0
-#/vis/geometry/set/colour BGlueBSegL 0 0 0 255
-#/vis/geometry/set/colour BSolderASegL 0 255 0 255
-#/vis/geometry/set/colour BConductingASegL 0 0 255 255
-#/vis/geometry/set/colour BSubstrateSegL 0 255 0 0
-#/vis/geometry/set/colour BConductingBSegL 0 0 255 255
-#/vis/geometry/set/colour BSolderBSegL 0 255 0 255
-
-#StaveC HCI Units
-#/vis/geometry/set/colour CGlueASegL 0 0 0 255
-#/vis/geometry/set/colour CChipsSegL 0 0 255 0
-#/vis/geometry/set/colour CGlueBSegL 0 0 0 255
-#/vis/geometry/set/colour CSolderASegL 0 255 0 255
-#/vis/geometry/set/colour CConductingASegL 0 0 255 255
-#/vis/geometry/set/colour CSubstrateSegL 0 255 0 0
-#/vis/geometry/set/colour CConductingBSegL 0 0 255 255
-#/vis/geometry/set/colour CSolderBSegL 0 255 0 255
-
-#StaveD HCI Units
-#/vis/geometry/set/colour DGlueASegL 0 0 0 255
-#/vis/geometry/set/colour DChipsSegL 0 0 255 0
-#/vis/geometry/set/colour DGlueBSegL 0 0 0 255
-#/vis/geometry/set/colour DSolderASegL 0 255 0 255
-#/vis/geometry/set/colour DConductingASegL 0 0 255 255
-#/vis/geometry/set/colour DSubstrateSegL 0 255 0 0
-#/vis/geometry/set/colour DConductingBSegL 0 0 255 255
-#/vis/geometry/set/colour DSolderBSegL 0 255 0 255
-
 
 #Draws detector as smooth surface
 /vis/viewer/set/style surface
