@@ -20,7 +20,7 @@
 
 #Adds a scale line to the enviroment
 #/vis/scene/add/scale
-/vis/scene/add/axes -55 30 0 33 mm
+#/vis/scene/add/axes -55 30 0 33 mm
 #/vis/scene/add/axes 0 0 0 140 mm
 #/vis/scene/add/axes 22.5 0 0 4 mm
 

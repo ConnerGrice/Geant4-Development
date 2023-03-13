@@ -36,7 +36,11 @@ This will be a timeline desplaying screenshots taken to outline the development 
 
 ![complete-barrel](screenshots/Complete-Staves-Barrel.png)
 
-**Added sensitive detectors ("Chips" layers only)""
+**Added sensitive detectors ("Chips" layers only)**
 
 ![sensdets](screenshots/SensitiveDet-copyNumbers.png)
+
+**NOTE the printout showing each layers is distinct from eachother**
+
+![sensdets-layers](screenshots/SensitiveDet-layers.png)
 

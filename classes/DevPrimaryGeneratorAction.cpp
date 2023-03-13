@@ -25,7 +25,7 @@ void DevPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
 	G4double e = 1000*MeV;
 	pParticleGun->SetParticleEnergy(e);
 
-	G4ParticleMomentum direction = G4ParticleMomentum(-0.5,1,0.5);
+	G4ParticleMomentum direction = G4ParticleMomentum(1,0.3,0);
 	pParticleGun->SetParticleMomentumDirection(direction);
 
 	pParticleGun->GeneratePrimaryVertex(anEvent);

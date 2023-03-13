@@ -153,11 +153,11 @@ void DevDetectorConstruction::buildHCI(G4String name) {
 	for (unsigned int i=0; i<thicknesses.size();i++) {
 
 		if (names[i] == "Chips") {
-			visAttr = new G4VisAttributes(true,colours[i]);
+			invisible = true;
 		} else {
-			visAttr = new G4VisAttributes(false,colours[i]);
+			invisible = false;
 		}
-
+		visAttr = new G4VisAttributes(invisible,colours[i]);
 		buildHCILayer(name+names[i],thicknesses[i],materials[i],visAttr,height);
 		height += G4ThreeVector(0,thicknesses[i],0);
 	}
@@ -226,8 +226,8 @@ G4VPhysicalVolume* DevDetectorConstruction::Construct() {
 
 	//Generate staves
 	ConstructStaves(3,"C");
-	//ConstructStaves(4,"D");
-	//ConstructStaves(2,"B");
+	ConstructStaves(4,"D");
+	ConstructStaves(2,"B");
 
 	return pPhysicalWorld;
 }
@@ -236,6 +236,14 @@ void DevDetectorConstruction::ConstructSDandField() {
 	auto CSensDet = new DevSensitiveDetector("StaveC","StaveCCollection");
 	G4SDManager::GetSDMpointer()->AddNewDetector(CSensDet);
 	SetSensitiveDetector("CChipsSegL",CSensDet);
+
+	auto DSensDet = new DevSensitiveDetector("StaveD","StaveDCollection");
+	G4SDManager::GetSDMpointer()->AddNewDetector(DSensDet);
+	SetSensitiveDetector("DChipsSegL",DSensDet);
+
+	auto BSensDet = new DevSensitiveDetector("StaveB","StaveBCollection");
+	G4SDManager::GetSDMpointer()->AddNewDetector(BSensDet);
+	SetSensitiveDetector("BChipsSegL",BSensDet);
 
 }
 
