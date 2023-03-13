@@ -17,5 +17,8 @@ DevActionInitialization::~DevActionInitialization() {
 
 void DevActionInitialization::Build() const{
 	SetUserAction(new DevPrimaryGeneratorAction);
+
+	DevRunAction* runAction = new DevRunAction();
+	SetUserAction(runAction);
 }
 
