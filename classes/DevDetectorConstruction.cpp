@@ -140,6 +140,7 @@ void DevDetectorConstruction::buildHCI(G4String name) {
 	G4Colour solderCol(1.0,0.0,1.0);
 	G4Colour conductingCol(0.0,1.0,1.0);
 	G4Colour substrateCol(1.0,0.0,0.0);
+	G4bool invisible = false;
 	G4VisAttributes* visAttr;;
 
 	//Parameters for each layer of the unit
@@ -150,7 +151,13 @@ void DevDetectorConstruction::buildHCI(G4String name) {
 
 	//Build each layer
 	for (unsigned int i=0; i<thicknesses.size();i++) {
-		visAttr = new G4VisAttributes(true,colours[i]);
+
+		if (names[i] == "Chips") {
+			visAttr = new G4VisAttributes(true,colours[i]);
+		} else {
+			visAttr = new G4VisAttributes(false,colours[i]);
+		}
+
 		buildHCILayer(name+names[i],thicknesses[i],materials[i],visAttr,height);
 		height += G4ThreeVector(0,thicknesses[i],0);
 	}
@@ -219,8 +226,8 @@ G4VPhysicalVolume* DevDetectorConstruction::Construct() {
 
 	//Generate staves
 	ConstructStaves(3,"C");
-	ConstructStaves(4,"D");
-	ConstructStaves(2,"B");
+	//ConstructStaves(4,"D");
+	//ConstructStaves(2,"B");
 
 	return pPhysicalWorld;
 }
@@ -228,7 +235,7 @@ G4VPhysicalVolume* DevDetectorConstruction::Construct() {
 void DevDetectorConstruction::ConstructSDandField() {
 	auto CSensDet = new DevSensitiveDetector("StaveC","StaveCCollection");
 	G4SDManager::GetSDMpointer()->AddNewDetector(CSensDet);
-	SetSensitiveDetector("CChipsL",CSensDet);
+	SetSensitiveDetector("CChipsSegL",CSensDet);
 
 }
 

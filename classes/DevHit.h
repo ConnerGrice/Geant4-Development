@@ -16,6 +16,13 @@ class DevHit: public G4VHit {
 public:
 	DevHit();
 	virtual ~DevHit();
+
+public:
+	inline G4int GetCopyNo() { return copyNo; };
+	inline void SetCopyNo(G4int num) { copyNo = num; };
+
+private:
+	G4int copyNo;
 };
 
 typedef G4THitsCollection<DevHit> DevHitsCollection;

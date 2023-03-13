@@ -21,7 +21,7 @@ public:
 
 public:
 	void Initialize(G4HCofThisEvent*) override;
-	G4bool ProcessHits(G4Step*,G4TouchableHistory*) override;
+	G4bool ProcessHits(G4Step* aStep,G4TouchableHistory*) override;
 	void EndOfEvent(G4HCofThisEvent*) override;
 
 
