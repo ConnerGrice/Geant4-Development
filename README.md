@@ -52,5 +52,14 @@ However, sometimes a secondary particle is generated and scatters multiple times
 
 ![sensdet-electron](screenshots/SensitiveDet-Electron.png)
 
+## First efficiency outcome
+
+After a full run simply counting the number of particles that hit each layer without taking scattering, or secondary particles into account the efficiency was calculated. A 100% efficiency would mean the layer has been hit 200480 times since there are 2 particles generated for each of the 100240 events.
+
+|Layer     |Hits   |Efficiency|
+ ------- | ----- | -------- 
+D (4 HCIs)|139,147|69.4%
+B (3 HCIs)|153,856|76.7%
+C (2 HCIs)|151,834|75.7%
 
 
