@@ -12,6 +12,7 @@
 
 #include <G4SDManager.hh>
 #include <G4HCofThisEvent.hh>
+#include <G4Event.hh>
 
 #include "DevRunAction.h"
 #include "DevHit.h"
@@ -22,10 +23,13 @@ public:
 	virtual ~DevEventAction();
 
 public:
-	void BeginOfEventAction(G4Event* anEvent) override;
-	void EndOfEventAction(G4Event* anEvent) override;
+	void BeginOfEventAction(const G4Event*) override;
+	void EndOfEventAction(const G4Event* anEvent) override;
 
 private:
+	G4VHitsCollection* getHitCollection(const G4Event* anEvent,G4String hcName);
+	G4int getTotalHits(const G4Event* anEvent,G4String hcName);
+
 	DevRunAction* rAction;
 };
 

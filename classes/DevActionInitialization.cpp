@@ -20,5 +20,8 @@ void DevActionInitialization::Build() const{
 
 	DevRunAction* runAction = new DevRunAction();
 	SetUserAction(runAction);
+
+	DevEventAction* eventAction = new DevEventAction(runAction);
+	SetUserAction(eventAction);
 }
 

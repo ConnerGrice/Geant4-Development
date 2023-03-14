@@ -12,6 +12,7 @@
 
 #include "DevPrimaryGeneratorAction.h"
 #include "DevRunAction.h"
+#include "DevEventAction.h"
 
 class DevActionInitialization: public G4VUserActionInitialization {
 public:

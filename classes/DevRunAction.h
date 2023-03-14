@@ -20,7 +20,16 @@ public:
 
 public:
 	void BeginOfRunAction(const G4Run*) override;
-	void EndOfRunAction(const G4Run* aRun) override;
+	void EndOfRunAction(const G4Run*) override;
+
+public:
+	inline void addBHits(G4int hits) { bTotal += hits; };
+	inline void addCHits(G4int hits) { cTotal += hits; };
+	inline void addDHits(G4int hits) { dTotal += hits; };
+
+private:
+	G4int bTotal,cTotal,dTotal;
+
 };
 
 #endif /* CLASSES_DEVRUNACTION_H_ */

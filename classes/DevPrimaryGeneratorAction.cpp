@@ -17,7 +17,6 @@ DevPrimaryGeneratorAction::~DevPrimaryGeneratorAction() {
 }
 
 void DevPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
-	/*
 	//Setting the values for the particle gun
 	pParticleGun->SetParticleDefinition(G4Proton::Definition());
 
@@ -55,8 +54,8 @@ void DevPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
 	//Define and shoot outgoing particle 2
 	pParticleGun->SetParticleMomentum(G4ThreeVector(px2,py2,pz2));
 	pParticleGun->GeneratePrimaryVertex(anEvent);
-*/
 
+	/*
 	pParticleGun->SetParticleDefinition(G4Proton::Definition());
 
 	G4ThreeVector origin = G4ThreeVector(0,0,0);
@@ -69,6 +68,6 @@ void DevPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
 	pParticleGun->SetParticleMomentumDirection(direction);
 
 	pParticleGun->GeneratePrimaryVertex(anEvent);
-
+	*/
 }
 
