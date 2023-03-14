@@ -8,11 +8,8 @@
 #include "DevHit.h"
 
 DevHit::DevHit() {
-	// TODO Auto-generated constructor stub
-
 }
 
 DevHit::~DevHit() {
-	// TODO Auto-generated destructor stub
 }
 

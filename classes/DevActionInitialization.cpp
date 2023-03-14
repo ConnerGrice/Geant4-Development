@@ -7,12 +7,9 @@
 #include "DevActionInitialization.h"
 
 DevActionInitialization::DevActionInitialization() {
-	// TODO Auto-generated constructor stub
-
 }
 
 DevActionInitialization::~DevActionInitialization() {
-	// TODO Auto-generated destructor stub
 }
 
 void DevActionInitialization::Build() const{

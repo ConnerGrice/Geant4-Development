@@ -18,12 +18,9 @@
 
 
 DevPhysicsList::DevPhysicsList() {
-	// TODO Auto-generated constructor stub
-
 }
 
 DevPhysicsList::~DevPhysicsList() {
-	// TODO Auto-generated destructor stub
 }
 
 void DevPhysicsList::ConstructParticle(){

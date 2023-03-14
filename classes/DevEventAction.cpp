@@ -13,7 +13,6 @@ DevEventAction::DevEventAction(DevRunAction* runAction) {
 }
 
 DevEventAction::~DevEventAction() {
-	// TODO Auto-generated destructor stub
 }
 
 void DevEventAction::BeginOfEventAction(const G4Event*) {

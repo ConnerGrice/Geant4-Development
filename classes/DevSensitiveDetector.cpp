@@ -10,11 +10,9 @@
 DevSensitiveDetector::DevSensitiveDetector(G4String name,G4String collection):
 G4VSensitiveDetector(name),pHitCollection(0){
 	collectionName.insert(collection);
-
 }
 
 DevSensitiveDetector::~DevSensitiveDetector() {
-	// TODO Auto-generated destructor stub
 }
 
 void DevSensitiveDetector::Initialize(G4HCofThisEvent* hce) {

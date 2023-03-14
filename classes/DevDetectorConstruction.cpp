@@ -15,7 +15,6 @@ sides(6),angle(M_PI/3.0),plateThickness(240*um){
 }
 
 DevDetectorConstruction::~DevDetectorConstruction() {
-	// TODO Auto-generated destructor stub
 }
 
 void DevDetectorConstruction::DefineMaterials(){

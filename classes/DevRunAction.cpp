@@ -8,15 +8,12 @@
 #include "DevRunAction.h"
 
 DevRunAction::DevRunAction(): bTotal(0),cTotal(0),dTotal(0) {
-
 }
 
 DevRunAction::~DevRunAction() {
-	// TODO Auto-generated destructor stub
 }
 
 void DevRunAction::BeginOfRunAction(const G4Run*) {
-
 }
 
 void DevRunAction::printCount() {
