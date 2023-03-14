@@ -53,6 +53,7 @@ G4int DevEventAction::getTotalHits(const G4Event* anEvent,G4String hcName) {
 }
 
 void DevEventAction::EndOfEventAction(const G4Event* anEvent) {
+	G4cout<<"Event: "<<anEvent->GetEventID()<<"/100240"<<G4endl;
 
 	G4String cName = "StaveCCollection";
 	G4int cHits = getTotalHits(anEvent,cName);
@@ -66,7 +67,7 @@ void DevEventAction::EndOfEventAction(const G4Event* anEvent) {
 	G4int bHits = getTotalHits(anEvent,bName);
 	rAction->addBHits(bHits);
 
-	G4cout<<"Event: "<<anEvent->GetEventID()<<"/100240"<<G4endl;
+	rAction->printCount();
 
 
 }

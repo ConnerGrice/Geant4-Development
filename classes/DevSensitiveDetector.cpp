@@ -41,9 +41,10 @@ G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
 void DevSensitiveDetector::EndOfEvent(G4HCofThisEvent*) {
 	G4int numHits = pHitCollection->entries();
 
+	G4cout<<SensitiveDetectorName<<": "<<numHits<<" (";
 	for (int i=0;i<numHits;i++) {
 		G4int copyNo = (*pHitCollection)[i]->GetCopyNo();
-		G4cout<<SensitiveDetectorName<<" "<<copyNo<<": "<<numHits<<G4endl;
+		 G4cout<<copyNo<<",";
 	}
-
+	G4cout<<")"<<G4endl;
 }

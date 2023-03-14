@@ -19,6 +19,12 @@ void DevRunAction::BeginOfRunAction(const G4Run*) {
 
 }
 
+void DevRunAction::printCount() {
+	G4cout<<"StaveC Count: "<<cTotal<<G4endl;
+	G4cout<<"StaveD Count: "<<dTotal<<G4endl;
+	G4cout<<"StaveB Count: "<<bTotal<<G4endl;
+}
+
 void DevRunAction::EndOfRunAction(const G4Run*) {
 	G4double cEff = cTotal/200480.0;
 	G4cout<<"StaveC Eff: "<<cTotal<<"/200480"<<" = "<<cEff<<G4endl;

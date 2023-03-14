@@ -25,3 +25,6 @@ void DevActionInitialization::Build() const{
 	SetUserAction(eventAction);
 }
 
+void DevActionInitialization::BuildForMaster() const {
+	SetUserAction(new DevRunAction());
+}

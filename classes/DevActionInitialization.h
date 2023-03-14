@@ -21,6 +21,7 @@ public:
 
 public:
 	void Build() const override;
+	void BuildForMaster() const override;
 };
 
 #endif /* INCLUDE_DEVACTIONINITIALIZATION_H_ */
