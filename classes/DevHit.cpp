@@ -7,7 +7,7 @@
 
 #include "DevHit.h"
 
-DevHit::DevHit() {
+DevHit::DevHit():copyNo(0) {
 }
 
 DevHit::~DevHit() {

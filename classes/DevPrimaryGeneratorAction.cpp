@@ -8,6 +8,7 @@
 #include "DevPrimaryGeneratorAction.h"
 
 DevPrimaryGeneratorAction::DevPrimaryGeneratorAction() {
+	//Default number of particles shot with each "GeneratePrimaryVertex" call
 	G4int numOfParticles = 1;
 	pParticleGun = new G4ParticleGun(numOfParticles);
 }

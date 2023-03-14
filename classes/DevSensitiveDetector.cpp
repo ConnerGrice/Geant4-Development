@@ -23,11 +23,12 @@ void DevSensitiveDetector::Initialize(G4HCofThisEvent* hce) {
 }
 
 G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
-	G4StepPoint* stepPoint = aStep->GetPreStepPoint();
 	//Gets the copy number of hit detector
+	G4StepPoint* stepPoint = aStep->GetPreStepPoint();
 	const G4VTouchable* touchable = stepPoint->GetTouchable();
 	G4int copyNo = touchable->GetCopyNumber();
 
+	//Creates a hit and fills it with data
 	auto hit = new DevHit();
 	hit->SetCopyNo(copyNo);
 
@@ -39,6 +40,7 @@ G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
 void DevSensitiveDetector::EndOfEvent(G4HCofThisEvent*) {
 	G4int numHits = pHitCollection->entries();
 
+	//Prints the detector and which section was hit
 	G4cout<<SensitiveDetectorName<<": "<<numHits<<" (";
 	for (int i=0;i<numHits;i++) {
 		G4int copyNo = (*pHitCollection)[i]->GetCopyNo();

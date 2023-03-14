@@ -20,6 +20,9 @@ void DevActionInitialization::Build() const{
 
 	DevEventAction* eventAction = new DevEventAction(runAction);
 	SetUserAction(eventAction);
+
+	DevStackingAction* stackingAction = new DevStackingAction();
+	SetUserAction(stackingAction);
 }
 
 void DevActionInitialization::BuildForMaster() const {

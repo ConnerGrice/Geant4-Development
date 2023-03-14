@@ -18,6 +18,7 @@ public:
 	virtual ~DevHit();
 
 public:
+	//Get/Set copy number
 	inline G4int GetCopyNo() { return copyNo; };
 	inline void SetCopyNo(G4int num) { copyNo = num; };
 

@@ -150,7 +150,7 @@ void DevDetectorConstruction::buildHCI(G4String name) {
 
 	//Build each layer
 	for (unsigned int i=0; i<thicknesses.size();i++) {
-
+		//Visualiser will only show the chips layer
 		if (names[i] == "Chips") {
 			invisible = true;
 		} else {
@@ -160,7 +160,6 @@ void DevDetectorConstruction::buildHCI(G4String name) {
 		buildHCILayer(name+names[i],thicknesses[i],materials[i],visAttr,height);
 		height += G4ThreeVector(0,thicknesses[i],0);
 	}
-
 }
 
 void DevDetectorConstruction::ConstructStaves(G4int numOfHCIs,G4String name) {
@@ -232,6 +231,7 @@ G4VPhysicalVolume* DevDetectorConstruction::Construct() {
 }
 
 void DevDetectorConstruction::ConstructSDandField() {
+	//Defines chips layers in each stave as the sensitive detector
 	auto CSensDet = new DevSensitiveDetector("StaveC","StaveCCollection");
 	G4SDManager::GetSDMpointer()->AddNewDetector(CSensDet);
 	SetSensitiveDetector("CChipsSegL",CSensDet);

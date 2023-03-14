@@ -62,4 +62,15 @@ D (4 HCIs)|139,147|69.4%
 B (3 HCIs)|153,856|76.7%
 C (2 HCIs)|151,834|75.7%
 
+After adding a stacking action to delete all particles except the initial protons (removing secondary particles so they arent counted if they hit the detector multiple times as shown above) the efficiency changes.
+
+|Layer     |Hits   |Efficiency|
+ ------- | ----- | -------- 
+D (4 HCIs)|133,279|66.5%
+B (3 HCIs)|148,442|74.0%
+C (2 HCIs)|144,275|72.0%
+
+This makes sense because the number of hits isn't being inflated by the extra hits by electrons. Though, there is still the issue of the original protons scattering and hitting the detector multiple times.
+
+
 

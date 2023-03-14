@@ -27,7 +27,10 @@ public:
 	void EndOfEventAction(const G4Event* anEvent) override;
 
 private:
+	//Fetches a hit collection by name
 	G4VHitsCollection* getHitCollection(const G4Event* anEvent,G4String hcName);
+
+	//Gets the number of hits within a hit collection
 	G4int getTotalHits(const G4Event* anEvent,G4String hcName);
 
 	DevRunAction* rAction;
