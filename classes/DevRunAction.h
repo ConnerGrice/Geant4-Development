@@ -31,9 +31,15 @@ public:
 	inline void addCHits(G4int hits) { cTotal += hits; };
 	inline void addDHits(G4int hits) { dTotal += hits; };
 
+	inline void addGood() { nGood++; };
+	inline void addAlright() { nAlright++; };
+	inline void addBad() { nBad++; };
+	inline void addInvalid() { nInvalid++; };
+
 private:
 	G4int bTotal,cTotal,dTotal;
 
+	G4int nGood,nAlright,nBad,nInvalid;
 };
 
 #endif /* CLASSES_DEVRUNACTION_H_ */

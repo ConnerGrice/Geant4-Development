@@ -18,12 +18,16 @@ public:
 	virtual ~DevHit();
 
 public:
-	//Get/Set copy number
+	//Get-Set copy number
 	inline G4int GetCopyNo() { return copyNo; };
 	inline void SetCopyNo(G4int num) { copyNo = num; };
 
+	//Get-Set trackID
+	inline G4int GetTrackID() { return trkID; };
+	inline void SetTrackID(G4int id) { trkID = id; };
 private:
 	G4int copyNo;
+	G4int trkID;
 };
 
 typedef G4THitsCollection<DevHit> DevHitsCollection;

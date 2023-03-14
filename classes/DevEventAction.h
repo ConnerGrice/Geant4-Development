@@ -30,8 +30,12 @@ private:
 	//Fetches a hit collection by name
 	G4VHitsCollection* getHitCollection(const G4Event* anEvent,G4String hcName);
 
-	//Gets the number of hits within a hit collection
-	G4int getTotalHits(const G4Event* anEvent,G4String hcName);
+	G4bool doBothHit(G4VHitsCollection* collection);
+
+	void classifyEvent(G4VHitsCollection* dCol,G4VHitsCollection* bCol,G4VHitsCollection* cCol);
+
+	//Sums how many hits are detected by each layer
+	void sumNumOfHits(G4VHitsCollection* dCol,G4VHitsCollection* bCol,G4VHitsCollection* cCol);
 
 	DevRunAction* rAction;
 };

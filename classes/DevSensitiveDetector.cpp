@@ -28,9 +28,12 @@ G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
 	const G4VTouchable* touchable = stepPoint->GetTouchable();
 	G4int copyNo = touchable->GetCopyNumber();
 
+	G4int trackID = aStep->GetTrack()->GetTrackID();
+
 	//Creates a hit and fills it with data
 	auto hit = new DevHit();
 	hit->SetCopyNo(copyNo);
+	hit->SetTrackID(trackID);
 
 	pHitCollection->insert(hit);
 
