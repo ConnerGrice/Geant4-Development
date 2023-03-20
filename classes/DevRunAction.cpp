@@ -26,41 +26,39 @@ void DevRunAction::printCount() {
 
 }
 
-void DevRunAction::printTypes() {
-	G4cout<<"Good Count: "<<nGood<<G4endl;
-	G4cout<<"Alright Count: "<<nAlright<<G4endl;
-	G4cout<<"Bad Count: "<<nBad<<G4endl;
-	G4cout<<"Total Count: "<<nGood+nAlright+nBad+nInvalid<<G4endl;
-}
-
-
-void DevRunAction::EndOfRunAction(const G4Run*) {
-
-
+void DevRunAction::printCountEff() {
 	G4double dEff = dTotal/200480.0;
 	G4cout<<"StaveD Eff: "<<dTotal<<"/200480"<<" = "<<dEff<<G4endl;
 	G4double bEff = bTotal/200480.0;
 	G4cout<<"StaveB Eff: "<<bTotal<<"/200480"<<" = "<<bEff<<G4endl;
 	G4double cEff = cTotal/200480.0;
 	G4cout<<"StaveC Eff: "<<cTotal<<"/200480"<<" = "<<cEff<<G4endl;
+}
 
+void DevRunAction::printType() {
+	G4cout<<"Good Count: "<<nGood<<G4endl;
+	G4cout<<"Alright Count: "<<nAlright<<G4endl;
+	G4cout<<"Bad Count: "<<nBad<<G4endl;
+}
+
+void DevRunAction::printTypeEff() {
 	G4int successful = nGood + nAlright + nBad;
 	G4double succEff = successful/100240.0;
-	G4cout<<"Valid: "<<successful<<"/100240 = "<<succEff<<G4endl;
-	G4cout<<"Invalid: "<<nInvalid<<"/100240"<<G4endl;
-
 	G4double goodEff = nGood/(G4double)successful;
-	G4cout<<"Good: "<<nGood<<"/"<<successful<<" = "<<goodEff<<G4endl;
-
 	G4double alrightEff = nAlright/(G4double)successful;
-	G4cout<<"ALright: "<<nAlright<<"/"<<successful<<" = "<<alrightEff<<G4endl;
-
 	G4double badEff = nBad/(G4double)successful;
-	G4cout<<"Bad: "<<nBad<<"/"<<successful<<" = "<<badEff<<G4endl;
 
+	G4cout<<"==============EFFICIENCY OVERVIEW==========="<<G4endl;
+	G4cout<<"Valid Events: "<<successful<<"/100240 = "<<succEff*100<<"%"<<G4endl;
+	G4cout<<"---------------Level of Success-------------"<<G4endl;
+	G4cout<<"Good	: "<<nGood<<"/"<<successful<<" = "<<goodEff*100<<"%"<<G4endl;
+	G4cout<<"Alright: "<<nAlright<<"/"<<successful<<" = "<<alrightEff*100<<"%"<<G4endl;
+	G4cout<<"Bad	: "<<nBad<<"/"<<successful<<" = "<<badEff*100<<"%"<<G4endl;
+	G4cout<<"--------------------------------------------"<<G4endl;
+}
 
-	//printCount();
-	//printTypes();
+void DevRunAction::EndOfRunAction(const G4Run*) {
+	printTypeEff();
 	G4cout<<"RUN END==============================="<<G4endl;
 
 }

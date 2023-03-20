@@ -25,7 +25,9 @@ public:
 public:
 	//Prints to hit counts for each layer
 	void printCount();
-	void printTypes();
+	void printCountEff();
+	void printType();
+	void printTypeEff();
 
 	//Hit counter for each layer
 	inline void addBHits(G4int hits) { bTotal += hits; };

@@ -107,11 +107,6 @@ void DevEventAction::sumNumOfHits(G4VHitsCollection* dCol,G4VHitsCollection* bCo
 }
 
 void DevEventAction::EndOfEventAction(const G4Event* anEvent) {
-	// TODO Decide if an event is good, alright,bad or invalid
-
-	//Counter for the number of events
-	G4cout<<"Event: "<<anEvent->GetEventID()<<"/100240"<<G4endl;
-
 	//Gets hit collection for each layer
 	G4String dName = "StaveDCollection";
 	G4VHitsCollection* dHitsCol = getHitCollection(anEvent,dName);
@@ -127,9 +122,13 @@ void DevEventAction::EndOfEventAction(const G4Event* anEvent) {
 
 	classifyEvent(dHitsCol,bHitsCol,cHitsCol);
 
-	G4cout<<"EVENT END==========================================="<<G4endl;
+	rAction->printCount();
+	rAction->printType();
 
-	//rAction->printCount();
+	//Counter for the number of events
+	G4cout<<"Event: "<<anEvent->GetEventID()<<"/100240"<<G4endl;
+
+	G4cout<<"EVENT END==========================================="<<G4endl;
 
 
 }
