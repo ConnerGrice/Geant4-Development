@@ -16,6 +16,7 @@ DevEventAction::~DevEventAction() {
 }
 
 void DevEventAction::BeginOfEventAction(const G4Event*) {
+	G4cout<<"EVENT START==================================="<<G4endl;
 
 }
 
@@ -56,7 +57,7 @@ G4bool DevEventAction::doBothHit(G4VHitsCollection* collection) {
 
 	//Get how many times each particle hit the layer
 	for (int i = 0;i < hitCount;i++) {
-		hit = (collection*)[i];
+		hit = (DevHit*)collection->GetHit(i);
 		G4int whichParticle = hit->GetTrackID();
 		if (whichParticle == 1) {
 			particle1++;
@@ -73,24 +74,29 @@ G4bool DevEventAction::doBothHit(G4VHitsCollection* collection) {
 	return false;
 }
 
+
 void DevEventAction::classifyEvent(G4VHitsCollection* dCol,G4VHitsCollection* bCol,G4VHitsCollection* cCol) {
 	G4bool dGood = doBothHit(dCol);
 	G4bool bGood = doBothHit(bCol);
 	G4bool cGood = doBothHit(cCol);
 
 	if (cGood && bGood) {
+		G4cout<<"GOOD EVENT"<<G4endl;
 		rAction->addGood();
 	} else if (cGood && dGood) {
+		G4cout<<"ALRIGHT EVENT"<<G4endl;
 		rAction->addAlright();
 	} else if (bGood && dGood) {
+		G4cout<<"BAD EVENT"<<G4endl;
 		rAction->addBad();
 	} else {
+		G4cout<<"INVALID EVENT"<<G4endl;
 		rAction->addInvalid();
 	}
 }
+
 void DevEventAction::sumNumOfHits(G4VHitsCollection* dCol,G4VHitsCollection* bCol,G4VHitsCollection* cCol) {
 	G4int dHitCount = dCol->GetSize();
-
 	rAction->addDHits(dHitCount);
 
 	G4int bHitCount = bCol->GetSize();
@@ -104,7 +110,6 @@ void DevEventAction::EndOfEventAction(const G4Event* anEvent) {
 	// TODO Decide if an event is good, alright,bad or invalid
 
 	//Counter for the number of events
-	G4cout<<"========================================="<<G4endl;
 	G4cout<<"Event: "<<anEvent->GetEventID()<<"/100240"<<G4endl;
 
 	//Gets hit collection for each layer
@@ -122,8 +127,9 @@ void DevEventAction::EndOfEventAction(const G4Event* anEvent) {
 
 	classifyEvent(dHitsCol,bHitsCol,cHitsCol);
 
+	G4cout<<"EVENT END==========================================="<<G4endl;
 
-	rAction->printCount();
+	//rAction->printCount();
 
 
 }

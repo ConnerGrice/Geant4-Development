@@ -13,7 +13,7 @@
 #include <G4ParticleGun.hh>
 #include <G4Proton.hh>
 #include <G4SystemOfUnits.hh>
-#include <G4RootAnalysisReader.hh>
+//#include <G4RootAnalysisReader.hh>
 #include <g4root.hh>
 
 class DevPrimaryGeneratorAction: public G4VUserPrimaryGeneratorAction {

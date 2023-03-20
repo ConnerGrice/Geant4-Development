@@ -25,11 +25,13 @@ public:
 public:
 	//Prints to hit counts for each layer
 	void printCount();
+	void printTypes();
 
 	//Hit counter for each layer
 	inline void addBHits(G4int hits) { bTotal += hits; };
 	inline void addCHits(G4int hits) { cTotal += hits; };
 	inline void addDHits(G4int hits) { dTotal += hits; };
+
 
 	inline void addGood() { nGood++; };
 	inline void addAlright() { nAlright++; };

@@ -72,7 +72,18 @@ C (2 HCIs)|144,275|72.0%
 
 This makes sense because the number of hits isn't being inflated by the extra hits by electrons. Though, there is still the issue of the original protons scattering and hitting the detector multiple times.
 
-THis is a test
+## Getting total system efficiency
+
+To get the total efficiency, what constitutes a valid and invalid event must be defined rather than just counting the number of hits on each detector. If either particle misses more than 1 layer the whole event is invalid. However, since there are 3 layers, there are different levels of success for each valid event. These levels were defined the experiment was run to calculate the total efficiency of the system.
+
+ - Total Efficiency: 51.9%
+ 
+|Level of Success|Definition|Percentage of Valid Events|
+|---|---|---|
+|Good|C + B _or_ C + B + D|90.4%|
+|Alright|C + D|8.7%|
+|Bad|B + D|0.9%|
+ 
 
 
 
