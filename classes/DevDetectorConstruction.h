@@ -13,6 +13,7 @@
 #include <G4PVPlacement.hh>
 #include <G4PVReplica.hh>
 #include <G4NistManager.hh>
+#include <G4Material.hh>
 #include <G4Box.hh>
 #include <G4SystemOfUnits.hh>
 #include <G4AssemblyVolume.hh>
@@ -27,6 +28,7 @@
 #include <G4VUserDetectorConstruction.hh>
 
 #include "DevSensitiveDetector.h"
+#include "parameters.h"
 
 class DevDetectorConstruction: public G4VUserDetectorConstruction {
 public:
@@ -44,12 +46,12 @@ private:
 	//Methods for constructing a stave
 	//Gets the width of the stave based on the number of HCIs
 	inline G4double getPlateWidth(G4int numOfHCIs){
-		return (HCIWidth*numOfHCIs)/2.0 + 4;
+		return (HCIWidth*numOfHCIs)/2.0 + PADDING;
 	}
 
 	//Gets the radius of the hexagon in order to make all staves touch
 	inline G4double getPlateRadius(G4double plateWidth){
-		return (plateWidth/tan(angle/2.0))+plateThickness/2;
+		return (plateWidth/tan(angle/2.0))+plateThickness/2+fleeceThickness;
 	}
 
 	//Defines volume containing all stave components
@@ -98,5 +100,6 @@ private:
 	G4int sides;
 	G4double angle;
 	G4double plateThickness;
+	G4double fleeceThickness;
 };
 #endif /* INCLUDE_DEVDETECTORCONSTRUCTION_H_ */

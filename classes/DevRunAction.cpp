@@ -58,6 +58,11 @@ void DevRunAction::printTypeEff() {
 }
 
 void DevRunAction::EndOfRunAction(const G4Run*) {
+	std::ofstream eff;
+	eff.open("../Results/Eff_padding.dat",std::ios_base::app);
+	eff<<PADDING<<" "<<((nGood+nAlright+nBad)/100240.0)<<std::endl;
+
+
 	printTypeEff();
 	G4cout<<"RUN END==============================="<<G4endl;
 

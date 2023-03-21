@@ -9,7 +9,7 @@
 
 DevDetectorConstruction::DevDetectorConstruction():HCIWidth(15*mm),
 staveLength(320*mm),HCILength(271.2*mm),HCIUnitThickness(285*um),
-sides(6),angle(M_PI/3.0),plateThickness(240*um){
+sides(6),angle(M_PI/3.0),plateThickness(240*um),fleeceThickness(20*um){
 	//Defines that maertial variables
 	DefineMaterials();
 }
@@ -20,14 +20,20 @@ DevDetectorConstruction::~DevDetectorConstruction() {
 void DevDetectorConstruction::DefineMaterials(){
 	//Defining materials
 	G4NistManager* pNist = G4NistManager::Instance();
+	G4Material* C = pNist->FindOrBuildMaterial("G4_C");
+	G4Material* Si = pNist->FindOrBuildMaterial("G4_Si");
+	G4Material* Al = pNist->FindOrBuildMaterial("G4_Al");
+	G4Material* kapton = pNist->FindOrBuildMaterial("G4_KAPTON");
+
+	//Defining volume materials
 	pWorldMat = pNist->FindOrBuildMaterial("G4_Galactic");
-	pPlateMat = pNist->FindOrBuildMaterial("G4_Si");
-	pFleeceMat = pNist->FindOrBuildMaterial("G4_C");
-	pGlue = pPlateMat;
-	pChips = pPlateMat;
-	pSolder = pPlateMat;
-	pConducting = pPlateMat;
-	pSubstrate = pPlateMat;
+	pPlateMat = C;
+	pFleeceMat = C;
+	pGlue = C;
+	pChips = Si;
+	pSolder = C;
+	pConducting = Al;
+	pSubstrate = kapton;
 }
 
 G4LogicalVolume* DevDetectorConstruction::staveMother(G4double width){
@@ -57,8 +63,7 @@ G4LogicalVolume* DevDetectorConstruction::coldPlate(G4double width) {
 
 G4LogicalVolume* DevDetectorConstruction::fleece(G4double width) {
 	//Volume definition
-	G4double thickness = 20*um;
-	G4Box* fleeceS = new G4Box("FleeceS",width,thickness/2,staveLength/2);
+	G4Box* fleeceS = new G4Box("FleeceS",width,fleeceThickness/2,staveLength/2);
 	G4LogicalVolume* fleeceL = new G4LogicalVolume(fleeceS,pFleeceMat,"FleeceL");
 
 	//Visual parameters
@@ -179,7 +184,7 @@ void DevDetectorConstruction::ConstructStaves(G4int numOfHCIs,G4String name) {
 	buildHCI(name);
 
 	//Left-most HCI unit position
-	G4ThreeVector HCIPosition = G4ThreeVector(-(HCIWidth*numOfHCIs/2)-HCIWidth/2,0,0);
+	G4ThreeVector HCIPosition = G4ThreeVector(-(HCIWidth*numOfHCIs/2)-HCIWidth/2,0,HCIZ);
 	G4RotationMatrix* HCIRotation = new G4RotationMatrix;
 
 	//Places each HCI unit on alternating side of the plate

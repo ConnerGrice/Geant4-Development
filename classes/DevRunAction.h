@@ -13,6 +13,10 @@
 #include <G4HCtable.hh>
 #include <G4Run.hh>
 
+#include <fstream>
+
+#include "parameters.h"
+
 class DevRunAction: public G4UserRunAction {
 public:
 	DevRunAction();
@@ -44,6 +48,7 @@ private:
 	G4int bTotal,cTotal,dTotal;
 
 	G4int nGood,nAlright,nBad,nInvalid;
+
 };
 
 #endif /* CLASSES_DEVRUNACTION_H_ */

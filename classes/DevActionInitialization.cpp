@@ -24,7 +24,8 @@ void DevActionInitialization::Build() const{
 	DevStackingAction* stackingAction = new DevStackingAction();
 	SetUserAction(stackingAction);
 }
-
+/*
 void DevActionInitialization::BuildForMaster() const {
 	SetUserAction(new DevRunAction());
 }
+*/

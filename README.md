@@ -83,7 +83,56 @@ To get the total efficiency, what constitutes a valid and invalid event must be 
 |Good|C + B _or_ C + B + D|90.4%|
 |Alright|C + D|8.7%|
 |Bad|B + D|0.9%|
- 
 
+## 21/3/2023
+### Material definitions
 
+At this point the materials used have been placeholders. Each layer was made up of carbon, while the empty space was a vaccum. Trying to make the simluation closer to the correct materials, I have modifed them
+
+```cpp
+void DevDetectorConstruction::DefineMaterials(){
+	//Defining materials
+	G4NistManager* pNist = G4NistManager::Instance();
+	G4Material* C = pNist->FindOrBuildMaterial("G4_C");
+	G4Material* Si = pNist->FindOrBuildMaterial("G4_Si");
+	G4Material* Al = pNist->FindOrBuildMaterial("G4_Al");
+	G4Material* kapton = pNist->FindOrBuildMaterial("G4_KAPTON");
+
+	//Defining volume materials
+	pWorldMat = pNist->FindOrBuildMaterial("G4_Galactic");
+	pPlateMat = C;
+	pFleeceMat = C;
+	pGlue = C;
+	pChips = Si;
+	pSolder = C;
+	pConducting = Al;
+	pSubstrate = kapton;
+}
+```
+Now, the only material that is not correct is `pSolder`. This is an epoxy chemical compound, $C_2H_2$.
+
+After running the experiments again, the efficiency is pretty much the same. This was expected as the thickness of the materials is smaller and the energy of the protons are high so complete absorbtion is unlikely to occur.
+
+### Improving efficiency by moving HCI unit
+
+When trying to increase the efficiency of the system, one method to do this is to increase the solid angle swept by the detector plates. There are a few ways to do this.
+
+The first is to move the HCI unit forward away from the origin of the particles. This means the units will cover more of the cone in which the 
+particles can move. 
+
+![hci-shift-image](screenshots/HCI-Unit-Shift.png)
+
+These are the results:
+
+![moving-hci](Results/Eff_HCI.eps)
+
+### Imporoving efficiency by chaning the amount of padding by the cold plate
+
+For the same reasons, the padding on either side of the HCI unit can also be reduced to lower the space between the detectors that the particles can pass through.
+
+![hci-padding](screenshots/HCI-Unit-padding.png)
+
+Here are the results:
+
+![padding-results](Results/Eff_padding.eps)
 
