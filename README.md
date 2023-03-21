@@ -124,7 +124,7 @@ particles can move.
 
 These are the results:
 
-![moving-hci](Results/Eff_HCI.eps)
+![moving-hci](./Results/Eff_HCI.svg)
 
 ### Imporoving efficiency by chaning the amount of padding by the cold plate
 
@@ -134,5 +134,5 @@ For the same reasons, the padding on either side of the HCI unit can also be red
 
 Here are the results:
 
-![padding-results](Results/Eff_padding.eps)
+![padding-results](./Results/Eff_padding.svg)
 
