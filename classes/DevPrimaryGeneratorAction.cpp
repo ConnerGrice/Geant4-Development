@@ -46,7 +46,7 @@ void DevPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
 	reader->GetNtupleRow();
 
 	//Set reaction origin point
-	pParticleGun->SetParticlePosition(G4ThreeVector(x,y,z));
+	pParticleGun->SetParticlePosition(G4ThreeVector(x,y,z-150*mm));
 
 	//Define and shoot outgoing particle 1
 	pParticleGun->SetParticleMomentum(G4ParticleMomentum(px1,py1,pz1));

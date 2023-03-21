@@ -136,3 +136,27 @@ Here are the results:
 
 ![padding-results](./Results/Eff_padding.svg)
 
+### Improving efficiency by moving the particle origin point
+
+For the same reason as the changes above, the particle source can be moved to the end of the detector. This means that the entire HCI unit will be used. Before this change (particle are generated from the centre), half of the unit was never hit because the particles will always be travelling forward when they are generated.
+
+![particle-shift](screenshots/Particle-Origin-Shift.png)
+
+I carried out an experiment with these parameters:
+
+- Particles are generated 10mm from the back of the detector
+- The HCI units are shifted 10mm towards to front of the detector
+- There is 3mm of padding on wither side of the cold plates
+
+Here are the results:
+
+- Total Efficiency: 66.7%%
+ 
+|Level of SuccessPercentage of Valid Events|
+|---|---|
+|Good|70.2%|
+|Alright|29.0%|
+|Bad|0.8%|
+
+Though the total efficiency has increased, the proportion of those that are considered _Good_ is reduced. This makes sense since the particles that are now captured after moving the origin back will be those that are travelling at a shallower angle. Therefore, there is a higher chance of missing the last layer, resulting in a _Alright_ event.
+
