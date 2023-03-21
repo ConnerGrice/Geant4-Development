@@ -11,6 +11,6 @@ void padding_plot() {
 	plot2->SetMarkerStyle(7);
 	plot2->Draw("acp");
 
-	c2->Print("../Results/Eff_padding.eps");
+	c2->Print("../Results/Eff_padding.svg");
 
 }

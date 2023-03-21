@@ -11,7 +11,7 @@ void shift_HCI_plot() {
 	plot1->SetMarkerStyle(7);
 	plot1->Draw("acp");
 
-	c1->Print("../Results/Eff_HCI.eps");
+	c1->Print("../Results/Eff_HCI.svg");
 
 	c1->Close();
 
