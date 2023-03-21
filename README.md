@@ -152,7 +152,7 @@ Here are the results:
 
 - Total Efficiency: 66.7%%
  
-|Level of SuccessPercentage of Valid Events|
+|Level of Success|Percentage of Valid Events|
 |---|---|
 |Good|70.2%|
 |Alright|29.0%|
