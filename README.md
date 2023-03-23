@@ -167,6 +167,16 @@ I then carried out the experiment changing the amount of padding and here are th
 
 ![padding](Results/Eff_padding_new.svg)
 
-These results show that with no padding at all, the system could be more than 90% efficient. However, this may be impractiacal. The accpeted efficiency is 70% or higher. This is the case when the padding is at most 3.5mm. 
+These results show that with no padding at all, the system could be more than 90% efficient. However, this may be impractiacal. The accpeted efficiency is 70% or higher. This is the case when the padding is at most 3.5mm.
+
+To get a better view on the levels of success, a final test was done where the padding was set to 3mm in order to get the efficiency above 70%. Here are the results:
+
+- Total Efficiency: 73.6%
+ 
+|Level of Success|Percentage of Valid Events|
+|---|---|
+|Good|89.4%|
+|Alright|9.4%|
+|Bad|1.2%|
 
 
