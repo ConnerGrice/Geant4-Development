@@ -16,6 +16,8 @@
 //#include <G4RootAnalysisReader.hh>
 #include <g4root.hh>
 
+#include "parameters.h"
+
 class DevPrimaryGeneratorAction: public G4VUserPrimaryGeneratorAction {
 public:
 	DevPrimaryGeneratorAction();

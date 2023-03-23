@@ -132,9 +132,7 @@ For the same reasons, the padding on either side of the HCI unit can also be red
 
 ![hci-padding](screenshots/HCI-Unit-padding.png)
 
-Here are the results:
-
-![padding-results](./Results/Eff_padding.svg)
+The results show that the efficiency was greatly increased if the padding was non-existent (~80%). However, this may become an issue when building the physical detector.  
 
 ### Improving efficiency by moving the particle origin point
 
@@ -159,4 +157,16 @@ Here are the results:
 |Bad|0.8%|
 
 Though the total efficiency has increased, the proportion of those that are considered _Good_ is reduced. This makes sense since the particles that are now captured after moving the origin back will be those that are travelling at a shallower angle. Therefore, there is a higher chance of missing the last layer, resulting in a _Alright_ event.
+
+## 23/03/2023
+### Testing affect of padding on efficiency if particle source is pushed down the detector
+
+To keep my testing consistent and as close to the main simulation as possible, I have changed the position of the particle source to be where the effective area of the detector starts, e.g. Not at the very end of the detector, but at the point where all the HCI units begin. 
+
+I then carried out the experiment changing the amount of padding and here are the results:
+
+![padding](Results/Eff_padding_new.svg)
+
+These results show that with no padding at all, the system could be more than 90% efficient. However, this may be impractiacal. The accpeted efficiency is 70% or higher. This is the case when the padding is at most 3.5mm. 
+
 

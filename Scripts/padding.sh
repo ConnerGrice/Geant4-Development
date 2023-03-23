@@ -12,4 +12,6 @@ do
 	((suffix++))
 done
 
+mv ../Results/Eff.dat ../Results/Eff_padding.dat
+
 echo ALL done
