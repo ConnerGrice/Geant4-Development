@@ -15,10 +15,10 @@
 #include <G4NistManager.hh>
 #include <G4Material.hh>
 #include <G4Box.hh>
+#include <G4Tubs.hh>
 #include <G4SystemOfUnits.hh>
 #include <G4AssemblyVolume.hh>
 #include <G4Transform3D.hh>
-
 #include <G4Colour.hh>
 #include <G4VisAttributes.hh>
 
@@ -71,6 +71,10 @@ private:
 	G4LogicalVolume* HCILayerMother(G4double thickness,G4String name);
 	G4LogicalVolume* HCISegment(G4double thickness,G4String name,G4Material* material,G4VisAttributes* visual);
 
+	G4LogicalVolume* HCIPixelStrip(G4double thickness,G4String name, G4Material* material,G4VisAttributes* visual);
+
+	G4LogicalVolume* HCIPixel(G4double thickness,G4String name, G4Material* material,G4VisAttributes* visual);
+
 	//Generates physical volumes for a HCI layer
 	void buildHCILayer(G4String name,G4double thickness, G4Material* mat,G4VisAttributes* visual,G4ThreeVector pos);
 
@@ -92,11 +96,13 @@ private:
 	G4Material* pSolder;
 	G4Material* pConducting;
 	G4Material* pSubstrate;
+	G4Material* pTarget;
 
 	G4double HCIWidth;
 	G4double staveLength;
 	G4double HCILength;
 	G4double HCIUnitThickness;
+	G4double HCIPixelSide;
 	G4int sides;
 	G4double angle;
 	G4double plateThickness;

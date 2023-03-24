@@ -59,16 +59,18 @@ After a full run simply counting the number of particles that hit each layer wit
 |Layer     |Hits   |Efficiency|
  ------- | ----- | -------- 
 D (4 HCIs)|139,147|69.4%
-B (3 HCIs)|153,856|76.7%
-C (2 HCIs)|151,834|75.7%
+C (3 HCIs)|151,834|75.7%
+B (2 HCIs)|153,856|76.7%
+
 
 After adding a stacking action to delete all particles except the initial protons (removing secondary particles so they arent counted if they hit the detector multiple times as shown above) the efficiency changes.
 
 |Layer     |Hits   |Efficiency|
  ------- | ----- | -------- 
 D (4 HCIs)|133,279|66.5%
-B (3 HCIs)|148,442|74.0%
-C (2 HCIs)|144,275|72.0%
+C (3 HCIs)|144,275|72.0%
+B (2 HCIs)|148,442|74.0%
+
 
 This makes sense because the number of hits isn't being inflated by the extra hits by electrons. Though, there is still the issue of the original protons scattering and hitting the detector multiple times.
 
@@ -179,4 +181,22 @@ To get a better view on the levels of success, a final test was done where the p
 |Alright|9.4%|
 |Bad|1.2%|
 
+## 24/03/2023
+### Adding Liquid Hydrogren target
+
+In the real detector, the protons will be produced by aiming a particle beam at a liquid hydrogen target. This was added at the over the top of where the particles are generated.
+
+The target as a diameter of 3cm and a length of 3cm.
+
+![target](screenshots/Target.png)
+
+![target-barrel](screenshots/Target-Barrel.png)
+
+### Starting to digitize
+
+The next goal is to set up digitisation in order to gather results that are more realistic to what the detector would output. To do this I have added the ability to split the Individual HCI segments into smaller pixel sections.
+
+In the real simulation the pixels will be 30x30 $\mu m^2$. In the image below is not to scale and is just for ease of viewing.
+
+![HCI-pixels](screenshots/HCIPixels.png)
 

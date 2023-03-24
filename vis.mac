@@ -8,7 +8,7 @@
 /vis/drawVolume
 
 #Sets the viewpoint position and light source position
-/vis/viewer/set/viewpointVector 0 0 0
+/vis/viewer/set/viewpointVector 1 0 0
 /vis/viewer/set/lightsVector -1 0 0
 
 #Defines the drawing of the particle trajectories

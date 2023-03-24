@@ -8,8 +8,8 @@
 #include "DevDetectorConstruction.h"
 
 DevDetectorConstruction::DevDetectorConstruction():HCIWidth(15*mm),
-staveLength(320*mm),HCILength(271.2*mm),HCIUnitThickness(285*um),
-sides(6),angle(M_PI/3.0),plateThickness(240*um),fleeceThickness(20*um){
+staveLength(320*mm),HCILength(271.08*mm),HCIUnitThickness(285*um),
+HCIPixelSide(1*mm),sides(6),angle(M_PI/3.0),plateThickness(240*um),fleeceThickness(20*um){
 	//Defines that maertial variables
 	DefineMaterials();
 }
@@ -24,6 +24,7 @@ void DevDetectorConstruction::DefineMaterials(){
 	G4Material* Si = pNist->FindOrBuildMaterial("G4_Si");
 	G4Material* Al = pNist->FindOrBuildMaterial("G4_Al");
 	G4Material* kapton = pNist->FindOrBuildMaterial("G4_KAPTON");
+	G4Material* liquid_H2 = pNist->FindOrBuildMaterial("G4_lH2");
 
 	//Defining volume materials
 	pWorldMat = pNist->FindOrBuildMaterial("G4_Galactic");
@@ -34,6 +35,7 @@ void DevDetectorConstruction::DefineMaterials(){
 	pSolder = C;
 	pConducting = Al;
 	pSubstrate = kapton;
+	pTarget = liquid_H2;
 }
 
 G4LogicalVolume* DevDetectorConstruction::staveMother(G4double width){
@@ -119,15 +121,45 @@ G4LogicalVolume* DevDetectorConstruction::HCISegment(G4double thickness,G4String
 	G4LogicalVolume* segmentL = new G4LogicalVolume(segmentS,material,name+"SegL");
 
 	//Visual parameters
-	segmentL->SetVisAttributes(visual);
+	G4VisAttributes* visAtt = new G4VisAttributes(false);
+	segmentL->SetVisAttributes(visAtt);
+
+
 
 	return segmentL;
+}
+
+G4LogicalVolume* DevDetectorConstruction::HCIPixelStrip(G4double thickness,G4String name, G4Material* material,G4VisAttributes* visual) {
+	G4double length = HCILength/9;
+	G4Box* pixelStripS = new G4Box(name+"PStripS",HCIPixelSide/2.0,thickness/2.0,length/2.0);
+	G4LogicalVolume* pixelStripL = new G4LogicalVolume(pixelStripS,material,name+"PStripS");
+
+	pixelStripL->SetVisAttributes(visual);
+
+	return pixelStripL;
+}
+
+G4LogicalVolume* DevDetectorConstruction::HCIPixel(G4double thickness,G4String name, G4Material* material,G4VisAttributes* visual) {
+	G4double side = 7.53*mm;
+	G4Box* pixelS = new G4Box(name+"PixelS",HCIPixelSide/2.0,thickness/2.0,side/2.0);
+	G4LogicalVolume* pixelL = new G4LogicalVolume(pixelS,material,name+"PixelS");
+
+	pixelL->SetVisAttributes(visual);
+
+	return pixelL;
 }
 
 void DevDetectorConstruction::buildHCILayer(G4String name, G4double thickness, G4Material* mat,G4VisAttributes* visual, G4ThreeVector pos) {
 	//Get volumes
 	G4LogicalVolume* layerStripL = HCILayerMother(thickness,name);
 	G4LogicalVolume* layerSegmentL = HCISegment(thickness,name,mat,visual);
+
+	if (name == "BChips" || name == "CChips" || name == "DChips") {
+		G4LogicalVolume* pixelStrip = HCIPixelStrip(thickness,name,mat,visual);
+		G4LogicalVolume* pixel = HCIPixel(thickness,name,mat,visual);
+		new G4PVReplica(name+"PixelStrip",pixelStrip,layerSegmentL,kXAxis,15,(HCIPixelSide));
+		new G4PVReplica(name+"Pixel",pixel,pixelStrip,kZAxis,4,7.53*mm);
+	}
 
 	//Place volumes
 	new G4PVReplica(name+"Replica",layerSegmentL,layerStripL,kZAxis,9,(HCILength/9));
@@ -227,15 +259,25 @@ G4VPhysicalVolume* DevDetectorConstruction::Construct() {
 	pLogicalWorld = new G4LogicalVolume(pSolidWorld,pWorldMat,"WorldL");
 	G4PVPlacement* pPhysicalWorld = new G4PVPlacement(0,G4ThreeVector(0,0,0),pLogicalWorld,"WorldP",0,false,0,true);
 
+	//Place liquid H2 target
+	G4double targetDiam = 3*cm;
+	G4double targetLength = 3*cm;
+	G4ThreeVector targetPosition = G4ThreeVector(0,0,-(HCILength/2)+HCIZ+(targetLength/2));
+	G4Tubs* targetS = new G4Tubs("TargetL",0,targetDiam,targetLength/2,0,2*M_PI);
+	G4LogicalVolume* targetL = new G4LogicalVolume(targetS,pTarget,"TargetL");
+	new G4PVPlacement(0,targetPosition,targetL,"TargetP",pLogicalWorld,false,6,true);
+
 	//Generate staves
-	ConstructStaves(3,"C");
-	ConstructStaves(4,"D");
+	//ConstructStaves(3,"C");
+	//ConstructStaves(4,"D");
 	ConstructStaves(2,"B");
 
 	return pPhysicalWorld;
 }
 
 void DevDetectorConstruction::ConstructSDandField() {
+
+	/*
 	//Defines chips layers in each stave as the sensitive detector
 	auto CSensDet = new DevSensitiveDetector("StaveC","StaveCCollection");
 	G4SDManager::GetSDMpointer()->AddNewDetector(CSensDet);
@@ -244,7 +286,7 @@ void DevDetectorConstruction::ConstructSDandField() {
 	auto DSensDet = new DevSensitiveDetector("StaveD","StaveDCollection");
 	G4SDManager::GetSDMpointer()->AddNewDetector(DSensDet);
 	SetSensitiveDetector("DChipsSegL",DSensDet);
-
+*/
 	auto BSensDet = new DevSensitiveDetector("StaveB","StaveBCollection");
 	G4SDManager::GetSDMpointer()->AddNewDetector(BSensDet);
 	SetSensitiveDetector("BChipsSegL",BSensDet);
