@@ -12,6 +12,8 @@
 #include <G4LogicalVolume.hh>
 #include <G4PVPlacement.hh>
 #include <G4PVReplica.hh>
+#include <G4PVDivision.hh>
+#include <G4ReplicatedSlice.hh>
 #include <G4NistManager.hh>
 #include <G4Material.hh>
 #include <G4Box.hh>
@@ -98,6 +100,7 @@ private:
 	G4Material* pSubstrate;
 	G4Material* pTarget;
 
+public:
 	G4double HCIWidth;
 	G4double staveLength;
 	G4double HCILength;

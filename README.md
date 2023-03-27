@@ -200,3 +200,16 @@ In the real simulation the pixels will be 30x30 $\mu m^2$. In the image below is
 
 ![HCI-pixels](screenshots/HCIPixels.png)
 
+## 27/03/2023
+### HIC Unit seperation
+
+Due to physical constraints, the individual HIC segments cannot be touching and have a 0.2m gap inbetween each one. I have added this feature into the HICs. Another feature that will be present in the real detector is the addition of a passive periphery circuit along the bottom of the unit that is 1.2mm wide. 
+
+![HIC-gap](screenshots/HIC-Gap.png)
+
+The actual chips going to be used will be the [ALPIDE chips](https://indico.cern.ch/event/863068/contributions/3752479/attachments/1996261/3330551/20200302-Aglieri-ALPIDE-Overview.pdf).
+
+These chips have a resolution of 512x1024 and are 15mmx30mm. An attempt will be made to get our model as close to this as possible.
+
+
+
