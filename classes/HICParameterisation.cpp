@@ -8,15 +8,22 @@
 #include "HICParameterisation.h"
 
 HICParameterisation::HICParameterisation() {
-	// TODO Auto-generated constructor stub
-
 }
 
 HICParameterisation::~HICParameterisation() {
-
 }
 
-void HICParameterisation::ComputeTransformation(const G4int copyNo,G4VPhysicalVolume*) const {
+void HICParameterisation::ComputeTransformation(const G4int copyNo,G4VPhysicalVolume* physVol) const {
+	ChipDigitiserMap* map = ChipDigitiserMap::get();
+	G4int xPixels = 460;
+	G4int zPixels = 1000;
+
+	if (copyNo < xPixels + zPixels) {
+		physVol->SetTranslation(map->get_position(copyNo));
+	} else {
+
+	}
+	physVol->SetRotation(0);
 
 }
 

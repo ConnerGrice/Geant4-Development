@@ -57,7 +57,7 @@ G4LogicalVolume* DevDetectorConstruction::coldPlate(G4double width) {
 	G4LogicalVolume* plateL = new G4LogicalVolume(plateS,pPlateMat,"PlateL");
 
 	//Visual parameters
-	G4VisAttributes* visAtt = new G4VisAttributes(false,G4Colour(0.75,0.75,0.75));
+	G4VisAttributes* visAtt = new G4VisAttributes(true,G4Colour(0.75,0.75,0.75));
 	plateL->SetVisAttributes(visAtt);
 
 	return plateL;
@@ -69,14 +69,14 @@ G4LogicalVolume* DevDetectorConstruction::fleece(G4double width) {
 	G4LogicalVolume* fleeceL = new G4LogicalVolume(fleeceS,pFleeceMat,"FleeceL");
 
 	//Visual parameters
-	G4VisAttributes* visAtt = new G4VisAttributes(false,G4Colour(0.5,0.5,0.5));
+	G4VisAttributes* visAtt = new G4VisAttributes(true,G4Colour(0.5,0.5,0.5));
 	fleeceL->SetVisAttributes(visAtt);
 
 	return fleeceL;
 }
 
 void DevDetectorConstruction::buildPlate(G4double width) {
-	//Padding of plate anf fleece
+	//Padding of plate and fleece
 	G4double offset = plateThickness/2+10*um;
 
 	//Get volumes

@@ -20,6 +20,7 @@ class ChipDigitiserMap {
 
 	std::map<G4int, G4ThreeVector> table;
 
+private:
 	ChipDigitiserMap();
 
 public:
@@ -27,6 +28,8 @@ public:
 	G4ThreeVector get_position(const G4int copyNo) { return table[copyNo]; };
 
 	G4double pixelDim = 30*um;
+	G4int xPixels = 460;
+	G4int zPixels = 1000;
 };
 
 #endif /* GEANT4_DEVELOPMENT_CLASSES_CHIPDIGITISERMAP_H_ */
