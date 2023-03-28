@@ -228,7 +228,7 @@ I set up a parameterisation to define the pixels and the passive circuit board i
 
 The more memory efficient approach was to use the PVReplica class twice to make a grid of pixels. This method allows me to run the program, though the visualiser takes much longer to start up. However, due to the large number of pixels, it is not practical to render each one, since the visualiser lags. Therefore, only the 9 segments will be visualised.
 
-### Creating Chip active area
+### Creating chip active area
 
 Due to the way the replica class works, I must first generate the active area of the chips and add the passive circuit board with another set of replicas. 
 
@@ -236,6 +236,13 @@ First, I have made the active area the correct size, so that it can contain 460x
 
 ![ActiveChip](screenshots/ALPIDE-Chip-Active.png)
 
+### Creating chip passive area
+
+I have now generated the passive chip area along the side of each chip, shown in the dark green.
+
+![Chip-Top](screenshots/ALPIDE-Chip-Top.png)
+
+![Chip-Side](screenshots/ALPIDE-Chips-Side.png)
 
 
 

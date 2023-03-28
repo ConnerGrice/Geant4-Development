@@ -140,6 +140,28 @@ G4LogicalVolume* DevDetectorConstruction::HCISegment(G4double thickness,G4String
 	return segmentL;
 }
 
+G4LogicalVolume* DevDetectorConstruction::HICChipLayerMother(G4double thickness) {
+	G4Box* chipS = new G4Box("PassiveS",0.6*mm,thickness/2.0,HCILength/2.0);
+	G4LogicalVolume* chipL = new G4LogicalVolume(chipS,pWorldMat,"PassiveL");
+
+	chipL->SetVisAttributes(false);
+	return chipL;
+}
+
+G4LogicalVolume* DevDetectorConstruction::HICChipSegment(G4double thickness,G4VisAttributes* visual) {
+	G4double length = HCILength/9.0;
+
+	G4Box* chipSegS = new G4Box("PassiveSegS",0.6*mm,thickness/2,length/2);
+	G4LogicalVolume* chipSegL = new G4LogicalVolume(chipSegS,pChips,"PassiveSegL");
+
+
+	G4VisAttributes* visAttr = new G4VisAttributes(visual);
+	visAttr->SetColour(G4Colour(0.0,0.5,0.0));
+
+	chipSegL->SetVisAttributes(visAttr);
+	return chipSegL;
+}
+
 G4LogicalVolume* DevDetectorConstruction::HCIPixelStrip(G4double thickness,G4String name, G4Material* material,G4VisAttributes* visual) {
 	G4double length = HCILength/9;
 	G4Box* pixelStripS = new G4Box(name+"PStripS",HCIPixelSide/2.0,thickness/2.0,length/2.0);
@@ -175,8 +197,16 @@ void DevDetectorConstruction::buildHCILayer(G4String name, G4double thickness, G
 	if (name == "BChips" || name == "CChips" || name == "DChips") {
 		G4LogicalVolume* pixelStrip = HCIPixelStrip(thickness,name,mat,visual);
 		G4LogicalVolume* pixel = HCIPixel(thickness,name,mat,visual);
+
+		G4LogicalVolume* chipStrip = HICChipLayerMother(thickness);
+		G4LogicalVolume* chipSegment = HICChipSegment(thickness,visual);
+
+		new G4ReplicatedSlice(name+"ChipStripP",chipSegment,chipStrip,kZAxis,9,30*mm,0.1*mm,0);
+		new G4PVPlacement(0,pos+G4ThreeVector(-6.9*mm,thickness/2,0),chipStrip,name+"ChipStripP",HCIUnitL,false,101);
+
 		new G4PVReplica(name+"PixelStrip",pixelStrip,layerSegmentL,kXAxis,460,HCIPixelSide);
 		new G4PVReplica(name+"Pixel",pixel,pixelStrip,kZAxis,1000,HCIPixelSide);
+
 		new G4ReplicatedSlice(name+"Segment",layerSegmentL,layerStripL,kZAxis,9,30*mm,0.1*mm,0);
 		new G4PVPlacement(0,pos+G4ThreeVector(0.6*mm,thickness/2,0),layerStripL,name+"StripP",HCIUnitL,false,100);
 	} else {

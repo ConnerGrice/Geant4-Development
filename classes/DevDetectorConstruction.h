@@ -76,7 +76,8 @@ private:
 	G4LogicalVolume* HCILayerMother(G4double thickness,G4String name);
 	G4LogicalVolume* HCISegment(G4double thickness,G4String name,G4Material* material,G4VisAttributes* visual);
 
-	G4LogicalVolume* HICChipLayerMother(G4double thickness, G4String name);
+	G4LogicalVolume* HICChipLayerMother(G4double thickness);
+	G4LogicalVolume* HICChipSegment(G4double thickness,G4VisAttributes* visual);
 
 	G4LogicalVolume* HCIPixelStrip(G4double thickness,G4String name, G4Material* material,G4VisAttributes* visual);
 
