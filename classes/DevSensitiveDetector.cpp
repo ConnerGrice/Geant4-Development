@@ -26,13 +26,33 @@ G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
 	//Gets the copy number of hit detector
 	G4StepPoint* stepPoint = aStep->GetPreStepPoint();
 	const G4VTouchable* touchable = stepPoint->GetTouchable();
-	G4int copyNo = touchable->GetCopyNumber();
+
+
+
+	G4int zPixel = touchable->GetCopyNumber();
+	G4int yPixel = touchable->GetCopyNumber(1);
+	G4int segment = touchable->GetCopyNumber(2);
+	G4int unit = touchable->GetCopyNumber(4);
+	G4int stave = touchable->GetCopyNumber(5);
+
+	std::pair<int,int> pixels = std::make_pair(zPixel,yPixel);
+
+	ChipDigitiserMap* map = ChipDigitiserMap::getInstance();
+	G4ThreeVector position = map->getPosition(pixels);
 
 	G4int trackID = aStep->GetTrack()->GetTrackID();
 
+	G4cout<<SensitiveDetectorName<<": "<<G4endl;
+	G4cout<<"    Stave:"<<stave<<G4endl;
+	G4cout<<"    Unit:"<<unit<<G4endl;
+	G4cout<<"    Segment:"<<segment<<G4endl;
+	G4cout<<"    yPixel:"<<yPixel<<G4endl;
+	G4cout<<"    zPixel:"<<zPixel<<G4endl;
+	G4cout<<"    Coords: ("<<position.getX()<<","<<position.getY()<<","<<position.getZ()<<")"<<G4endl;
+
+
 	//Creates a hit and fills it with data
 	auto hit = new DevHit();
-	hit->SetCopyNo(copyNo);
 	hit->SetTrackID(trackID);
 
 	pHitCollection->insert(hit);
@@ -46,8 +66,12 @@ void DevSensitiveDetector::EndOfEvent(G4HCofThisEvent*) {
 	//Prints the detector and which section was hit
 	G4cout<<SensitiveDetectorName<<": "<<numHits<<" (";
 	for (int i=0;i<numHits;i++) {
+		/*
 		G4int copyNo = (*pHitCollection)[i]->GetCopyNo();
-		 G4cout<<copyNo<<",";
+		G4int copyNo2 = (*pHitCollection)[i]->GetCopyNo2();
+		G4int copyNo3 = (*pHitCollection)[i]->GetCopyNo3();
+		G4cout<<copyNo<<"("<<copyNo2<<"["<<copyNo3<<"]),";
+		*/
 	}
 	G4cout<<")"<<G4endl;
 }

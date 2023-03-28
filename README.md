@@ -244,5 +244,19 @@ I have now generated the passive chip area along the side of each chip, shown in
 
 ![Chip-Side](screenshots/ALPIDE-Chips-Side.png)
 
+### Testing with pixel array
+
+After running a single test, I found that not a single event was classed as valid. This is because, a valid event was determined by each particle coming into contact with a single senstive detector of each layer, e.g. each layer picks up 2 detections. However, since adding the pixels, each particle is passing through multiple pixels on each layer, therefore, making the event invalid.
+
+For example, the last event of the simluation shows the following pixels within stave C hit:
+
+```cmd
+G4WT0 > StaveC: 8 (490,491,492,308,309,310,310,311)
+```
+
+8 different pixels were hit by the particles. Though the pixels are clise together indicated by their similar copy numbers.
+
+I think I am going to try and set up the digitisation before fixing this bug. I think this can be fixed easily by just considering the first pixel hit by each particle at each layer.
+
 
 

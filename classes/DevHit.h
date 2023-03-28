@@ -19,14 +19,31 @@ public:
 
 public:
 	//Get-Set copy number
-	inline G4int GetCopyNo() { return copyNo; };
-	inline void SetCopyNo(G4int num) { copyNo = num; };
+	inline G4int GetZPx() { return zPx; };
+	inline void SetZPx(G4int num) { zPx = num; };
+
+	inline G4int GetYPx() { return yPx; };
+	inline void SetYPx(G4int num) { yPx = num; };
+
+	inline G4int GetSegment() { return segment; };
+	inline void SetSegment(G4int num) { segment = num; };
+
+	inline G4int GetUnit() { return unit; };
+	inline void SetUnit(G4int num) { unit = num; };
+
+	inline G4int GetStave() { return stave; };
+	inline void SetStave(G4int num) { stave = num; };
+
 
 	//Get-Set trackID
 	inline G4int GetTrackID() { return trkID; };
 	inline void SetTrackID(G4int id) { trkID = id; };
 private:
-	G4int copyNo;
+	G4int zPx;
+	G4int yPx;
+	G4int segment;
+	G4int unit;
+	G4int stave;
 	G4int trkID;
 };
 

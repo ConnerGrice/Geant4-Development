@@ -36,6 +36,7 @@ void DevDetectorConstruction::DefineMaterials(){
 	pConducting = Al;
 	pSubstrate = kapton;
 	pTarget = liquid_H2;
+	//TODO: Add Mylar target cover
 }
 
 G4LogicalVolume* DevDetectorConstruction::staveMother(G4double width){
@@ -176,7 +177,7 @@ G4LogicalVolume* DevDetectorConstruction::HCIPixelStrip(G4double thickness,G4Str
 
 G4LogicalVolume* DevDetectorConstruction::HCIPixel(G4double thickness,G4String name, G4Material* material,G4VisAttributes* visual) {
 	G4Box* pixelS = new G4Box(name+"PixelS",HCIPixelSide/2.0,thickness/2.0,HCIPixelSide/2.0);
-	G4LogicalVolume* pixelL = new G4LogicalVolume(pixelS,material,name+"PixelS");
+	G4LogicalVolume* pixelL = new G4LogicalVolume(pixelS,material,name+"PixelL");
 
 	//Visual parameters
 	G4VisAttributes* visAtt = new G4VisAttributes(false);
@@ -185,35 +186,36 @@ G4LogicalVolume* DevDetectorConstruction::HCIPixel(G4double thickness,G4String n
 	return pixelL;
 }
 
-void DevDetectorConstruction::buildChip(G4String name,G4double thickness, G4Material* mat, G4ThreeVector pos) {
-
-}
-
 void DevDetectorConstruction::buildHCILayer(G4String name, G4double thickness, G4Material* mat,G4VisAttributes* visual, G4ThreeVector pos) {
 	//Get volumes
 	G4LogicalVolume* layerStripL = HCILayerMother(thickness,name);
 	G4LogicalVolume* layerSegmentL = HCISegment(thickness,name,mat,visual);
 
+	//Constructs chip layer
 	if (name == "BChips" || name == "CChips" || name == "DChips") {
+		//Pixel array
 		G4LogicalVolume* pixelStrip = HCIPixelStrip(thickness,name,mat,visual);
 		G4LogicalVolume* pixel = HCIPixel(thickness,name,mat,visual);
 
+		//Passive strips
 		G4LogicalVolume* chipStrip = HICChipLayerMother(thickness);
 		G4LogicalVolume* chipSegment = HICChipSegment(thickness,visual);
 
+		//Passive strips
 		new G4ReplicatedSlice(name+"ChipStripP",chipSegment,chipStrip,kZAxis,9,30*mm,0.1*mm,0);
 		new G4PVPlacement(0,pos+G4ThreeVector(-6.9*mm,thickness/2,0),chipStrip,name+"ChipStripP",HCIUnitL,false,101);
 
+		//Pixel Array
 		new G4PVReplica(name+"PixelStrip",pixelStrip,layerSegmentL,kXAxis,460,HCIPixelSide);
 		new G4PVReplica(name+"Pixel",pixel,pixelStrip,kZAxis,1000,HCIPixelSide);
 
+		//Full layer
 		new G4ReplicatedSlice(name+"Segment",layerSegmentL,layerStripL,kZAxis,9,30*mm,0.1*mm,0);
-		new G4PVPlacement(0,pos+G4ThreeVector(0.6*mm,thickness/2,0),layerStripL,name+"StripP",HCIUnitL,false,100);
+		new G4PVPlacement(0,pos+G4ThreeVector(0.6*mm,thickness/2,0),layerStripL,name+"StripP",HCIUnitL,false,1);
 	} else {
 	//Place volumes
-	//new G4PVReplica(name+"Replica",layerSegmentL,layerStripL,kZAxis,9,(HCILength/9));
 	new G4ReplicatedSlice(name+"Segment",layerSegmentL,layerStripL,kZAxis,9,30*mm,0.1*mm,0);
-	new G4PVPlacement(0,pos+G4ThreeVector(0,thickness/2,0),layerStripL,name+"StripP",HCIUnitL,false,100);
+	new G4PVPlacement(0,pos+G4ThreeVector(0,thickness/2,0),layerStripL,name+"StripP",HCIUnitL,false,1);
 	}
 }
 
@@ -239,7 +241,7 @@ void DevDetectorConstruction::buildHCI(G4String name) {
 	//Build each layer
 	for (unsigned int i=0; i<thicknesses.size();i++) {
 		//Visualiser will only show the chips layer
-		if (names[i] == "Chips" || names[i] == "GlueA") {
+		if (names[i] == "Chips") {
 			invisible = true;
 		} else {
 			invisible = false;
@@ -285,12 +287,12 @@ void DevDetectorConstruction::ConstructStaves(G4int numOfHCIs,G4String name) {
 		}
 
 		//Place HCI Unit volume in simulation
-		new G4PVPlacement(HCIRotation,HCIPosition,HCIUnitL,"HCI"+(G4String)i,staveL,false,(10*numOfHCIs)+i);
+		new G4PVPlacement(HCIRotation,HCIPosition,HCIUnitL,"HCI"+(G4String)i,staveL,false,i);
 	}
 
 	//Stave location parameters
 	const G4double plateRadius = getPlateRadius(staveWidth);
-	G4RotationMatrix* staveRotation;;
+	G4RotationMatrix* staveRotation;
 	G4ThreeVector staveTranslation = G4ThreeVector(plateRadius,0,0);
 
 	//Creates a stave for each side of the detector
@@ -298,7 +300,7 @@ void DevDetectorConstruction::ConstructStaves(G4int numOfHCIs,G4String name) {
 		staveRotation = new G4RotationMatrix(0,0,(M_PI/2)+(angle*i));
 
 		//Place lowest level stave mother volume
-		new G4PVPlacement(staveRotation,staveTranslation,staveL,"Stave"+name+"P",pLogicalWorld,false,5+i);
+		new G4PVPlacement(staveRotation,staveTranslation,staveL,"Stave"+name+"P",pLogicalWorld,false,i);
 
 		staveTranslation.rotateZ(angle);
 	}
@@ -319,8 +321,8 @@ G4VPhysicalVolume* DevDetectorConstruction::Construct() {
 	new G4PVPlacement(0,targetPosition,targetL,"TargetP",pLogicalWorld,false,6,true);
 
 	//Generate staves
-	//ConstructStaves(3,"C");
-	//ConstructStaves(4,"D");
+	ConstructStaves(3,"C");
+	ConstructStaves(4,"D");
 	ConstructStaves(2,"B");
 
 /*
@@ -344,19 +346,19 @@ G4VPhysicalVolume* DevDetectorConstruction::Construct() {
 }
 
 void DevDetectorConstruction::ConstructSDandField() {
-/*
+
 	//Defines chips layers in each stave as the sensitive detector
 	auto CSensDet = new DevSensitiveDetector("StaveC","StaveCCollection");
 	G4SDManager::GetSDMpointer()->AddNewDetector(CSensDet);
-	SetSensitiveDetector("CChipsSegL",CSensDet);
+	SetSensitiveDetector("CChipsPixelL",CSensDet);
 
 	auto DSensDet = new DevSensitiveDetector("StaveD","StaveDCollection");
 	G4SDManager::GetSDMpointer()->AddNewDetector(DSensDet);
-	SetSensitiveDetector("DChipsSegL",DSensDet);
-*/
+	SetSensitiveDetector("DChipsPixelL",DSensDet);
+
 	auto BSensDet = new DevSensitiveDetector("StaveB","StaveBCollection");
 	G4SDManager::GetSDMpointer()->AddNewDetector(BSensDet);
-	SetSensitiveDetector("BChipsSegL",BSensDet);
+	SetSensitiveDetector("BChipsPixelL",BSensDet);
 
 }
 

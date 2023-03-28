@@ -32,7 +32,6 @@
 
 #include "DevSensitiveDetector.h"
 #include "parameters.h"
-#include "HICParameterisation.h"
 #include "ChipDigitiserMap.h"
 
 class DevDetectorConstruction: public G4VUserDetectorConstruction {
@@ -44,7 +43,7 @@ public:
 	G4VPhysicalVolume* Construct() override;
 	void ConstructSDandField() override;
 
-private:
+public:
 	//Initialises material definitions
 	void DefineMaterials();
 
@@ -59,6 +58,7 @@ private:
 		return (plateWidth/tan(angle/2.0))+plateThickness/2+fleeceThickness;
 	}
 
+private:
 	//Defines volume containing all stave components
 	G4LogicalVolume* staveMother(G4double width);
 
@@ -76,17 +76,17 @@ private:
 	G4LogicalVolume* HCILayerMother(G4double thickness,G4String name);
 	G4LogicalVolume* HCISegment(G4double thickness,G4String name,G4Material* material,G4VisAttributes* visual);
 
+	//Defines volume that will contain the passive area of the ALPIDE chip
 	G4LogicalVolume* HICChipLayerMother(G4double thickness);
 	G4LogicalVolume* HICChipSegment(G4double thickness,G4VisAttributes* visual);
 
+	//Defines the volume of the active area of the ALPIDE chip
 	G4LogicalVolume* HCIPixelStrip(G4double thickness,G4String name, G4Material* material,G4VisAttributes* visual);
-
 	G4LogicalVolume* HCIPixel(G4double thickness,G4String name, G4Material* material,G4VisAttributes* visual);
 
 	//Generates physical volumes for a HCI layer
 	void buildHCILayer(G4String name,G4double thickness, G4Material* mat,G4VisAttributes* visual,G4ThreeVector pos);
 
-	void buildChip(G4String name,G4double thickness,G4Material* mat,G4ThreeVector pos);
 	//Builds a single HCI unit
 	void buildHCI(G4String name);
 

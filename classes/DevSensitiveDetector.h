@@ -13,6 +13,7 @@
 #include <G4SDManager.hh>
 
 #include "DevHit.h"
+#include "ChipDigitiserMap.h"
 
 class DevSensitiveDetector: public G4VSensitiveDetector {
 public:

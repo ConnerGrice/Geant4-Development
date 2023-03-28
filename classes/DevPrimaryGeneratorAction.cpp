@@ -46,9 +46,8 @@ void DevPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
 	reader->GetNtupleRow();
 
 	//Set reaction origin point
-
 	const G4double HCIHalfLength = 135.6*mm;
-	pParticleGun->SetParticlePosition(G4ThreeVector(x,y,z-HCIHalfLength+HCIZ));
+	pParticleGun->SetParticlePosition(G4ThreeVector(x,y,(z/10.0)-HCIHalfLength+HCIZ));
 
 	//Define and shoot outgoing particle 1
 	pParticleGun->SetParticleMomentum(G4ParticleMomentum(px1,py1,pz1));
@@ -58,7 +57,8 @@ void DevPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
 	pParticleGun->SetParticleMomentum(G4ParticleMomentum(px2,py2,pz2));
 	pParticleGun->GeneratePrimaryVertex(anEvent);
 
-	/*
+
+/*
 	pParticleGun->SetParticleDefinition(G4Proton::Definition());
 
 	G4ThreeVector origin = G4ThreeVector(0,0,0);
@@ -67,10 +67,10 @@ void DevPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
 	G4double e = 1000*MeV;
 	pParticleGun->SetParticleEnergy(e);
 
-	G4ParticleMomentum direction = G4ParticleMomentum(1,0.3,0);
+	G4ParticleMomentum direction = G4ParticleMomentum(0,0.4,0);
 	pParticleGun->SetParticleMomentumDirection(direction);
 
 	pParticleGun->GeneratePrimaryVertex(anEvent);
-	*/
+*/
 }
 
