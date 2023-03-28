@@ -105,7 +105,13 @@ G4LogicalVolume* DevDetectorConstruction::HCIUnitMother() {
 
 G4LogicalVolume* DevDetectorConstruction::HCILayerMother(G4double thickness,G4String name) {
 	//Volume definition
-	G4Box* stripS = new G4Box(name+"S",HCIWidth/2.0,thickness/2.0,HCILength/2.0);
+	G4Box* stripS;
+	if (name == "BChips" || name == "CChips" || name == "DChips") {
+		stripS = new G4Box(name+"S",HCIWidth/2.0-0.6*mm,thickness/2.0,HCILength/2.0);
+	} else {
+		stripS = new G4Box(name+"S",HCIWidth/2.0,thickness/2.0,HCILength/2.0);
+	}
+
 	G4LogicalVolume* stripL = new G4LogicalVolume(stripS,pWorldMat,name+"L");
 
 	//Visual parameters
@@ -117,14 +123,19 @@ G4LogicalVolume* DevDetectorConstruction::HCILayerMother(G4double thickness,G4St
 G4LogicalVolume* DevDetectorConstruction::HCISegment(G4double thickness,G4String name,G4Material* material, G4VisAttributes* visual) {
 	//Volume definition
 	G4double length = HCILength/9;
-	G4Box* segmentS = new G4Box(name+"SegS",HCIWidth/2.0,thickness/2.0,length/2.0);
+
+	G4Box* segmentS;
+
+	if (name == "BChips" || name == "CChips" || name == "DChips") {
+		segmentS = new G4Box(name+"SegS",HCIWidth/2.0-0.6*mm,thickness/2.0,length/2.0);
+	} else {
+		segmentS = new G4Box(name+"SegS",HCIWidth/2.0,thickness/2.0,length/2.0);
+	}
+
 	G4LogicalVolume* segmentL = new G4LogicalVolume(segmentS,material,name+"SegL");
 
 	//Visual parameters
-	G4VisAttributes* visAtt = new G4VisAttributes(false);
 	segmentL->SetVisAttributes(visual);
-
-
 
 	return segmentL;
 }
@@ -134,19 +145,26 @@ G4LogicalVolume* DevDetectorConstruction::HCIPixelStrip(G4double thickness,G4Str
 	G4Box* pixelStripS = new G4Box(name+"PStripS",HCIPixelSide/2.0,thickness/2.0,length/2.0);
 	G4LogicalVolume* pixelStripL = new G4LogicalVolume(pixelStripS,material,name+"PStripS");
 
-	pixelStripL->SetVisAttributes(visual);
+	//Visual parameters
+	G4VisAttributes* visAtt = new G4VisAttributes(false);
+	pixelStripL->SetVisAttributes(visAtt);
 
 	return pixelStripL;
 }
 
 G4LogicalVolume* DevDetectorConstruction::HCIPixel(G4double thickness,G4String name, G4Material* material,G4VisAttributes* visual) {
-	G4double side = 7.53*mm;
-	G4Box* pixelS = new G4Box(name+"PixelS",HCIPixelSide/2.0,thickness/2.0,side/2.0);
+	G4Box* pixelS = new G4Box(name+"PixelS",HCIPixelSide/2.0,thickness/2.0,HCIPixelSide/2.0);
 	G4LogicalVolume* pixelL = new G4LogicalVolume(pixelS,material,name+"PixelS");
 
-	pixelL->SetVisAttributes(visual);
+	//Visual parameters
+	G4VisAttributes* visAtt = new G4VisAttributes(false);
+	pixelL->SetVisAttributes(visAtt);
 
 	return pixelL;
+}
+
+void DevDetectorConstruction::buildChip(G4String name,G4double thickness, G4Material* mat, G4ThreeVector pos) {
+
 }
 
 void DevDetectorConstruction::buildHCILayer(G4String name, G4double thickness, G4Material* mat,G4VisAttributes* visual, G4ThreeVector pos) {
@@ -156,14 +174,17 @@ void DevDetectorConstruction::buildHCILayer(G4String name, G4double thickness, G
 
 	if (name == "BChips" || name == "CChips" || name == "DChips") {
 		G4LogicalVolume* pixelStrip = HCIPixelStrip(thickness,name,mat,visual);
-		//G4LogicalVolume* pixel = HCIPixel(thickness,name,mat,visual);
-		//new G4PVReplica(name+"PixelStrip",pixelStrip,layerSegmentL,kXAxis,15,HCIPixelSide);
-		//new G4PVReplica(name+"Pixel",pixel,pixelStrip,kZAxis,4,7.53*mm);
-	}
+		G4LogicalVolume* pixel = HCIPixel(thickness,name,mat,visual);
+		new G4PVReplica(name+"PixelStrip",pixelStrip,layerSegmentL,kXAxis,460,HCIPixelSide);
+		new G4PVReplica(name+"Pixel",pixel,pixelStrip,kZAxis,1000,HCIPixelSide);
+		new G4ReplicatedSlice(name+"Segment",layerSegmentL,layerStripL,kZAxis,9,30*mm,0.1*mm,0);
+		new G4PVPlacement(0,pos+G4ThreeVector(0.6*mm,thickness/2,0),layerStripL,name+"StripP",HCIUnitL,false,100);
+	} else {
 	//Place volumes
 	//new G4PVReplica(name+"Replica",layerSegmentL,layerStripL,kZAxis,9,(HCILength/9));
 	new G4ReplicatedSlice(name+"Segment",layerSegmentL,layerStripL,kZAxis,9,30*mm,0.1*mm,0);
 	new G4PVPlacement(0,pos+G4ThreeVector(0,thickness/2,0),layerStripL,name+"StripP",HCIUnitL,false,100);
+	}
 }
 
 void DevDetectorConstruction::buildHCI(G4String name) {
@@ -188,7 +209,7 @@ void DevDetectorConstruction::buildHCI(G4String name) {
 	//Build each layer
 	for (unsigned int i=0; i<thicknesses.size();i++) {
 		//Visualiser will only show the chips layer
-		if (names[i] == "Chips") {
+		if (names[i] == "Chips" || names[i] == "GlueA") {
 			invisible = true;
 		} else {
 			invisible = false;
@@ -268,15 +289,32 @@ G4VPhysicalVolume* DevDetectorConstruction::Construct() {
 	new G4PVPlacement(0,targetPosition,targetL,"TargetP",pLogicalWorld,false,6,true);
 
 	//Generate staves
-	ConstructStaves(3,"C");
-	ConstructStaves(4,"D");
+	//ConstructStaves(3,"C");
+	//ConstructStaves(4,"D");
 	ConstructStaves(2,"B");
 
+/*
+	G4Box* test = new G4Box("test",7.5*mm,25*um,15*mm);
+	G4LogicalVolume* testL = new G4LogicalVolume(test,pWorldMat,"testt");
+	auto param = new HICParameterisation();
+	G4VPhysicalVolume* testFin = new G4PVParameterised("final",testL,pLogicalWorld,kZAxis,1461,param);
+*/
+
+/*
+	ChipDigitiserMap* map = ChipDigitiserMap::getInstance();
+	G4cout<<map->getPosition(0).getX()<<G4endl;
+	G4cout<<map->getPosition(0).getY()<<G4endl;
+	G4cout<<map->getPosition(0).getZ()<<G4endl;
+	G4cout<<"================================"<<G4endl;
+	G4cout<<map->getPosition(1).getX()<<G4endl;
+	G4cout<<map->getPosition(1).getY()<<G4endl;
+	G4cout<<map->getPosition(1).getZ()<<G4endl;
+*/
 	return pPhysicalWorld;
 }
 
 void DevDetectorConstruction::ConstructSDandField() {
-
+/*
 	//Defines chips layers in each stave as the sensitive detector
 	auto CSensDet = new DevSensitiveDetector("StaveC","StaveCCollection");
 	G4SDManager::GetSDMpointer()->AddNewDetector(CSensDet);
@@ -285,7 +323,7 @@ void DevDetectorConstruction::ConstructSDandField() {
 	auto DSensDet = new DevSensitiveDetector("StaveD","StaveDCollection");
 	G4SDManager::GetSDMpointer()->AddNewDetector(DSensDet);
 	SetSensitiveDetector("DChipsSegL",DSensDet);
-
+*/
 	auto BSensDet = new DevSensitiveDetector("StaveB","StaveBCollection");
 	G4SDManager::GetSDMpointer()->AddNewDetector(BSensDet);
 	SetSensitiveDetector("BChipsSegL",BSensDet);

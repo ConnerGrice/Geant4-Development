@@ -13,6 +13,7 @@
 #include <G4PVPlacement.hh>
 #include <G4PVReplica.hh>
 #include <G4PVDivision.hh>
+#include <G4PVParameterised.hh>
 #include <G4ReplicatedSlice.hh>
 #include <G4NistManager.hh>
 #include <G4Material.hh>
@@ -31,6 +32,8 @@
 
 #include "DevSensitiveDetector.h"
 #include "parameters.h"
+#include "HICParameterisation.h"
+#include "ChipDigitiserMap.h"
 
 class DevDetectorConstruction: public G4VUserDetectorConstruction {
 public:
@@ -73,6 +76,8 @@ private:
 	G4LogicalVolume* HCILayerMother(G4double thickness,G4String name);
 	G4LogicalVolume* HCISegment(G4double thickness,G4String name,G4Material* material,G4VisAttributes* visual);
 
+	G4LogicalVolume* HICChipLayerMother(G4double thickness, G4String name);
+
 	G4LogicalVolume* HCIPixelStrip(G4double thickness,G4String name, G4Material* material,G4VisAttributes* visual);
 
 	G4LogicalVolume* HCIPixel(G4double thickness,G4String name, G4Material* material,G4VisAttributes* visual);
@@ -80,6 +85,7 @@ private:
 	//Generates physical volumes for a HCI layer
 	void buildHCILayer(G4String name,G4double thickness, G4Material* mat,G4VisAttributes* visual,G4ThreeVector pos);
 
+	void buildChip(G4String name,G4double thickness,G4Material* mat,G4ThreeVector pos);
 	//Builds a single HCI unit
 	void buildHCI(G4String name);
 
@@ -100,7 +106,6 @@ private:
 	G4Material* pSubstrate;
 	G4Material* pTarget;
 
-public:
 	G4double HCIWidth;
 	G4double staveLength;
 	G4double HCILength;

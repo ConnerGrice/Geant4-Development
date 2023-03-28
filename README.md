@@ -220,6 +220,22 @@ It was brought to my attention that the target had the wrong dimensions. The new
 
 ![target-barrel-new](screenshots/Target-Barrel-new.png)
 
+### Attempt to make detector unit
+
+I set up a parameterisation to define the pixels and the passive circuit board into the HIC unit. However, whole trying to generate a single 15mmx30mm, the entirty of my 16GB of RAM was used up. Therefore, this method is not usable in a practical sense.
+
+### Second Attempt to make detector unit
+
+The more memory efficient approach was to use the PVReplica class twice to make a grid of pixels. This method allows me to run the program, though the visualiser takes much longer to start up. However, due to the large number of pixels, it is not practical to render each one, since the visualiser lags. Therefore, only the 9 segments will be visualised.
+
+### Creating Chip active area
+
+Due to the way the replica class works, I must first generate the active area of the chips and add the passive circuit board with another set of replicas. 
+
+First, I have made the active area the correct size, so that it can contain 460x1000 px.
+
+![ActiveChip](screenshots/ALPIDE-Chip-Active.png)
+
 
 
 
