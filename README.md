@@ -211,5 +211,15 @@ The actual chips going to be used will be the [ALPIDE chips](https://indico.cern
 
 These chips have a resolution of 512x1024 and are 15mmx30mm. An attempt will be made to get our model as close to this as possible.
 
+## 28/03/2023
+### Fixing Target
+
+It was brought to my attention that the target had the wrong dimensions. The new target as a radius of 3cm and a length of 1cm
+
+![target-new](screenshots/Target-New.png)
+
+![target-barrel-new](screenshots/Target-Barrel-new.png)
+
+
 
 

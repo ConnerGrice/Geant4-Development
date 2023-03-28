@@ -57,7 +57,7 @@ G4LogicalVolume* DevDetectorConstruction::coldPlate(G4double width) {
 	G4LogicalVolume* plateL = new G4LogicalVolume(plateS,pPlateMat,"PlateL");
 
 	//Visual parameters
-	G4VisAttributes* visAtt = new G4VisAttributes(true,G4Colour(0.75,0.75,0.75));
+	G4VisAttributes* visAtt = new G4VisAttributes(false,G4Colour(0.75,0.75,0.75));
 	plateL->SetVisAttributes(visAtt);
 
 	return plateL;
@@ -69,7 +69,7 @@ G4LogicalVolume* DevDetectorConstruction::fleece(G4double width) {
 	G4LogicalVolume* fleeceL = new G4LogicalVolume(fleeceS,pFleeceMat,"FleeceL");
 
 	//Visual parameters
-	G4VisAttributes* visAtt = new G4VisAttributes(true,G4Colour(0.5,0.5,0.5));
+	G4VisAttributes* visAtt = new G4VisAttributes(false,G4Colour(0.5,0.5,0.5));
 	fleeceL->SetVisAttributes(visAtt);
 
 	return fleeceL;
@@ -261,15 +261,15 @@ G4VPhysicalVolume* DevDetectorConstruction::Construct() {
 
 	//Place liquid H2 target
 	G4double targetDiam = 3*cm;
-	G4double targetLength = 3*cm;
+	G4double targetLength = 1*cm;
 	G4ThreeVector targetPosition = G4ThreeVector(0,0,-(HCILength/2)+HCIZ+(targetLength/2));
-	G4Tubs* targetS = new G4Tubs("TargetL",0,targetDiam,targetLength/2,0,2*M_PI);
+	G4Tubs* targetS = new G4Tubs("TargetL",0,targetDiam/2,targetLength/2,0,2*M_PI);
 	G4LogicalVolume* targetL = new G4LogicalVolume(targetS,pTarget,"TargetL");
 	new G4PVPlacement(0,targetPosition,targetL,"TargetP",pLogicalWorld,false,6,true);
 
 	//Generate staves
-	//ConstructStaves(3,"C");
-	//ConstructStaves(4,"D");
+	ConstructStaves(3,"C");
+	ConstructStaves(4,"D");
 	ConstructStaves(2,"B");
 
 	return pPhysicalWorld;
@@ -277,7 +277,6 @@ G4VPhysicalVolume* DevDetectorConstruction::Construct() {
 
 void DevDetectorConstruction::ConstructSDandField() {
 
-	/*
 	//Defines chips layers in each stave as the sensitive detector
 	auto CSensDet = new DevSensitiveDetector("StaveC","StaveCCollection");
 	G4SDManager::GetSDMpointer()->AddNewDetector(CSensDet);
@@ -286,7 +285,7 @@ void DevDetectorConstruction::ConstructSDandField() {
 	auto DSensDet = new DevSensitiveDetector("StaveD","StaveDCollection");
 	G4SDManager::GetSDMpointer()->AddNewDetector(DSensDet);
 	SetSensitiveDetector("DChipsSegL",DSensDet);
-*/
+
 	auto BSensDet = new DevSensitiveDetector("StaveB","StaveBCollection");
 	G4SDManager::GetSDMpointer()->AddNewDetector(BSensDet);
 	SetSensitiveDetector("BChipsSegL",BSensDet);
