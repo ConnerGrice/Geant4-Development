@@ -258,5 +258,30 @@ G4WT0 > StaveC: 8 (490,491,492,308,309,310,310,311)
 
 I think I am going to try and set up the digitisation before fixing this bug. I think this can be fixed easily by just considering the first pixel hit by each particle at each layer.
 
+## 30/03/2023
 
+### Digitisation problem
 
+When trying to digitise the detector, the goal it to find out which pixel the particle hit, then find the position the centre of that particle. When setting up the geometry, different parts of the detector are given copy numbers. These copy numbers are the way of identifying which part of the sensitive detector was hit. 
+
+An overview on how the copy numbers are set up are below,
+
+#### Each stave is given a number
+
+![stave](screenshots/Stave-Numbers.png)
+
+#### Each HCI strip is given a number, relative to the stave it is on
+
+The range of these numbers depend on the layer e.g. stave D contains 4 strips so they will be numbered between 0 -> 3.
+
+![strip](screenshots/Strip-Numbers.png)
+
+#### Each segment of the strip is given a number
+
+![segments](screenshots/SensitiveDet-copyNumbers.png)
+
+#### Each segment is split into a pixel array
+
+- The back top corner represents (0,0)
+- Increase in positive z direction until 999
+- Increases in negative y driection until 459 (relative to stave 0 or 5)
