@@ -10,7 +10,7 @@
 
 #include "ChipDigitiserMap.h"
 
-ChipDigitiserMap* inst = nullptr;
+ChipDigitiserMap* ChipDigitiserMap::instance = nullptr;
 
 ChipDigitiserMap::ChipDigitiserMap() {
 	/*
@@ -42,8 +42,22 @@ ChipDigitiserMap::ChipDigitiserMap() {
 		yPos = 6.9*mm;
 		for (int j=0;j<yPixels;j++) {
 			yPos += j*pixelDim;
+			G4cout<<i<<","<<j<<G4endl;
 			table[std::make_pair(i,j)] = G4ThreeVector(0,yPos,zPos);
 		}
 	}
 
 }
+/*
+G4ThreeVector ChipDigitiserMap::getPosition(G4String sensName,
+		const std::pair<int,int> copyNo) {
+	switch(sensName) {
+	case("StaveB"):
+			return tableB[copyNo];
+	case("StaveC"):
+			return tableC[copyNo];
+	case("StaveD"):
+			return tableD[copyNo];
+	}
+}
+*/

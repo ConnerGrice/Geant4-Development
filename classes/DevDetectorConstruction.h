@@ -107,6 +107,7 @@ private:
 	G4Material* pSubstrate;
 	G4Material* pTarget;
 
+public:
 	G4double HCIWidth;
 	G4double staveLength;
 	G4double HCILength;

@@ -7,7 +7,10 @@
 
 #include "DevHit.h"
 
-DevHit::DevHit():trkID(0) {
+DevHit::DevHit():zPx(0),yPx(0),segment(0),unit(0),stave(0),trkID(0){
+	exactPos = G4ThreeVector(0,0,0);
+	digitPos = G4ThreeVector(0,0,0);
+
 }
 
 DevHit::~DevHit() {

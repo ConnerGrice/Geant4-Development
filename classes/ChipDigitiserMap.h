@@ -18,6 +18,7 @@
 
 class ChipDigitiserMap {
 
+	static ChipDigitiserMap* instance;
 	std::map<std::pair<G4int,G4int>, G4ThreeVector> table;
 
 private:
@@ -26,10 +27,13 @@ private:
 public:
 
 	static ChipDigitiserMap* getInstance() {
-		ChipDigitiserMap* inst = new ChipDigitiserMap();
-		return inst;
+		if (!instance) {
+			instance = new ChipDigitiserMap();
+		}
+		return instance;
 	}
-	G4ThreeVector getPosition(const std::pair<int,int> copyNo) { return table[copyNo]; };
+	G4ThreeVector getPosition(G4String sensName,
+			const std::pair<int,int> copyNo);
 
 	G4double pixelDim = 30*um;
 	G4int yPixels = 460;

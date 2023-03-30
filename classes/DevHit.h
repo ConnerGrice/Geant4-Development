@@ -11,7 +11,7 @@
 #include <G4VHit.hh>
 
 #include <G4THitsCollection.hh>
-
+#include <G4ThreeVector.hh>
 class DevHit: public G4VHit {
 public:
 	DevHit();
@@ -34,6 +34,12 @@ public:
 	inline G4int GetStave() { return stave; };
 	inline void SetStave(G4int num) { stave = num; };
 
+	inline G4ThreeVector GetExactPosition() { return exactPos; };
+	inline void SetExactPosition(G4ThreeVector num) { exactPos = num; };
+
+	inline G4ThreeVector GetDigitisedPosition() { return digitPos; };
+	inline void SetDigitisedPosition(G4ThreeVector num) { digitPos = num; };
+
 
 	//Get-Set trackID
 	inline G4int GetTrackID() { return trkID; };
@@ -45,6 +51,9 @@ private:
 	G4int unit;
 	G4int stave;
 	G4int trkID;
+
+	G4ThreeVector exactPos;
+	G4ThreeVector digitPos;
 };
 
 typedef G4THitsCollection<DevHit> DevHitsCollection;

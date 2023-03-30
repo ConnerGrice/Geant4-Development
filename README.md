@@ -285,3 +285,15 @@ The range of these numbers depend on the layer e.g. stave D contains 4 strips so
 - The back top corner represents (0,0)
 - Increase in positive z direction until 999
 - Increases in negative y driection until 459 (relative to stave 0 or 5)
+
+### First Digitisation Test
+
+After setting up what I thought was correct to get the 3D coordinates of the pixel that was hit, I did a test firing a single particle along the x axis from the origin. This resulted in the particle missing both B and D staves but passing directly though a unit in stave C.
+
+Results:
+
+- Exact Position (mm): 		(44.5373,-1.0764e-05,-4.07475e-05)
+- Digitised Position (mm): 	(44.5123,13.785,-9.195)
+
+This indicates that by calulations for the X value is correct, only being off by 25um. THis is correct because the exact point is actaully the point at which the particle exists the pixel, which is 50um thick. Therefore, the centre of the pixel would actaully be at 25um.
+ 
