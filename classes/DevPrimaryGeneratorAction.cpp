@@ -57,19 +57,20 @@ void DevPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
 	pParticleGun->SetParticleMomentum(G4ParticleMomentum(px2,py2,pz2));
 	pParticleGun->GeneratePrimaryVertex(anEvent);
 
-*/
-	pParticleGun->SetParticleDefinition(G4Proton::Definition());
 
+	pParticleGun->SetParticleDefinition(G4Proton::Definition());
+*/
 	G4ThreeVector origin = G4ThreeVector(0,0,0);
 	pParticleGun->SetParticlePosition(origin);
 
 	G4double e = 100*GeV;
 	pParticleGun->SetParticleEnergy(e);
 
-	G4ParticleMomentum direction = G4ParticleMomentum(1,0,0);
+	G4ParticleMomentum direction = G4ParticleMomentum(1,0.3,0);
 	pParticleGun->SetParticleMomentumDirection(direction);
-
 	pParticleGun->GeneratePrimaryVertex(anEvent);
+
+
 
 }
 

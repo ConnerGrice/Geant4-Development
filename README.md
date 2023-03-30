@@ -295,5 +295,15 @@ Results:
 - Exact Position (mm): 		(44.5373,-1.0764e-05,-4.07475e-05)
 - Digitised Position (mm): 	(44.5123,13.785,-9.195)
 
-This indicates that by calulations for the X value is correct, only being off by 25um. THis is correct because the exact point is actaully the point at which the particle exists the pixel, which is 50um thick. Therefore, the centre of the pixel would actaully be at 25um.
+This indicates that by calulations for the X value is correct, only being off by 25um. This is correct because the exact point is actaully the point at which the particle exists the pixel, which is 50um thick. Therefore, the centre of the pixel would actaully be at 25um.
+
+### Progress
+
+I have found that I can get the position of a volume relative to its mother volume. This means I can loop through the tree of volumes, adding up their position vectors as I go to get a final position vector that will be the pixels absolute position in the world. 
+
+I have tried implimenting this but results are varied. Which make be think that I have made an error somewhere.
+
+For example, having done a test where the particle passes through each layer, the error in the exact position and the digitised position increases for layers further from the origin. However, in tests where a particle is fired along the x-axis, the results are quite accurate.
+
+More investigation is needed. 
  
