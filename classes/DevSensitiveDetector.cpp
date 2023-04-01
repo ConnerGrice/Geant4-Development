@@ -47,9 +47,26 @@ G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
 	//G4VPhysicalVolume* staveVol = touchable->GetVolume(5);
 
 	G4ThreeVector test;
+	G4ThreeVector temp;
+	G4double tempRot = 0;
+	G4String name;
 	for (int i=5;i>-1;i--) {
+		temp = touchable->GetVolume(i)->GetObjectTranslation();
 
-		test += touchable->GetVolume(i)->GetObjectTranslation();
+		/*
+		if (i == 4) {
+			temp.rotateZ(tempRot);
+		}
+
+		if (i < 4) {
+			temp.rotateZ(M_PI+tempRot);
+		}
+		*/
+		temp.rotateZ(tempRot);
+		tempRot += touchable->GetVolume(i)->GetObjectRotationValue().getDelta();
+		test += temp;
+		name = touchable->GetVolume(i)->GetName();
+		//G4cout<<name<<": "<<tempRot<<" ("<<temp.getX()<<","<<temp.getY()<<","<<temp.getZ()<<")"<<G4endl;
 	}
 	G4cout<<"Digit: ("<<test.getX()<<","<<test.getY()<<","<<test.getZ()<<")"<<G4endl;
 

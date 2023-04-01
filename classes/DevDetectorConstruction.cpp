@@ -274,6 +274,7 @@ void DevDetectorConstruction::ConstructStaves(G4int numOfHCIs,G4String name) {
 
 	//Places each HCI unit on alternating side of the plate
 	for (int i=0;i < numOfHCIs;i++){
+
 		//Slide to the right
 		HCIPosition += G4ThreeVector(HCIWidth,0,0);
 		if (i%2 == 0) {
@@ -285,9 +286,8 @@ void DevDetectorConstruction::ConstructStaves(G4int numOfHCIs,G4String name) {
 			HCIPosition.setY(-282.5*um);
 			HCIRotation = new G4RotationMatrix(0,0,M_PI);
 		}
-
 		//Place HCI Unit volume in simulation
-		new G4PVPlacement(HCIRotation,HCIPosition,HCIUnitL,"HCI"+(G4String)i,staveL,false,i);
+		new G4PVPlacement(HCIRotation,HCIPosition,HCIUnitL,"HCI"+std::to_string(i),staveL,false,i);
 	}
 
 	//Stave location parameters

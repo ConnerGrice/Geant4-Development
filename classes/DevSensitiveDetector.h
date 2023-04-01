@@ -11,6 +11,7 @@
 #include <G4VSensitiveDetector.hh>
 
 #include <G4SDManager.hh>
+#include <G4RotationMatrix.hh>
 
 #include "DevHit.h"
 #include "ChipDigitiserMap.h"

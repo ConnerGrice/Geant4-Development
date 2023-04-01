@@ -27,6 +27,7 @@
 
 #include <cmath>
 #include <vector>
+#include <string>
 
 #include <G4VUserDetectorConstruction.hh>
 

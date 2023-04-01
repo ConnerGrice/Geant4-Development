@@ -305,5 +305,54 @@ I have tried implimenting this but results are varied. Which make be think that 
 
 For example, having done a test where the particle passes through each layer, the error in the exact position and the digitised position increases for layers further from the origin. However, in tests where a particle is fired along the x-axis, the results are quite accurate.
 
-More investigation is needed. 
- 
+More investigation is needed.
+
+## 01/04/2023
+
+### Digitiser Tweaking
+
+I found that the position given by the volume does not take rotation into account. Since in the program, the staves are generated horizontally then rotated into a vertical position, all the positions are as if the stave was still horizontal.
+
+I am able to get the rotation of the volumes and apply them to the position vectors while adding them together. This has given results that are much more accurate. I have done a test firing 6 particles, each is hits a stave at its normal angle.
+
+Here are the results:
+```cmd
+G4WT0 > EVENT START===================================
+G4WT0 > Digit: (22.2432,-38.5563,0.005)
+G4WT0 > Exact: (22.2686,-38.5704,-4.07475e-05)
+G4WT0 > Diff : (0.0254811,-0.014156,-0.00504075)
+G4WT0 > =============================================
+G4WT0 > Digit: (-15.543,-27.2913,0.005)
+G4WT0 > Exact: (-15.7735,-27.3204,5.46514e-08)
+G4WT0 > Diff : (-0.23049,-0.0291508,-0.00499995)
+G4WT0 > =============================================
+G4WT0 > Digit: (-22.0641,-38.5563,0.005)
+G4WT0 > Exact: (-22.2687,-38.5704,6.50483e-05)
+G4WT0 > Diff : (-0.204545,-0.0141302,-0.00493495)
+G4WT0 > =============================================
+G4WT0 > Digit: (-44.1023,-0.015,0.005)
+G4WT0 > Exact: (-44.5373,4.20583e-05,4.99024e-05)
+G4WT0 > Diff : (-0.435,0.0150421,-0.0049501)
+G4WT0 > =============================================
+G4WT0 > Digit: (-15.5689,27.3063,0.005)
+G4WT0 > Exact: (-15.7735,27.3204,2.22299e-07)
+G4WT0 > Diff : (-0.20451,0.0141505,-0.00499978)
+G4WT0 > =============================================
+G4WT0 > Digit: (-22.0641,38.5563,0.005)
+G4WT0 > Exact: (-22.2687,38.5704,3.78402e-05)
+G4WT0 > Diff : (-0.204594,0.0141018,-0.00496216)
+G4WT0 > =============================================
+G4WT0 > Digit: (15.748,27.3063,0.005)
+G4WT0 > Exact: (15.7735,27.3204,-4.1168e-08)
+G4WT0 > Diff : (0.0254903,0.0141507,-0.00500004)
+G4WT0 > =============================================
+G4WT0 > Digit: (22.2691,38.5413,0.005)
+G4WT0 > Exact: (22.2687,38.5704,1.6705e-05)
+G4WT0 > Diff : (-0.000487288,0.0291488,-0.0049833)
+G4WT0 > =============================================
+G4WT0 > Digit: (44.5123,-0.015,0.005)
+G4WT0 > Exact: (44.5373,-1.14702e-05,-7.27118e-06)
+G4WT0 > Diff : (0.025,0.0149885,-0.00500727)
+G4WT0 > =============================================
+```
+As seen, the results are still not perfect but progress is being made.
