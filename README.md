@@ -356,3 +356,60 @@ G4WT0 > Diff : (0.025,0.0149885,-0.00500727)
 G4WT0 > =============================================
 ```
 As seen, the results are still not perfect but progress is being made.
+
+## 03/04/2023
+
+### Further Digitiser Testing
+
+I did a test using the first entry of `quasi.root`. In this run, one particle goes through stave 0 (right-most horizontal) and the other went through stave 3 (right-most horizontal).
+
+From stave 0:
+
+```cmd
+G4WT0 > Pixel: 0(312,79)
+G4WT0 > Digit: (31.5219,4.425,-93.385)
+G4WT0 > Exact: (31.4969,4.4189,-93.4273)
+G4WT0 > Diff : (-0.025,-0.00610462,-0.0423365)
+G4WT0 > =============================================
+G4WT0 > Pixel: 0(312,80)
+G4WT0 > Digit: (31.5219,4.425,-93.385)
+G4WT0 > Exact: (31.5237,4.42302,-93.4)
+G4WT0 > Diff : (0.00181556,-0.00197683,-0.015)
+G4WT0 > =============================================
+```
+These results are very good but I noticed that even though the pixel that was activated is different, `(312,79)` and `(312,80)` the digitised coordinate is exactly the same, in this case, the z value for both should be slightly different. 
+
+Some results from stave 3 are:
+
+```cmd
+G4WT0 > Pixel: 3(374,469)
+G4WT0 > Digit: (-31.1119,2.565,-81.685)
+G4WT0 > Exact: (-31.4969,-2.56587,-81.7101)
+G4WT0 > Diff : (-0.385,-5.13087,-0.0251173)
+G4WT0 > =============================================
+G4WT0 > Pixel: 3(374,470)
+G4WT0 > Digit: (-31.1119,2.565,-81.655)
+G4WT0 > Exact: (-31.5045,-2.56639,-81.7)
+G4WT0 > Diff : (-0.392547,-5.13139,-0.045)
+G4WT0 > =============================================
+G4WT0 > Pixel: 3(374,471)
+G4WT0 > Digit: (-31.1119,2.565,-81.655)
+G4WT0 > Exact: (-31.5268,-2.56792,-81.67)
+G4WT0 > Diff : (-0.414914,-5.13292,-0.015)
+G4WT0 > =============================================
+```
+
+The `(376,470)` and `(374,471)` pixels show the same issue as stave 0, however, `(374,469)` seems to change the z value correctly. This leads me to think something is wrong with the pixel volume coordinates.
+
+Another thing to notice is the fact that the y value for the digitised coordinate is the negative of what it should be. This is probably something to do with the angles I am rotating the position vectors by. This coul be what has also lead to the bigger difference in the x value as well. More tests will be carried out with this stave.
+
+### Angle Problem
+
+I have found that the issue with the incorrect negative values only occurs for the staves of the left side of the detector (2,3,4).
+
+On the right side of the detector, the HIC copy numbers increases from bottom to top. However, since I generated the staves by rotating them by $\frac{\pi}{3}$ at a time, copy number of the staves of the left side increase in the opposite direction (from top to bottom). This is what is causing the issues. 
+
+### Digitiser Solved (Almost)
+
+I have fixed the negative value problem. The issue was with how Geant4 deals with angles. After some experimentation, I found that if the HIC that was triggered was on a stave on the negative x side of the detector, instead of adding the angles of each object, I needed to subtract them. Now the digitiser gives coordinates that are much more accurate for all staves. However, the issue with the z being exactly the same between some concurrent pixels along the z axis is still not fixed.
+

@@ -44,7 +44,7 @@ void DevPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
 
 	//Get values
 	reader->GetNtupleRow();
-/*
+
 	//Set reaction origin point
 	const G4double HCIHalfLength = 135.6*mm;
 	pParticleGun->SetParticlePosition(G4ThreeVector(x,y,(z/10.0)-HCIHalfLength+HCIZ));
@@ -59,17 +59,27 @@ void DevPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
 
 
 	pParticleGun->SetParticleDefinition(G4Proton::Definition());
-*/
 
+/*
 	G4ThreeVector origin = G4ThreeVector(0,0,0);
 	pParticleGun->SetParticlePosition(origin);
 
 	G4double e = 100*GeV;
 	pParticleGun->SetParticleEnergy(e);
 
-	G4ParticleMomentum direction = G4ParticleMomentum(1,0,0);
+	G4ParticleMomentum direction = G4ParticleMomentum(1,0.3,0);
+	direction.rotateZ(5*M_PI/3);
 	pParticleGun->SetParticleMomentumDirection(direction);
 	pParticleGun->GeneratePrimaryVertex(anEvent);
+
+	direction.rotateZ(2*M_PI/3);
+	pParticleGun->SetParticleMomentumDirection(direction);
+	pParticleGun->GeneratePrimaryVertex(anEvent);
+
+	direction.rotateZ(M_PI/3);
+	pParticleGun->SetParticleMomentumDirection(direction);
+	pParticleGun->GeneratePrimaryVertex(anEvent);
+
 
 	direction.rotateZ(M_PI/3);
 	pParticleGun->SetParticleMomentumDirection(direction);
@@ -79,20 +89,11 @@ void DevPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
 	pParticleGun->SetParticleMomentumDirection(direction);
 	pParticleGun->GeneratePrimaryVertex(anEvent);
 
-
 	direction.rotateZ(M_PI/3);
 	pParticleGun->SetParticleMomentumDirection(direction);
 	pParticleGun->GeneratePrimaryVertex(anEvent);
 
-	direction.rotateZ(M_PI/3);
-	pParticleGun->SetParticleMomentumDirection(direction);
-	pParticleGun->GeneratePrimaryVertex(anEvent);
-
-	direction.rotateZ(M_PI/3);
-	pParticleGun->SetParticleMomentumDirection(direction);
-	pParticleGun->GeneratePrimaryVertex(anEvent);
-
-
+*/
 
 
 }
