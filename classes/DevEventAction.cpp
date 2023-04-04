@@ -13,6 +13,7 @@ DevEventAction::DevEventAction(DevRunAction* runAction) {
 }
 
 DevEventAction::~DevEventAction() {
+	delete G4AnalysisManager::Instance();
 }
 
 void DevEventAction::BeginOfEventAction(const G4Event*) {

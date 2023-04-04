@@ -12,6 +12,7 @@
 
 #include <G4SDManager.hh>
 #include <G4RotationMatrix.hh>
+#include <G4AffineTransform.hh>
 
 #include "DevHit.h"
 

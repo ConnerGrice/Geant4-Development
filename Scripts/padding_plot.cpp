@@ -1,5 +1,6 @@
 #include <TGraph.h>
 #include <TCanvas.h>
+#include <TAxis.h>
 
 void padding_plot() {
 	TCanvas* c2 = new TCanvas();
@@ -13,4 +14,4 @@ void padding_plot() {
 
 	c2->Print("../Results/Eff_padding.svg");
 
-}
+};

@@ -508,3 +508,22 @@ G4WT1 > Pixel: 0(0,992)
 
 Showing that the error is only occuring when a new pixel strip is activated by the particle e.g. `Pixel: 0(y,xxx)`, where `y` is the strip in the y direction and `xxx` is the pixel in that strip. I don't think this is due to the actual positions of the pixels since the error looks like it can occur on any pair of pixels, as long as they are the first 2 of the strip that are detected. Therefore, it is probably an issue of the method used to digitise.
 
+### Fix Found*
+
+I realised that I had the wrong idea about the preStepPoint. In reality, the preStepPoint gets the position of the particle as it enters the volume instead of as it exists. The volume attached to this point is therefore the volume that the particle is leaving.
+
+I have now changed to using the postStepPoint, which gets the particle as it is leaving, and the volume that it is leaving. This fixes the error completely. However, now when I run more than a single run I get a segmentation fault. This is due to this change.
+
+### Reason For Segmentation Fault
+
+The issue happens when I get the volume that the particle that was inside of using the postStepPoint. If I use the preStepPoint, the error does not happen, but the original error returns.
+
+### Digging Deeper
+
+The fault seems to happen when the particles leave the active area. This is because I am now taking the postStepPoint, therefore, the volume given will not be one of the pixel volumes. This causes the segmentation fault because these volumes do not have as many mothers as the pixel volumes. 
+
+- Pixels: Pixel -> Pixel Strip -> HIC Segment -> HIC Strip -> HIC Unit -> Stave -> World
+- Another HIC layer: HIC Segment -> HIC Strip -> HIC Unit -> Stave ->  World
+
+Since I am looping through each volume in the tree of volumes to get the position relative to the world volume, I am assuming this volume will have exactly 6 layers (since the pixels normally have this many layers). However, if the volume is not a pixel, there will be less than 6 layers, meaning that I am trying to get a volume that doesn't exist. Giving me the segmentation fault.
+
