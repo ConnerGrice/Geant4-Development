@@ -67,16 +67,20 @@ G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
 		//Get name of volume
 		name = touchable->GetVolume(i)->GetName();
 
-		//G4cout<<name<<"("<<copy<<"): "<<tempRot<<" ("<<temp.getX()<<","<<temp.getY()<<","<<temp.getZ()<<")"<<G4endl;
+		if (i < 1) {
+			G4cout<<name<<"("<<copy<<"): "<<tempRot<<" ("<<temp.getX()<<","<<temp.getY()<<","<<temp.getZ()<<")"<<G4endl;
+
+		}
 	}
 
 	//Get position of particle as it leaves the pixel
 	G4ThreeVector exact = aStep->GetPreStepPoint()->GetPosition();
 	//Gets the particle ID
 	G4int trackID = aStep->GetTrack()->GetTrackID();
+	G4cout<<"Pixel: "<<stave<<"("<<yPixel<<","<<zPixel<<")"<<G4endl;
+
 /*
 	//TODO: REMOVE DEBUGGING LOGS
-	G4cout<<"Pixel: "<<stave<<"("<<yPixel<<","<<zPixel<<")"<<G4endl;
 	G4cout<<"Digit: ("<<digitised.getX()<<","<<digitised.getY()<<","<<digitised.getZ()<<")"<<G4endl;
 	G4cout<<"Exact: ("<<exact.getX()<<","<<exact.getY()<<","<<exact.getZ()<<")"<<G4endl;
 

@@ -439,4 +439,72 @@ The peaks shown in this plot are at 0.015mm, which is what I would expect becaus
 
 NOt much can be seen in this plot apart from the large number of points close to 0. The mean is largest than the other points by quite a significant amount. This could be due to the error where that some pixels that are close to eachother are giving the same z value when they should not be. The plot was also quite zoomed out when it was generated, this probably means that there is an outlier somewhere, this could also be changing the mean considerably. 
 
+### Diagnosing Error in Z Direction
+
+I have ran a single test where a particle was straight down the sensitive detector and output which pixel (z-coordinate) that was hit.
+
+The last few results are:
+
+```cmd
+G4WT0 > CChipsPixel(993): 4.71239 (0,-0,14.835)
+G4WT0 > Pixel: 0(210,993)
+G4WT0 > CChipsPixel(994): 4.71239 (0,-0,14.865)
+G4WT0 > Pixel: 0(210,994)
+G4WT0 > CChipsPixel(995): 4.71239 (0,-0,14.895)
+G4WT0 > Pixel: 0(210,995)
+G4WT0 > CChipsPixel(996): 4.71239 (0,-0,14.895)
+G4WT0 > Pixel: 0(210,996)
+```
+
+It showns that the last 2 pixels give the same z value. I could not find any more instances of this in this experiment.
+
+I also did a test after angling the beam up slighltly. The last few results:
+
+```cmd
+G4WT1 > DChipsPixel(982): 4.71239 (0,-0,14.505)
+G4WT1 > Pixel: 0(1,982)
+G4WT1 > DChipsPixel(983): 4.71239 (0,-0,14.535)
+G4WT1 > Pixel: 0(1,983)
+G4WT1 > DChipsPixel(984): 4.71239 (0,-0,14.565)
+G4WT1 > Pixel: 0(1,984)
+G4WT1 > DChipsPixel(985): 4.71239 (0,-0,14.595)
+G4WT1 > Pixel: 0(1,985)
+G4WT1 > DChipsPixel(986): 4.71239 (0,-0,14.625)
+G4WT1 > Pixel: 0(1,986)
+G4WT1 > DChipsPixel(987): 4.71239 (0,-0,14.625)
+G4WT1 > Pixel: 0(1,987)
+G4WT1 > DChipsPixel(987): 4.71239 (0,-0,14.655)
+G4WT1 > Pixel: 0(0,987)
+G4WT1 > DChipsPixel(988): 4.71239 (0,-0,14.685)
+G4WT1 > Pixel: 0(0,988)
+G4WT1 > DChipsPixel(989): 4.71239 (0,-0,14.715)
+G4WT1 > Pixel: 0(0,989)
+G4WT1 > DChipsPixel(990): 4.71239 (0,-0,14.745)
+G4WT1 > Pixel: 0(0,990)
+G4WT1 > DChipsPixel(991): 4.71239 (0,-0,14.775)
+G4WT1 > Pixel: 0(0,991)
+G4WT1 > DChipsPixel(992): 4.71239 (0,-0,14.775)
+G4WT1 > Pixel: 0(0,992)
+
+```
+
+This shows that the error appears much more often. The areas that are wrong are:
+
+```cmd
+G4WT1 > DChipsPixel(986): 4.71239 (0,-0,14.625)
+G4WT1 > Pixel: 0(1,986)
+G4WT1 > DChipsPixel(987): 4.71239 (0,-0,14.625)
+G4WT1 > Pixel: 0(1,987)
+G4WT1 > DChipsPixel(987): 4.71239 (0,-0,14.655)
+G4WT1 > Pixel: 0(0,987)
+
+...
+
+G4WT1 > DChipsPixel(991): 4.71239 (0,-0,14.775)
+G4WT1 > Pixel: 0(0,991)
+G4WT1 > DChipsPixel(992): 4.71239 (0,-0,14.775)
+G4WT1 > Pixel: 0(0,992)
+```
+
+Showing that the error is only occuring when a new pixel strip is activated by the particle e.g. `Pixel: 0(y,xxx)`, where `y` is the strip in the y direction and `xxx` is the pixel in that strip. I don't think this is due to the actual positions of the pixels since the error looks like it can occur on any pair of pixels, as long as they are the first 2 of the strip that are detected. Therefore, it is probably an issue of the method used to digitise.
 
