@@ -10,13 +10,38 @@
 DevRunAction::DevRunAction(): bTotal(0),cTotal(0),dTotal(0),
 nGood(0),nAlright(0),nBad(0),nInvalid(0) {
 
+	G4AnalysisManager* manager = G4AnalysisManager::Instance();
+	manager->SetNtupleMerging(true);
+
+	manager->SetFileName("../Results/data.root");
+
+	manager->CreateNtuple("StaveB","Metrics");
+	manager->CreateNtupleDColumn("xDiff");
+	manager->CreateNtupleDColumn("yDiff");
+	manager->CreateNtupleDColumn("zDiff");
+	manager->FinishNtuple(0);
+
+	manager->CreateNtuple("StaveC","Metrics");
+	manager->CreateNtupleDColumn("xDiff");
+	manager->CreateNtupleDColumn("yDiff");
+	manager->CreateNtupleDColumn("zDiff");
+	manager->FinishNtuple(1);
+
+	manager->CreateNtuple("StaveD","Metrics");
+	manager->CreateNtupleDColumn("xDiff");
+	manager->CreateNtupleDColumn("yDiff");
+	manager->CreateNtupleDColumn("zDiff");
+	manager->FinishNtuple(2);
 }
 
 DevRunAction::~DevRunAction() {
+	delete G4AnalysisManager::Instance();
 }
 
 void DevRunAction::BeginOfRunAction(const G4Run*) {
 	G4cout<<"RUN START================================"<<G4endl;
+	G4AnalysisManager* manager = G4AnalysisManager::Instance();
+	manager->OpenFile();
 }
 
 void DevRunAction::printCount() {
@@ -62,8 +87,12 @@ void DevRunAction::EndOfRunAction(const G4Run*) {
 	eff.open("../Results/Eff.dat",std::ios_base::app);
 	eff<<PADDING<<" "<<((nGood+nAlright+nBad)/100240.0)<<std::endl;
 
-
 	printTypeEff();
+
+	G4AnalysisManager* manager = G4AnalysisManager::Instance();
+	manager->Write();
+	manager->CloseFile();
+
 	G4cout<<"RUN END==============================="<<G4endl;
 
 }

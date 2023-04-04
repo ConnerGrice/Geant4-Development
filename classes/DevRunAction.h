@@ -12,6 +12,7 @@
 
 #include <G4HCtable.hh>
 #include <G4Run.hh>
+#include <g4root.hh>
 
 #include <fstream>
 
@@ -38,7 +39,7 @@ public:
 	inline void addCHits(G4int hits) { cTotal += hits; };
 	inline void addDHits(G4int hits) { dTotal += hits; };
 
-
+	//Level of success classifiers
 	inline void addGood() { nGood++; };
 	inline void addAlright() { nAlright++; };
 	inline void addBad() { nBad++; };

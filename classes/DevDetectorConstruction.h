@@ -33,7 +33,6 @@
 
 #include "DevSensitiveDetector.h"
 #include "parameters.h"
-#include "ChipDigitiserMap.h"
 
 class DevDetectorConstruction: public G4VUserDetectorConstruction {
 public:

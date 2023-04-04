@@ -413,3 +413,30 @@ On the right side of the detector, the HIC copy numbers increases from bottom to
 
 I have fixed the negative value problem. The issue was with how Geant4 deals with angles. After some experimentation, I found that if the HIC that was triggered was on a stave on the negative x side of the detector, instead of adding the angles of each object, I needed to subtract them. Now the digitiser gives coordinates that are much more accurate for all staves. However, the issue with the z being exactly the same between some concurrent pixels along the z axis is still not fixed.
 
+## 04/04/2023
+
+### Digitiser Error
+
+I have added the ability to record the difference between the preStepPoint and the digitied point for every hit in the simluation and have generated some plots showing this error.
+
+#### X Error
+
+![x-error](Results/X_Error.png)
+
+The 2 tall sections are +/- 0.025mm, the reason for this is that the preStepPoint is the point as the particle leaves the pixel and the pixel is 0.05mm thick, meaning that the centre point is 0.025mm away from the back of the pixel, giving this result. However, since the pixel is 0.03x0.03x0.05mm, I would have also expected some peaks around +/- 0.015mm but these aren't present.
+
+There is still some results that gave an error slightly larger than 0.025mm, I am not sure what is causing this since the furthest point from the centre of each particle is about 0.0328mm.
+
+#### Y Error
+
+![y-error](Results/Y_Error.png)
+
+The peaks shown in this plot are at 0.015mm, which is what I would expect because of the side length in that. However, it seems like that error can get as high as 0.036mm, which is more than the furthest point in the pixel.
+
+#### Z Error
+
+![z-error](Results/Z_Error.png)
+
+NOt much can be seen in this plot apart from the large number of points close to 0. The mean is largest than the other points by quite a significant amount. This could be due to the error where that some pixels that are close to eachother are giving the same z value when they should not be. The plot was also quite zoomed out when it was generated, this probably means that there is an outlier somewhere, this could also be changing the mean considerably. 
+
+

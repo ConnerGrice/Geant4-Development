@@ -27,25 +27,28 @@ G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
 	G4StepPoint* stepPoint = aStep->GetPreStepPoint();
 	const G4VTouchable* touchable = stepPoint->GetTouchable();
 
-
-
+	//Get the copy number of volumes in the volume tree
 	G4int zPixel = touchable->GetCopyNumber();
 	G4int yPixel = touchable->GetCopyNumber(1);
 	G4int segment = touchable->GetCopyNumber(2);
 	G4int unit = touchable->GetCopyNumber(4);
 	G4int stave = touchable->GetCopyNumber(5);
 
-	G4ThreeVector digitised;
-	G4ThreeVector temp;
-	G4double tempRot = 0;
-	G4String name;
-	G4int copy;
+	//Variables for getting volume position
+	G4ThreeVector digitised;	//Digitised position
+	G4ThreeVector temp;			//Volumes position wrt mother volume
+	G4double tempRot = 0;		//Sum of volume rotations
 
+	//Debugging variables
+	G4String name;	//Name of current volume
+	G4int copy;		//Copy number of current volume
+
+	//Loops through each volume in the tree
 	for (int i=5;i>-1;i--) {
-
 		//Get volume Position relative to mother
 		temp = touchable->GetVolume(i)->GetObjectTranslation();
 
+		//Get copy number
 		copy = touchable->GetCopyNumber(i);
 
 		//Rotate this relative to mother volume rotation
@@ -61,26 +64,29 @@ G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
 		//Add rotated position vector
 		digitised += temp;
 
+		//Get name of volume
 		name = touchable->GetVolume(i)->GetName();
 
 		//G4cout<<name<<"("<<copy<<"): "<<tempRot<<" ("<<temp.getX()<<","<<temp.getY()<<","<<temp.getZ()<<")"<<G4endl;
 	}
 
+	//Get position of particle as it leaves the pixel
 	G4ThreeVector exact = aStep->GetPreStepPoint()->GetPosition();
-
-
+	//Gets the particle ID
+	G4int trackID = aStep->GetTrack()->GetTrackID();
+/*
+	//TODO: REMOVE DEBUGGING LOGS
 	G4cout<<"Pixel: "<<stave<<"("<<yPixel<<","<<zPixel<<")"<<G4endl;
 	G4cout<<"Digit: ("<<digitised.getX()<<","<<digitised.getY()<<","<<digitised.getZ()<<")"<<G4endl;
 	G4cout<<"Exact: ("<<exact.getX()<<","<<exact.getY()<<","<<exact.getZ()<<")"<<G4endl;
 
-	G4int trackID = aStep->GetTrack()->GetTrackID();
 
 	G4double xDiff = exact.getX()-digitised.getX();
 	G4double yDiff = exact.getY()-digitised.getY();
 	G4double zDiff = exact.getZ()-digitised.getZ();
 	G4cout<<"Diff : ("<<xDiff<<","<<yDiff<<","<<zDiff<<")"<<G4endl;
 	G4cout<<"============================================="<<G4endl;
-
+*/
 	//Creates a hit and fills it with data
 	auto hit = new DevHit();
 	hit->SetTrackID(trackID);
