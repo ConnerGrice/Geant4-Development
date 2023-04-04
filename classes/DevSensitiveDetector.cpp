@@ -27,13 +27,17 @@ G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
 	G4StepPoint* stepPoint = aStep->GetPostStepPoint();
 
 	//const G4VTouchable* touchable = aStep->GetPreStepPoint()->GetTouchable();
-	const G4VTouchable* touchable = aStep->GetPostStepPoint()->GetTouchable();
 
 
-	const G4NavigationHistory* testing = aStep->GetPostStepPoint()->GetTouchable()->GetHistory();
-	G4int trans = testing->GetDepth();
-	G4String t = testing->GetTopVolume()->GetName();
-	G4cout<<t<<":"<<trans<<G4endl;
+	G4int testing = stepPoint->GetTouchable()->GetHistory()->GetDepth();
+	//G4String t = testing->GetTopVolume()->GetName();
+	//G4cout<<t<<":"<<trans<<G4endl;
+
+	if (testing != 6)
+		stepPoint = aStep->GetPreStepPoint();
+		//return true;
+
+	const G4VTouchable* touchable = stepPoint->GetTouchable();
 
 	//Get the copy number of volumes in the volume tree
 	G4int zPixel = touchable->GetCopyNumber();
@@ -79,7 +83,7 @@ G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
 		if (i < 1) {
 		//if (i == 6) {
 			//G4cout<<name<<"("<<copy<<"): "<<tempRot<<" ("<<temp.getX()<<","<<temp.getY()<<","<<temp.getZ()<<")"<<G4endl;
-			G4cout<<name<<"("<<yPixel<<","<<zPixel<<"): "<<" ("<<digitised.getX()<<","<<digitised.getY()<<","<<digitised.getZ()<<")"<<G4endl;
+			//G4cout<<name<<"("<<yPixel<<","<<zPixel<<"): "<<" ("<<digitised.getX()<<","<<digitised.getY()<<","<<digitised.getZ()<<")"<<G4endl;
 		}
 	}
 	//Get position of particle as it leaves the pixel
@@ -111,17 +115,19 @@ G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
 }
 
 void DevSensitiveDetector::EndOfEvent(G4HCofThisEvent*) {
+	/*
 	G4int numHits = pHitCollection->entries();
 
 	//Prints the detector and which section was hit
 	G4cout<<SensitiveDetectorName<<": "<<numHits<<" (";
 	for (int i=0;i<numHits;i++) {
-		/*
+
 		G4int copyNo = (*pHitCollection)[i]->GetCopyNo();
 		G4int copyNo2 = (*pHitCollection)[i]->GetCopyNo2();
 		G4int copyNo3 = (*pHitCollection)[i]->GetCopyNo3();
 		G4cout<<copyNo<<"("<<copyNo2<<"["<<copyNo3<<"]),";
-		*/
+
 	}
 	G4cout<<")"<<G4endl;
+	*/
 }

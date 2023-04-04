@@ -146,8 +146,8 @@ void DevEventAction::EndOfEventAction(const G4Event* anEvent) {
 
 	classifyEvent(dHitsCol,bHitsCol,cHitsCol);
 
-	rAction->printCount();
-	rAction->printType();
+	//rAction->printCount();
+	//rAction->printType();
 
 	fillMetrics(dHitsCol,bHitsCol,cHitsCol);
 

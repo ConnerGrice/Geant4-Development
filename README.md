@@ -316,6 +316,7 @@ I found that the position given by the volume does not take rotation into accoun
 I am able to get the rotation of the volumes and apply them to the position vectors while adding them together. This has given results that are much more accurate. I have done a test firing 6 particles, each is hits a stave at its normal angle.
 
 Here are the results:
+
 ```cmd
 G4WT0 > EVENT START===================================
 G4WT0 > Digit: (22.2432,-38.5563,0.005)
@@ -377,6 +378,7 @@ G4WT0 > Exact: (31.5237,4.42302,-93.4)
 G4WT0 > Diff : (0.00181556,-0.00197683,-0.015)
 G4WT0 > =============================================
 ```
+
 These results are very good but I noticed that even though the pixel that was activated is different, `(312,79)` and `(312,80)` the digitised coordinate is exactly the same, in this case, the z value for both should be slightly different. 
 
 Some results from stave 3 are:
@@ -490,6 +492,7 @@ G4WT1 > Pixel: 0(0,992)
 
 This shows that the error appears much more often. The areas that are wrong are:
 
+
 ```cmd
 G4WT1 > DChipsPixel(986): 4.71239 (0,-0,14.625)
 G4WT1 > Pixel: 0(1,986)
@@ -526,4 +529,39 @@ The fault seems to happen when the particles leave the active area. This is beca
 - Another HIC layer: HIC Segment -> HIC Strip -> HIC Unit -> Stave ->  World
 
 Since I am looping through each volume in the tree of volumes to get the position relative to the world volume, I am assuming this volume will have exactly 6 layers (since the pixels normally have this many layers). However, if the volume is not a pixel, there will be less than 6 layers, meaning that I am trying to get a volume that doesn't exist. Giving me the segmentation fault.
+
+### Solution
+
+To bypass this error, I have added a condition that will decide if the preStepPoint or postStepPoint should be used. This means if the particle is leaving an active volume and going into a passive volume, it will use the preStepPoint and therefore, the volume of the pixel it was leaving. If it is just moving between active volumes, it will use the postStepPoint and get the volume it is moving in to.
+
+Here are the new results:
+
+#### X Error
+
+![x-error-2](Results/X_Error_mk2.png)
+
+The peaks at +/- 0.025mm have disappeared and the width of the distribution has shrunk but the mean still remains very close to zero.
+
+#### Y Error
+
+![y-error-2](Results/Y_Error_mk2.png)
+
+The peaks remain in place, but more of the point lie inside of their boundaries. This has lead to a thinner plot, similar to that of the X errors.
+
+#### Z Error
+
+![z-error-2](Results/Z_Error.png)
+
+THis plot is still vary similar to the first z error plot. The next idea I am going to try is to ignore the particles that are enter volumes that are not active.
+
+### Ignoring Particles
+
+After ignoring particles that move into passive areas as they leave active areas gives the same shape results in the x and y directions, however, the z error changes:
+
+![z-error-3](Results/Z_Error_mk3.png)
+
+Doing this has removed the outlier points present in the plots above. The mean is also closer to the centre. As a result of excluding particles, the number of recorded particles was also reduced by a large amount.
+
+The particles that are causing this error are the ones that collide with the active area first, before moving through the rest of the detector. I think a better solution must be found to preserve the number of recorded particles.   
+
 
