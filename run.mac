@@ -5,5 +5,5 @@
 /event/verbose 0
 /tracking/verbose 0
 
-/run/beamOn 100240
-#/run/beamOn 1
+#/run/beamOn 100240
+/run/beamOn 1

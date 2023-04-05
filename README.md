@@ -564,4 +564,21 @@ Doing this has removed the outlier points present in the plots above. The mean i
 
 The particles that are causing this error are the ones that collide with the active area first, before moving through the rest of the detector. I think a better solution must be found to preserve the number of recorded particles.   
 
+## 05/04/2023
+
+### New Driection
+
+Since this issue cannot be sovled by using the postStepPoint, I need to take a different approach. The issue may be the way I generate the geometry. I am using an object just `PVReplicaSlice` which divides the volume into sections but it has the ability to create a gap in between those sections. However, when doing this I think it will squish the section volume. Since my pixels are within the volume that gets squished they might either be over-lapping or are not the size I am assuming them to be, causing issues in the digitiser.
+
+TO get around this I am going to experiment with just placing the sections down manually.
+
+### Issues with PVReplicaSlices
+
+it so happens that `PVReplicaSlices` will also shorten the volume at the ends by the same amount as the distance between each section. This means that the entire volume is quite a bit shorter than I thought.
+
+I have added the chips manually to make sure they are all the same size. The issue with the replace length is much more apparent in the passive chip volume along the top. The axes is 271.6mm long, the length the strip should be.
+
+![replace](screenshots/ReplicaSlice.png)  
+
+For the sake of accuracy and trying to fix my current issue, I will generate all layers of the HIC manually.
 

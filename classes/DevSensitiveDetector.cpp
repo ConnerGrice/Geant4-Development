@@ -24,20 +24,37 @@ void DevSensitiveDetector::Initialize(G4HCofThisEvent* hce) {
 
 G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
 	//Gets the copy number of hit detector
-	G4StepPoint* stepPoint = aStep->GetPostStepPoint();
+	G4StepPoint* prePoint = aStep->GetPreStepPoint();
+	G4StepPoint* postPoint = aStep->GetPostStepPoint();
 
 	//const G4VTouchable* touchable = aStep->GetPreStepPoint()->GetTouchable();
 
 
-	G4int testing = stepPoint->GetTouchable()->GetHistory()->GetDepth();
-	//G4String t = testing->GetTopVolume()->GetName();
-	//G4cout<<t<<":"<<trans<<G4endl;
 
-	if (testing != 6)
-		stepPoint = aStep->GetPreStepPoint();
-		//return true;
+	G4int preDepth = prePoint->GetTouchable()->GetHistory()->GetDepth();
+	G4int postDepth = postPoint->GetTouchable()->GetHistory()->GetDepth();
 
-	const G4VTouchable* touchable = stepPoint->GetTouchable();
+/*
+	if (postDepth == 6) {
+		prePoint = postPoint;
+	}
+	*/
+
+	const G4VTouchable* touchable = prePoint->GetTouchable();
+
+	G4String test = postPoint->GetTouchable()->GetHistory()->GetTopVolume()->GetName();
+	G4ThreeVector testLoc = postPoint->GetTouchable()->GetHistory()->GetTopVolume()->GetTranslation();
+	G4int testCopy = postPoint->GetTouchable()->GetHistory()->GetTopReplicaNo();
+	G4int testCopy2 = postPoint->GetTouchable()->GetHistory()->GetReplicaNo(5);
+
+		//G4NavigationHistory
+
+	G4String test1 = prePoint->GetTouchable()->GetHistory()->GetTopVolume()->GetName();
+	G4ThreeVector test1Loc = prePoint->GetTouchable()->GetHistory()->GetTopVolume()->GetTranslation();
+	G4int test1Copy = prePoint->GetTouchable()->GetHistory()->GetTopVolume()->GetCopyNo();
+	G4int test1Copy2 = prePoint->GetTouchable()->GetHistory()->GetReplicaNo(5);
+
+	//G4cout<<" Pre: "<<test1<<"["<<test1Copy<<","<<test1Copy2<<"]"<<test1Loc<<"| Post: "<<test<<"["<<testCopy<<","<<testCopy2<<"]"<<testLoc<<G4endl;
 
 	//Get the copy number of volumes in the volume tree
 	G4int zPixel = touchable->GetCopyNumber();
@@ -82,16 +99,21 @@ G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
 
 		if (i < 1) {
 		//if (i == 6) {
-			//G4cout<<name<<"("<<copy<<"): "<<tempRot<<" ("<<temp.getX()<<","<<temp.getY()<<","<<temp.getZ()<<")"<<G4endl;
+			G4cout<<name<<"("<<yPixel<<","<<zPixel<<"): "<<" ("<<temp.getX()<<","<<temp.getY()<<","<<temp.getZ()<<")"<<G4endl;
 			//G4cout<<name<<"("<<yPixel<<","<<zPixel<<"): "<<" ("<<digitised.getX()<<","<<digitised.getY()<<","<<digitised.getZ()<<")"<<G4endl;
 		}
 	}
 	//Get position of particle as it leaves the pixel
-	G4ThreeVector exact = stepPoint->GetPosition();
+	G4ThreeVector exact1 = prePoint->GetPosition();
+	G4ThreeVector exact2 = postPoint->GetPosition();
+
+	//G4cout<<exact1<<G4endl;
+	//G4cout<<exact2<<G4endl;
+	G4ThreeVector exact = (exact2+exact1)/2.0;
 	//Gets the particle ID
 	G4int trackID = aStep->GetTrack()->GetTrackID();
 
-/*
+
 	//TODO: REMOVE DEBUGGING LOGS
 	G4cout<<"Digit: ("<<digitised.getX()<<","<<digitised.getY()<<","<<digitised.getZ()<<")"<<G4endl;
 	G4cout<<"Exact: ("<<exact.getX()<<","<<exact.getY()<<","<<exact.getZ()<<")"<<G4endl;
@@ -102,7 +124,7 @@ G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
 	G4double zDiff = exact.getZ()-digitised.getZ();
 	G4cout<<"Diff : ("<<xDiff<<","<<yDiff<<","<<zDiff<<")"<<G4endl;
 	G4cout<<"============================================="<<G4endl;
-*/
+
 	//Creates a hit and fills it with data
 	auto hit = new DevHit();
 	hit->SetTrackID(trackID);
