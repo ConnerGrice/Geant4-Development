@@ -8,7 +8,7 @@
 /vis/drawVolume
 
 #Sets the viewpoint position and light source position
-/vis/viewer/set/viewpointVector -1 0 0
+/vis/viewer/set/viewpointVector 1 0 0
 /vis/viewer/set/lightsVector -1 0 0
 
 #Defines the drawing of the particle trajectories
@@ -21,7 +21,7 @@
 #Adds a scale line to the enviroment
 #/vis/scene/add/scale
 #/vis/scene/add/axes -55 30 0 33 mm
-/vis/scene/add/axes 35 0 -125.8 271.6 mm
+#/vis/scene/add/axes 35 0 -125.8 271.6 mm
 #/vis/scene/add/axes 22.5 0 0 4 mm
 
 #Makes the Mother volumes invisible

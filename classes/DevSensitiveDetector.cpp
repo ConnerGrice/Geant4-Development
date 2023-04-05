@@ -99,17 +99,17 @@ G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
 
 		if (i < 1) {
 		//if (i == 6) {
-			G4cout<<name<<"("<<yPixel<<","<<zPixel<<"): "<<" ("<<temp.getX()<<","<<temp.getY()<<","<<temp.getZ()<<")"<<G4endl;
+			//G4cout<<name<<"("<<yPixel<<","<<zPixel<<"): "<<" ("<<temp.getX()<<","<<temp.getY()<<","<<temp.getZ()<<")"<<G4endl;
 			//G4cout<<name<<"("<<yPixel<<","<<zPixel<<"): "<<" ("<<digitised.getX()<<","<<digitised.getY()<<","<<digitised.getZ()<<")"<<G4endl;
 		}
 	}
 	//Get position of particle as it leaves the pixel
-	G4ThreeVector exact1 = prePoint->GetPosition();
-	G4ThreeVector exact2 = postPoint->GetPosition();
+	G4ThreeVector exact2 = prePoint->GetPosition();
+	G4ThreeVector exact = postPoint->GetPosition();
 
 	//G4cout<<exact1<<G4endl;
 	//G4cout<<exact2<<G4endl;
-	G4ThreeVector exact = (exact2+exact1)/2.0;
+	G4ThreeVector exact1 = (exact2+exact1)/2.0;
 	//Gets the particle ID
 	G4int trackID = aStep->GetTrack()->GetTrackID();
 

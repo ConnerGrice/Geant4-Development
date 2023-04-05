@@ -582,3 +582,28 @@ I have added the chips manually to make sure they are all the same size. The iss
 
 For the sake of accuracy and trying to fix my current issue, I will generate all layers of the HIC manually.
 
+### Digitiser testing
+
+After redoing the geometry generation I run another experiment. These tests were done using the preStepPoint:
+
+#### X Error
+
+![x-error-4](Results/X_Error_mk4.png)
+
+Compared to the results from the other test that used the preStepPoints this distribution cuts off faster. The largest error is around 0.026mm. There are also less points that has a smaller error.
+
+#### Y Error
+
+![y-error-4](Results/Y_Error_mk4.png)
+
+Similar to the X error results, there are no errors with a magnitude larger than 0.039mm. The results look similar to that produced by the test where the postStepPoint was used, however, there are a much larger number of entires since there are no particles being disregarded.
+
+#### Z Error
+
+![z-error-4](Results/Z_Error_mk4.png)
+
+These results are more slightly better than they were before. There are no outliers like there were in the last test wherer the preStepPoint was used. Like the y error, the plot looks very similar to the postStepPoint experiment, however, there are many more entries, therefore, the results that gave errors less than -0.015 can be seen. 
+
+I am starting to think that this error may be due to the fact that particles in the test are generally moving in the negative z direction, therefore, will almost always hit the side of the pixel that is facing in the positive z direction. The x and y errors are more symmetrical since the pixels are rotated about the z axis.
+
+

@@ -132,7 +132,7 @@ G4LogicalVolume* DevDetectorConstruction::HCISegment(G4double thickness,G4String
 	if (name == "BChips" || name == "CChips" || name == "DChips") {
 		segmentS = new G4Box(name+"SegS",HCIWidth/2.0-0.6*mm,thickness/2.0,30*mm/2.0);
 	} else {
-		segmentS = new G4Box(name+"SegS",HCIWidth/2.0,thickness/2.0,length/2.0);
+		segmentS = new G4Box(name+"SegS",HCIWidth/2.0,thickness/2.0,30*mm/2.0);
 	}
 
 	G4LogicalVolume* segmentL = new G4LogicalVolume(segmentS,material,name+"SegL");
@@ -152,7 +152,7 @@ G4LogicalVolume* DevDetectorConstruction::HICChipLayerMother(G4double thickness)
 }
 
 G4LogicalVolume* DevDetectorConstruction::HICChipSegment(G4double thickness,G4VisAttributes* visual) {
-	G4double length = HCILength/9.0;
+	G4double length = 30*mm;
 
 	G4Box* chipSegS = new G4Box("PassiveSegS",0.6*mm,thickness/2,length/2);
 	G4LogicalVolume* chipSegL = new G4LogicalVolume(chipSegS,pChips,"PassiveSegL");
@@ -206,23 +206,28 @@ void DevDetectorConstruction::buildHCILayer(G4String name, G4double thickness, G
 		G4LogicalVolume* chipSegment = HICChipSegment(thickness,visual);
 
 
-		new G4ReplicatedSlice(name+"ChipStripP",chipSegment,chipStrip,kZAxis,9,30*mm,0.1*mm,0*mm);
-		new G4PVPlacement(0,pos+G4ThreeVector(-6.9*mm,thickness/2,0),chipStrip,name+"ChipStripP",HCIUnitL,false,101);
+		//new G4ReplicatedSlice(name+"ChipStripP",chipSegment,chipStrip,kZAxis,9,30*mm,0.1*mm,0*mm);
+
 
 		//Full layer
 
 		for (int i = 0;i<9;i++) {
+			new G4PVPlacement(0,G4ThreeVector(0,0,(-HCILength/2.0)+15*mm+(i*30.2*mm)),chipSegment,name+"ChipStripP",chipStrip,false,124);
 			new G4PVPlacement(0,G4ThreeVector(0,0,(-HCILength/2.0)+15*mm+(i*30.2*mm)),layerSegmentL,name+"Segment",layerStripL,false,123);
 		}
+		new G4PVPlacement(0,pos+G4ThreeVector(-6.9*mm,thickness/2,0),chipStrip,name+"ChipStripP",HCIUnitL,false,101);
 
 		//new G4ReplicatedSlice(name+"Segment",layerSegmentL,layerStripL,kZAxis,9,30*mm,0.1*mm,0);
 		new G4PVPlacement(0,pos+G4ThreeVector(0.6*mm,thickness/2,0),layerStripL,name+"StripP",HCIUnitL,false,1);
 
 
 	} else {
+		for (int i = 0;i<9;i++) {
+			new G4PVPlacement(0,G4ThreeVector(0,0,(-HCILength/2.0)+15*mm+(i*30.2*mm)),layerSegmentL,name+"Segment",layerStripL,false,125);
+		}
 	//Place volumes
-	new G4ReplicatedSlice(name+"Segment",layerSegmentL,layerStripL,kZAxis,9,30*mm,0.1*mm,0);
-	new G4PVPlacement(0,pos+G4ThreeVector(0,thickness/2,0),layerStripL,name+"StripP",HCIUnitL,false,1);
+	//new G4ReplicatedSlice(name+"Segment",layerSegmentL,layerStripL,kZAxis,9,30*mm,0.1*mm,0);
+		new G4PVPlacement(0,pos+G4ThreeVector(0,thickness/2,0),layerStripL,name+"StripP",HCIUnitL,false,1);
 	}
 }
 
@@ -329,8 +334,8 @@ G4VPhysicalVolume* DevDetectorConstruction::Construct() {
 	new G4PVPlacement(0,targetPosition,targetL,"TargetP",pLogicalWorld,false,6,true);
 
 	//Generate staves
-	//ConstructStaves(3,"C");
-	//ConstructStaves(4,"D");
+	ConstructStaves(3,"C");
+	ConstructStaves(4,"D");
 	ConstructStaves(2,"B");
 
 /*
@@ -354,7 +359,7 @@ G4VPhysicalVolume* DevDetectorConstruction::Construct() {
 }
 
 void DevDetectorConstruction::ConstructSDandField() {
-/*
+
 	//Defines chips layers in each stave as the sensitive detector
 	auto CSensDet = new DevSensitiveDetector("StaveC","StaveCCollection");
 	G4SDManager::GetSDMpointer()->AddNewDetector(CSensDet);
@@ -363,7 +368,7 @@ void DevDetectorConstruction::ConstructSDandField() {
 	auto DSensDet = new DevSensitiveDetector("StaveD","StaveDCollection");
 	G4SDManager::GetSDMpointer()->AddNewDetector(DSensDet);
 	SetSensitiveDetector("DChipsPixelL",DSensDet);
-*/
+
 	auto BSensDet = new DevSensitiveDetector("StaveB","StaveBCollection");
 	G4SDManager::GetSDMpointer()->AddNewDetector(BSensDet);
 	SetSensitiveDetector("BChipsPixelL",BSensDet);
