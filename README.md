@@ -1,6 +1,6 @@
 # Development Timeline
 
-This will be a timeline desplaying screenshots taken to outline the development process.
+This will be a timeline to outline the development process.
 
 Timeline section:
 
@@ -12,8 +12,6 @@ Timeline section:
 ### Recording measured position
 
 The ability to record the digitised positions has been added and the first test has been done.
-
-#### X Positions
 
 |Stave B| Stave C| Stave D|
 |-------|--------|--------|
