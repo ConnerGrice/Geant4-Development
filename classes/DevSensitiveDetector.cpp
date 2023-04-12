@@ -69,7 +69,6 @@ G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
 
 	//Get position of particle as it leaves the pixel
 	G4ThreeVector exact = postPoint->GetPosition();
-
 	//Gets the particle ID
 	G4int trackID = aStep->GetTrack()->GetTrackID();
 
@@ -78,6 +77,7 @@ G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
 	hit->SetTrackID(trackID);
 	hit->SetExactPosition(exact);
 	hit->SetDigitisedPosition(digitised);
+	//hit->SetEventID(eventID);
 
 	pHitCollection->insert(hit);
 

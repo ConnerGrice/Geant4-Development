@@ -25,3 +25,23 @@ Y position data also follows a similar trend by showning different sections. The
 
 The Z position data shows a smoother curve. For staves further from the centre, the curve is stretched in the x axis direction, which makes sense since the solid angle spanned increases the further from the centre the stave is.
 
+### Averaging firing pixels
+
+Since adding the pixels to the geometry, a single particle can fire multiple pixels in a single HIC unit as it passes through. This means we can take the average value of all of the fired pixels to get the position of the particle with a better resolution. This calculation has been added.
+
+THe resulting position data measured is very similar to that above (when not averaged) however, each distinct section has become slightly more convex in shape. Take the y positions in stave C
+
+|Measured|Averaged|
+|---|---|
+|![cm](Results/StaveC_yPos.png)|![ca](Results/StaveC_yAvg.png)|
+
+A few things to note in the averaged plot. I have split the data up by the incident particle in order to get a valid average value. Events where one of the particles did not hit a HIC unit are also discarded. Therefore, the number of entries has reduced by 90%. However, if all events were valid there would only be a maximum of 100240 entires, therefore, the total efficiency is sitting at around 60%.
+
+### Averaging digitised error
+
+I have also took this oppotunity to test how these values compare to the averaged exact value. There plots are very different compared to the original error plots.
+
+|X|Y|Z|
+|---|---|---|
+|![xe](Results/AvgError_x.png)|![ye](Results/AvgError_y.png)|![ze](Results/AvgError_z.png)|
+

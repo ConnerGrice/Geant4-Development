@@ -36,17 +36,26 @@ private:
 	G4bool doBothHit(G4VHitsCollection* collection);
 
 	//Classifies if event was good, alright, or bad
-	void classifyEvent(G4VHitsCollection* dCol,G4VHitsCollection* bCol,G4VHitsCollection* cCol);
+	void classifyEvent(G4VHitsCollection* dCol,
+			G4VHitsCollection* bCol,
+			G4VHitsCollection* cCol);
 
 	//Sums how many hits are detected by each layer
-	void sumNumOfHits(G4VHitsCollection* dCol,G4VHitsCollection* bCol,G4VHitsCollection* cCol);
+	void sumNumOfHits(G4VHitsCollection* dCol,
+			G4VHitsCollection* bCol,
+			G4VHitsCollection* cCol);
 
 	//Fills given table with digitisation error data
-	void fillError(G4VHitsCollection* collection, G4int tupleID);
+	void fillError(const G4Event* anEvent,
+			G4VHitsCollection* collection,
+			G4int tupleID);
 
 
 	//Fills table with specified data
-	void fillMetrics(G4VHitsCollection* dCol,G4VHitsCollection* bCol,G4VHitsCollection* cCol);
+	void fillMetrics(const G4Event* anEvent,
+			G4VHitsCollection* dCol,
+			G4VHitsCollection* bCol,
+			G4VHitsCollection* cCol);
 
 
 	DevRunAction* rAction;

@@ -34,12 +34,21 @@ void DevRunAction::BeginOfRunAction(const G4Run*) {
 void DevRunAction::metricsTable(G4String name, G4int tupleID, G4AnalysisManager* manager) {
 
 	manager->CreateNtuple(name,"Metrics");
-	manager->CreateNtupleDColumn("xDiff");
-	manager->CreateNtupleDColumn("yDiff");
-	manager->CreateNtupleDColumn("zDiff");
-	manager->CreateNtupleDColumn("xPos");
-	manager->CreateNtupleDColumn("yPos");
-	manager->CreateNtupleDColumn("zPos");
+	manager->CreateNtupleDColumn("xDiff1");
+	manager->CreateNtupleDColumn("yDiff1");
+	manager->CreateNtupleDColumn("zDiff1");
+	manager->CreateNtupleDColumn("xDiff2");
+	manager->CreateNtupleDColumn("yDiff2");
+	manager->CreateNtupleDColumn("zDiff2");
+
+	manager->CreateNtupleDColumn("xPos1");
+	manager->CreateNtupleDColumn("yPos1");
+	manager->CreateNtupleDColumn("zPos1");
+	manager->CreateNtupleDColumn("xPos2");
+	manager->CreateNtupleDColumn("yPos2");
+	manager->CreateNtupleDColumn("zPos2");
+
+	manager->CreateNtupleIColumn("Event");
 	manager->FinishNtuple(tupleID);
 }
 

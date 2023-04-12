@@ -14,42 +14,25 @@
 #include <G4ThreeVector.hh>
 class DevHit: public G4VHit {
 public:
-	DevHit();
+	DevHit(): evntID(0),trkID(0),exactPos(G4ThreeVector()),digitPos(G4ThreeVector()) {};
 	virtual ~DevHit();
 
 public:
 	//Get-Set copy number
-	inline G4int GetZPx() { return zPx; };
-	inline void SetZPx(G4int num) { zPx = num; };
-
-	inline G4int GetYPx() { return yPx; };
-	inline void SetYPx(G4int num) { yPx = num; };
-
-	inline G4int GetSegment() { return segment; };
-	inline void SetSegment(G4int num) { segment = num; };
-
-	inline G4int GetUnit() { return unit; };
-	inline void SetUnit(G4int num) { unit = num; };
-
-	inline G4int GetStave() { return stave; };
-	inline void SetStave(G4int num) { stave = num; };
-
 	inline G4ThreeVector GetExactPosition() { return exactPos; };
 	inline void SetExactPosition(G4ThreeVector num) { exactPos = num; };
 
 	inline G4ThreeVector GetDigitisedPosition() { return digitPos; };
 	inline void SetDigitisedPosition(G4ThreeVector num) { digitPos = num; };
 
+	inline G4int GetEventID() { return evntID; };
+	inline void SetEventID(G4int id) {evntID = id;};
 
 	//Get-Set trackID
 	inline G4int GetTrackID() { return trkID; };
 	inline void SetTrackID(G4int id) { trkID = id; };
 private:
-	G4int zPx;
-	G4int yPx;
-	G4int segment;
-	G4int unit;
-	G4int stave;
+	G4int evntID;
 	G4int trkID;
 
 	G4ThreeVector exactPos;

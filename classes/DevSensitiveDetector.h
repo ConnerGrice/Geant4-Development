@@ -11,6 +11,7 @@
 #include <G4VSensitiveDetector.hh>
 
 #include <G4SDManager.hh>
+#include <G4RunManager.hh>
 #include <G4RotationMatrix.hh>
 #include <G4AffineTransform.hh>
 

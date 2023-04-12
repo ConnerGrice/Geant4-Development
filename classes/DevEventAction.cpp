@@ -108,31 +108,87 @@ void DevEventAction::sumNumOfHits(G4VHitsCollection* dCol,G4VHitsCollection* bCo
 	rAction->addCHits(cHitCount);
 }
 
-void DevEventAction::fillError(G4VHitsCollection* collection, G4int tupleID) {
+void DevEventAction::fillError(const G4Event* anEvent,
+		G4VHitsCollection* collection, G4int tupleID) {
+
+	//Flag to pick which data will be recorded
+	G4bool errorFlag = true;	//Difference between exact* and digitised position
+	G4bool positionFlag = true;	//Digitised position
+
 	G4int hitCount = collection->GetSize();
 	DevHit* hit = new DevHit();
 
+	G4int p1Count = 0;
+	G4int p2Count = 0;
+	G4ThreeVector p1Pos;
+	G4ThreeVector p1Ext;
+	G4ThreeVector p2Pos;
+	G4ThreeVector p2Ext;
+
+	G4int eventID = anEvent->GetEventID();
+
 	for (int i=0;i<hitCount;i++) {
 		hit = (DevHit*)collection->GetHit(i);
-		G4ThreeVector difference = hit->GetExactPosition() - hit->GetDigitisedPosition();
+		G4int trackID = hit->GetTrackID();
 		G4ThreeVector position = hit->GetDigitisedPosition();
-		manager->FillNtupleDColumn(tupleID,0,difference.getX());
-		manager->FillNtupleDColumn(tupleID,1,difference.getY());
-		manager->FillNtupleDColumn(tupleID,2,difference.getZ());
-		manager->FillNtupleDColumn(tupleID,3,position.getX());
-		manager->FillNtupleDColumn(tupleID,4,position.getY());
-		manager->FillNtupleDColumn(tupleID,5,position.getZ());
-		manager->AddNtupleRow(tupleID);
+		G4ThreeVector exact = hit->GetExactPosition();
+
+		if (trackID == 1) {
+			p1Count++;
+			p1Pos += position;
+			p1Ext += exact;
+		} else if (trackID == 2) {
+			p2Count++;
+			p2Pos += position;
+			p2Ext += exact;
+		}
+
 	}
+
+	if (p1Count == 0 || p2Count == 0)
+		return;
+
+	G4ThreeVector p1AvgPos = p1Pos/(G4double)p1Count;
+	G4ThreeVector p2AvgPos = p2Pos/(G4double)p2Count;
+	G4ThreeVector p1AvgExt = p1Ext/(G4double)p1Count;
+	G4ThreeVector p2AvgExt = p2Ext/(G4double)p2Count;
+
+	if (errorFlag) {
+		G4ThreeVector p1Diff = p1AvgPos - p1AvgExt;
+		G4ThreeVector p2Diff = p2AvgPos - p2AvgExt;
+		manager->FillNtupleDColumn(tupleID,0,p1Diff.getX());
+		manager->FillNtupleDColumn(tupleID,1,p1Diff.getY());
+		manager->FillNtupleDColumn(tupleID,2,p1Diff.getZ());
+
+		manager->FillNtupleDColumn(tupleID,3,p2Diff.getX());
+		manager->FillNtupleDColumn(tupleID,4,p2Diff.getY());
+		manager->FillNtupleDColumn(tupleID,5,p2Diff.getZ());
+
+	}
+
+	if (positionFlag) {
+	manager->FillNtupleDColumn(tupleID,6,p1AvgPos.getX());
+	manager->FillNtupleDColumn(tupleID,7,p1AvgPos.getY());
+	manager->FillNtupleDColumn(tupleID,8,p1AvgPos.getZ());
+
+	manager->FillNtupleDColumn(tupleID,9,p2AvgPos.getX());
+	manager->FillNtupleDColumn(tupleID,10,p2AvgPos.getY());
+	manager->FillNtupleDColumn(tupleID,11,p2AvgPos.getZ());
+	}
+
+	manager->FillNtupleIColumn(tupleID,12,eventID);
+	manager->AddNtupleRow(tupleID);
 }
 
 
-void DevEventAction::fillMetrics(G4VHitsCollection* dCol,G4VHitsCollection* bCol,G4VHitsCollection* cCol) {
-	fillError(bCol,0);
+void DevEventAction::fillMetrics(const G4Event* anEvent,
+		G4VHitsCollection* dCol,G4VHitsCollection* bCol,G4VHitsCollection* cCol) {
 
-	fillError(cCol,1);
+	fillError(anEvent,bCol,0);
 
-	fillError(dCol,2);
+	fillError(anEvent,cCol,1);
+
+	fillError(anEvent,dCol,2);
 }
 
 void DevEventAction::EndOfEventAction(const G4Event* anEvent) {
@@ -154,7 +210,7 @@ void DevEventAction::EndOfEventAction(const G4Event* anEvent) {
 	//rAction->printCount();
 	//rAction->printType();
 
-	fillMetrics(dHitsCol,bHitsCol,cHitsCol);
+	fillMetrics(anEvent,dHitsCol,bHitsCol,cHitsCol);
 
 	//Counter for the number of events
 	G4cout<<"Event: "<<anEvent->GetEventID()<<"/100240"<<G4endl;
