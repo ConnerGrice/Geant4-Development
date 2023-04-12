@@ -69,7 +69,7 @@ G4bool DevEventAction::doBothHit(G4VHitsCollection* collection) {
 	}
 
 	//Checks both particles only hit the layer once
-	if (particle1 == 1 && particle2 == 1) {
+	if (particle1 > 1 && particle2 > 1) {
 		return true;
 	}
 
@@ -110,6 +110,7 @@ void DevEventAction::sumNumOfHits(G4VHitsCollection* dCol,G4VHitsCollection* bCo
 
 void DevEventAction::fillError(const G4Event* anEvent,
 		G4VHitsCollection* collection, G4int tupleID) {
+
 
 	//Flag to pick which data will be recorded
 	G4bool errorFlag = true;	//Difference between exact* and digitised position
