@@ -65,11 +65,11 @@ I think I might need to return to the efficiency calculation to see if there is 
 
 I have now changed the method of calculating the level of success of an event. Now, I will look at both particles and give them a level of success based on the layers they hit (while the particles are independent from eachother). After determining this, I get the overall outcome by taking the particle with the lowest level. E.g. if particle 1 had an alright event but particle 2 had a bad event, the overall level for the event would be bad. With this new method in place I ran an experiment and got these results:
 
-Total: 40.38%
+Total: 33.90%
 
-- Good: 84.80%
-- Alright: 9.11%
-- Bad: 6.09%
+- Good: 72.85%
+- Alright: 15.06%
+- Bad: 12.09%
 
-This new method has meant that the calculated efficiency has increased by almost 10%
+This did not increase the efficiency by much. I still think this method of calculating the efficiency is more accurate. 
 

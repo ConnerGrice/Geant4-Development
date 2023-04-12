@@ -101,7 +101,7 @@ void DevEventAction::classifyEvent(G4VHitsCollection* dCol,G4VHitsCollection* bC
 	hitContainer cHits = doBothHit(cCol);
 	hitContainer dHits = doBothHit(dCol);
 
-	DevEventAction::EventSuccess p1Level = classifyParticle(1,bHits,cHits,dHits);
+	DevEventAction::EventSuccess p1Level = classifyParticle(0,bHits,cHits,dHits);
 	DevEventAction::EventSuccess p2Level = classifyParticle(1,bHits,cHits,dHits);
 
 	if (p1Level == InvalidEvent || p2Level == InvalidEvent) {
