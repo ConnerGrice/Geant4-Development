@@ -17,7 +17,9 @@ The ability to record the digitised positions has been added and the first test 
 
 |Stave B| Stave C| Stave D|
 |-------|--------|--------|
-|![b](Results/StaveB_xPos.png]|![c](Results/StaveC_xPos.png)|![d](Results/StaveD_xPos.png)|
+|![bx](Results/StaveB_xPos.png)|![cx](Results/StaveC_xPos.png)|![dx](Results/StaveD_xPos.png)|
+|![by](Results/StaveB_yPos.png)|![cy](Results/StaveC_yPos.png)|![dy](Results/StaveD_yPos.png)|
+|![bz](Results/StaveB_zPos.png)|![cz](Results/StaveC_zPos.png)|![dz](Results/StaveD_zPos.png)|
 
 
 
