@@ -28,6 +28,8 @@ public:
 	void EndOfRunAction(const G4Run*) override;
 
 public:
+	void metricsTable(G4String name, G4int tupleID, G4AnalysisManager* manager);
+
 	//Prints to hit counts for each layer
 	void printCount();
 	void printCountEff();

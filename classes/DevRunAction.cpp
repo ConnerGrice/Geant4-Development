@@ -15,24 +15,11 @@ nGood(0),nAlright(0),nBad(0),nInvalid(0) {
 
 	manager->SetFileName("../Results/data.root");
 
-	manager->CreateNtuple("StaveB","Metrics");
-	manager->CreateNtupleDColumn("xDiff");
-	manager->CreateNtupleDColumn("yDiff");
-	manager->CreateNtupleDColumn("zDiff");
-	manager->FinishNtuple(0);
-
-	manager->CreateNtuple("StaveC","Metrics");
-	manager->CreateNtupleDColumn("xDiff");
-	manager->CreateNtupleDColumn("yDiff");
-	manager->CreateNtupleDColumn("zDiff");
-	manager->FinishNtuple(1);
-
-	manager->CreateNtuple("StaveD","Metrics");
-	manager->CreateNtupleDColumn("xDiff");
-	manager->CreateNtupleDColumn("yDiff");
-	manager->CreateNtupleDColumn("zDiff");
-	manager->FinishNtuple(2);
+	metricsTable("StaveB",0,manager);
+	metricsTable("StaveC",1,manager);
+	metricsTable("StaveD",2,manager);
 }
+
 
 DevRunAction::~DevRunAction() {
 	delete G4AnalysisManager::Instance();
@@ -42,6 +29,18 @@ void DevRunAction::BeginOfRunAction(const G4Run*) {
 	G4cout<<"RUN START================================"<<G4endl;
 	G4AnalysisManager* manager = G4AnalysisManager::Instance();
 	manager->OpenFile();
+}
+
+void DevRunAction::metricsTable(G4String name, G4int tupleID, G4AnalysisManager* manager) {
+
+	manager->CreateNtuple(name,"Metrics");
+	manager->CreateNtupleDColumn("xDiff");
+	manager->CreateNtupleDColumn("yDiff");
+	manager->CreateNtupleDColumn("zDiff");
+	manager->CreateNtupleDColumn("xPos");
+	manager->CreateNtupleDColumn("yPos");
+	manager->CreateNtupleDColumn("zPos");
+	manager->FinishNtuple(tupleID);
 }
 
 void DevRunAction::printCount() {

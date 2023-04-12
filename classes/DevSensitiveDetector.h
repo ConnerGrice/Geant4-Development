@@ -15,6 +15,7 @@
 #include <G4AffineTransform.hh>
 
 #include "DevHit.h"
+#include "DevDetectorConstruction.h"
 
 class DevSensitiveDetector: public G4VSensitiveDetector {
 public:

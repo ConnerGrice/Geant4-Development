@@ -9,6 +9,7 @@
 
 DevEventAction::DevEventAction(DevRunAction* runAction) {
 	rAction = runAction;
+	manager = G4AnalysisManager::Instance();
 
 }
 
@@ -110,23 +111,27 @@ void DevEventAction::sumNumOfHits(G4VHitsCollection* dCol,G4VHitsCollection* bCo
 void DevEventAction::fillError(G4VHitsCollection* collection, G4int tupleID) {
 	G4int hitCount = collection->GetSize();
 	DevHit* hit = new DevHit();
-	G4ThreeVector difference;
-
-	G4AnalysisManager* manager = G4AnalysisManager::Instance();
 
 	for (int i=0;i<hitCount;i++) {
 		hit = (DevHit*)collection->GetHit(i);
-		difference = hit->GetExactPosition() - hit->GetDigitisedPosition();
+		G4ThreeVector difference = hit->GetExactPosition() - hit->GetDigitisedPosition();
+		G4ThreeVector position = hit->GetDigitisedPosition();
 		manager->FillNtupleDColumn(tupleID,0,difference.getX());
 		manager->FillNtupleDColumn(tupleID,1,difference.getY());
 		manager->FillNtupleDColumn(tupleID,2,difference.getZ());
+		manager->FillNtupleDColumn(tupleID,3,position.getX());
+		manager->FillNtupleDColumn(tupleID,4,position.getY());
+		manager->FillNtupleDColumn(tupleID,5,position.getZ());
 		manager->AddNtupleRow(tupleID);
 	}
 }
 
+
 void DevEventAction::fillMetrics(G4VHitsCollection* dCol,G4VHitsCollection* bCol,G4VHitsCollection* cCol) {
 	fillError(bCol,0);
+
 	fillError(cCol,1);
+
 	fillError(dCol,2);
 }
 

@@ -28,6 +28,7 @@ public:
 	void EndOfEventAction(const G4Event* anEvent) override;
 
 private:
+
 	//Fetches a hit collection by name
 	G4VHitsCollection* getHitCollection(const G4Event* anEvent,G4String hcName);
 
@@ -40,12 +41,16 @@ private:
 	//Sums how many hits are detected by each layer
 	void sumNumOfHits(G4VHitsCollection* dCol,G4VHitsCollection* bCol,G4VHitsCollection* cCol);
 
+	//Fills given table with digitisation error data
 	void fillError(G4VHitsCollection* collection, G4int tupleID);
 
+
+	//Fills table with specified data
 	void fillMetrics(G4VHitsCollection* dCol,G4VHitsCollection* bCol,G4VHitsCollection* cCol);
 
 
 	DevRunAction* rAction;
+	G4AnalysisManager* manager;
 };
 
 #endif /* CLASSES_DEVEVENTACTION_H_ */
