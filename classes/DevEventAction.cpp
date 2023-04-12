@@ -50,51 +50,70 @@ G4VHitsCollection* DevEventAction::getHitCollection(const G4Event* anEvent, G4St
 	return hc;
 }
 
-G4bool DevEventAction::doBothHit(G4VHitsCollection* collection) {
+hitContainer DevEventAction::doBothHit(G4VHitsCollection* collection) {
 	G4int hitCount = collection->GetSize();
 
 	DevHit* hit = new DevHit();
 	G4int particle1 = 0;
 	G4int particle2 = 0;
+	hitContainer result {particle1,particle2};
 
 	//Get how many times each particle hit the layer
 	for (int i = 0;i < hitCount;i++) {
+
+		if (result[0] == 1 && result[1] == 1)
+			break;
+
 		hit = (DevHit*)collection->GetHit(i);
 		G4int whichParticle = hit->GetTrackID();
 		if (whichParticle == 1) {
-			particle1++;
+			result[0] = 1;
+			//particle1++;
 		} else if (whichParticle == 2) {
-			particle2++;
+			result[1] = 1;
+			//particle2++;
 		}
 	}
-
-	//Checks both particles only hit the layer once
-	if (particle1 > 1 && particle2 > 1) {
-		return true;
-	}
-
-	return false;
+	return result;
 }
 
+DevEventAction::EventSuccess DevEventAction::classifyParticle(G4int particleID,hitContainer bHits,hitContainer cHits,hitContainer dHits) {
+	G4int staveB = bHits[particleID];
+	G4int staveC = cHits[particleID];
+	G4int staveD = dHits[particleID];
+	G4int total = staveB + staveC + staveD;
+
+	if ((total == 3) || (staveB && staveC)) {
+		return GoodEvent;
+	} else if (staveB && staveD) {
+		return BadEvent;
+	}else if (staveC && staveD) {
+		return AlrightEvent;
+	} else {
+		return InvalidEvent;
+	}
+
+}
 
 void DevEventAction::classifyEvent(G4VHitsCollection* dCol,G4VHitsCollection* bCol,G4VHitsCollection* cCol) {
-	G4bool dGood = doBothHit(dCol);
-	G4bool bGood = doBothHit(bCol);
-	G4bool cGood = doBothHit(cCol);
 
-	if (cGood && bGood) {
-		G4cout<<"GOOD EVENT"<<G4endl;
-		rAction->addGood();
-	} else if (cGood && dGood) {
-		G4cout<<"ALRIGHT EVENT"<<G4endl;
-		rAction->addAlright();
-	} else if (bGood && dGood) {
-		G4cout<<"BAD EVENT"<<G4endl;
-		rAction->addBad();
-	} else {
-		G4cout<<"INVALID EVENT"<<G4endl;
+	hitContainer bHits = doBothHit(bCol);
+	hitContainer cHits = doBothHit(cCol);
+	hitContainer dHits = doBothHit(dCol);
+
+	DevEventAction::EventSuccess p1Level = classifyParticle(1,bHits,cHits,dHits);
+	DevEventAction::EventSuccess p2Level = classifyParticle(1,bHits,cHits,dHits);
+
+	if (p1Level == InvalidEvent || p2Level == InvalidEvent) {
 		rAction->addInvalid();
+	} else if (p1Level == BadEvent || p2Level == BadEvent) {
+		rAction->addBad();
+	} else if (p1Level == AlrightEvent || p2Level == AlrightEvent) {
+		rAction->addAlright();
+	} else if (p1Level == GoodEvent || p2Level == GoodEvent) {
+		rAction->addGood();
 	}
+
 }
 
 void DevEventAction::sumNumOfHits(G4VHitsCollection* dCol,G4VHitsCollection* bCol,G4VHitsCollection* cCol) {
@@ -113,7 +132,7 @@ void DevEventAction::fillError(const G4Event* anEvent,
 
 
 	//Flag to pick which data will be recorded
-	G4bool errorFlag = true;	//Difference between exact* and digitised position
+	G4bool errorFlag = false;	//Difference between exact* and digitised position
 	G4bool positionFlag = true;	//Digitised position
 
 	G4int hitCount = collection->GetSize();

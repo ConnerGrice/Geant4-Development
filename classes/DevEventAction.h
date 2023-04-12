@@ -15,13 +15,25 @@
 #include <G4Event.hh>
 #include <g4root.hh>
 
+#include <vector>
+
 #include "DevRunAction.h"
 #include "DevHit.h"
+
+typedef std::vector<G4int> hitContainer;
 
 class DevEventAction: public G4UserEventAction {
 public:
 	DevEventAction(DevRunAction* runAction);
 	virtual ~DevEventAction();
+
+
+	enum EventSuccess {
+		GoodEvent,
+		AlrightEvent,
+		BadEvent,
+		InvalidEvent
+	};
 
 public:
 	void BeginOfEventAction(const G4Event*) override;
@@ -29,11 +41,14 @@ public:
 
 private:
 
+
 	//Fetches a hit collection by name
 	G4VHitsCollection* getHitCollection(const G4Event* anEvent,G4String hcName);
 
 	//Makes sure each particle hits a detector only once
-	G4bool doBothHit(G4VHitsCollection* collection);
+	hitContainer doBothHit(G4VHitsCollection* collection);
+
+	EventSuccess classifyParticle(G4int particleID,hitContainer bHits,hitContainer cHits,hitContainer dHits);
 
 	//Classifies if event was good, alright, or bad
 	void classifyEvent(G4VHitsCollection* dCol,
@@ -61,5 +76,6 @@ private:
 	DevRunAction* rAction;
 	G4AnalysisManager* manager;
 };
+
 
 #endif /* CLASSES_DEVEVENTACTION_H_ */
