@@ -83,7 +83,7 @@ Therefore, during one execution of the program, 2 seperate runs are happening. T
 
 Fixing this meant that merging the results of each thread needed to be done. Here are the results:
 
-Total valid: 67.88%
+Total valid: 67.87%
 
 - Good: 72.77%
 - Alright: 15.12%
