@@ -14,6 +14,7 @@
 #include <G4HCofThisEvent.hh>
 #include <G4Event.hh>
 #include <G4SDManager.hh>
+#include <g4root.hh>
 
 #include "DevHit.h"
 
@@ -55,7 +56,15 @@ private:
 	EventSuccess classifyParticle(G4int particleID,hitContainer& bHits,hitContainer& cHits,hitContainer& dHits);
 
 	//Classifies if event was good, alright, or bad
-	void classifyEvent(G4VHitsCollection* dCol,
+	EventSuccess classifyEvent(G4VHitsCollection* dCol,
+			G4VHitsCollection* bCol,
+			G4VHitsCollection* cCol);
+
+	void recordStaveData(const G4Event* anEvent,
+			G4VHitsCollection* collection, G4int tupleID);
+
+	void recordData(const G4Event* anEvent,
+			G4VHitsCollection* dCol,
 			G4VHitsCollection* bCol,
 			G4VHitsCollection* cCol);
 

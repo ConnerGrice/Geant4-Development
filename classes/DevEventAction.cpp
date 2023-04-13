@@ -175,7 +175,7 @@ void DevEventAction::fillError(const G4Event* anEvent,
 
 	}
 
-	if (p1Count == 0 || p2Count == 0)
+	if (p1Count < 2 || p2Count < 2)
 		return;
 
 	G4ThreeVector p1AvgPos = p1Pos/(G4double)p1Count;
@@ -197,13 +197,13 @@ void DevEventAction::fillError(const G4Event* anEvent,
 	}
 
 	if (positionFlag) {
-	manager->FillNtupleDColumn(tupleID,6,p1AvgPos.getX());
-	manager->FillNtupleDColumn(tupleID,7,p1AvgPos.getY());
-	manager->FillNtupleDColumn(tupleID,8,p1AvgPos.getZ());
+		manager->FillNtupleDColumn(tupleID,6,p1AvgPos.getX());
+		manager->FillNtupleDColumn(tupleID,7,p1AvgPos.getY());
+		manager->FillNtupleDColumn(tupleID,8,p1AvgPos.getZ());
 
-	manager->FillNtupleDColumn(tupleID,9,p2AvgPos.getX());
-	manager->FillNtupleDColumn(tupleID,10,p2AvgPos.getY());
-	manager->FillNtupleDColumn(tupleID,11,p2AvgPos.getZ());
+		manager->FillNtupleDColumn(tupleID,9,p2AvgPos.getX());
+		manager->FillNtupleDColumn(tupleID,10,p2AvgPos.getY());
+		manager->FillNtupleDColumn(tupleID,11,p2AvgPos.getZ());
 	}
 
 	manager->FillNtupleIColumn(tupleID,12,eventID);
@@ -233,14 +233,14 @@ void DevEventAction::EndOfEventAction(const G4Event* anEvent) {
 	G4VHitsCollection* cHitsCol = getHitCollection(anEvent,cName);
 
 	//Sums the number of hits for each layer
-	sumNumOfHits(dHitsCol,bHitsCol,cHitsCol);
+	//sumNumOfHits(dHitsCol,bHitsCol,cHitsCol);
 
 	//classifyEvent(dHitsCol,bHitsCol,cHitsCol);
 
 	//rAction->printCount();
 	//rAction->printType();
 
-	fillMetrics(anEvent,dHitsCol,bHitsCol,cHitsCol);
+	//fillMetrics(anEvent,dHitsCol,bHitsCol,cHitsCol);
 
 	//Counter for the number of events
 	G4cout<<"Event: "<<anEvent->GetEventID()<<"/100240"<<G4endl;
