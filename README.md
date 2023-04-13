@@ -71,5 +71,22 @@ Total: 33.90%
 - Alright: 15.06%
 - Bad: 12.09%
 
-This did not increase the efficiency by much. I still think this method of calculating the efficiency is more accurate. 
+This did not increase the efficiency by much. I still think this method of calculating the efficiency is more accurate.
+
+## 13/04/2023
+
+### Oversight in efficiency
+
+The efficiency results shown above are very low. It was brought to my attention that the reduction in active area would not justify a drop in efficiency by this much. After some investigation the issue was found to be the fact that the program runs using 2 seperate threads(workers) to speed up computation time.
+
+Therefore, during one execution of the program, 2 seperate runs are happening. These runs therefore finish and outout their efficiency values, however, since there are only 100240 events to go around, each run will process roughly half of them, meaning the efficiency results stated above are that of a single thread. 
+
+Fixing this meant that merging the results of each thread needed to be done. Here are the results:
+
+Total valid: 67.88%
+
+- Good: 72.77%
+- Alright: 15.12%
+- Bad: 12.11%
+
 

@@ -17,6 +17,7 @@
 #include <fstream>
 
 #include "parameters.h"
+#include "DevRun.h"
 
 class DevRunAction: public G4UserRunAction {
 public:
@@ -24,6 +25,7 @@ public:
 	virtual ~DevRunAction();
 
 public:
+	G4Run* GenerateRun() override;
 	void BeginOfRunAction(const G4Run*) override;
 	void EndOfRunAction(const G4Run*) override;
 
@@ -34,7 +36,7 @@ public:
 	void printCount();
 	void printCountEff();
 	void printType();
-	void printTypeEff();
+	void printTypeEff(const G4Run* aRun);
 
 	//Hit counter for each layer
 	inline void addBHits(G4int hits) { bTotal += hits; };

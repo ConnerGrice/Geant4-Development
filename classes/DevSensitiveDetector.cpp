@@ -29,14 +29,6 @@ G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
 
 	const G4VTouchable* touchable = prePoint->GetTouchable();
 
-	//Get the copy number of volumes in the volume tree
-	/*
-	G4int zPixel = touchable->GetCopyNumber();
-	G4int yPixel = touchable->GetCopyNumber(1);
-	G4int segment = touchable->GetCopyNumber(2);
-	G4int unit = touchable->GetCopyNumber(4);
-	*/
-
 	G4int stave = touchable->GetCopyNumber(5);
 
 	//Variables for getting volume position
@@ -65,7 +57,6 @@ G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
 		//Add rotated position vector
 		digitised += temp;
 	}
-
 
 	//Get position of particle as it leaves the pixel
 	G4ThreeVector exact = postPoint->GetPosition();

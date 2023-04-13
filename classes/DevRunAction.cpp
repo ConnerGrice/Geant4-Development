@@ -25,8 +25,17 @@ DevRunAction::~DevRunAction() {
 	delete G4AnalysisManager::Instance();
 }
 
+G4Run* DevRunAction::GenerateRun() {
+	return new DevRun;
+}
+
 void DevRunAction::BeginOfRunAction(const G4Run*) {
-	G4cout<<"RUN START================================"<<G4endl;
+
+	if (IsMaster())
+		G4cout<<"RUN MASTER START================================"<<G4endl;
+	else
+		G4cout<<"RUN LOCAL START ================================"<<G4endl;
+
 	G4AnalysisManager* manager = G4AnalysisManager::Instance();
 	manager->OpenFile();
 }
@@ -74,15 +83,24 @@ void DevRunAction::printType() {
 	G4cout<<"Bad Count: "<<nBad<<G4endl;
 }
 
-void DevRunAction::printTypeEff() {
+void DevRunAction::printTypeEff(const G4Run* aRun) {
+	const DevRun* run = static_cast<const DevRun*>(aRun);
+	nGood = run->getGood();
+	nAlright = run->getAlright();
+	nBad = run->getBad();
+	nInvalid = run->getInvalid();
+
 	G4int successful = nGood + nAlright + nBad;
-	G4double succEff = successful/100240.0;
+	G4int total = successful + nInvalid;
+	G4double succEff = successful/(G4double)total;
 	G4double goodEff = nGood/(G4double)successful;
 	G4double alrightEff = nAlright/(G4double)successful;
 	G4double badEff = nBad/(G4double)successful;
-
-	G4cout<<"==============EFFICIENCY OVERVIEW==========="<<G4endl;
-	G4cout<<"Valid Events: "<<successful<<"/100240 = "<<succEff*100<<"%"<<G4endl;
+	if (IsMaster())
+		G4cout<<"MASTER RESULTS================================"<<G4endl;
+	else
+		G4cout<<"LOCAL RESULTS================================"<<G4endl;
+	G4cout<<"Valid Events: "<<successful<<"/"<<total<<" = "<<succEff*100<<"%"<<G4endl;
 	G4cout<<"---------------Level of Success-------------"<<G4endl;
 	G4cout<<"Good	: "<<nGood<<"/"<<successful<<" = "<<goodEff*100<<"%"<<G4endl;
 	G4cout<<"Alright: "<<nAlright<<"/"<<successful<<" = "<<alrightEff*100<<"%"<<G4endl;
@@ -90,18 +108,22 @@ void DevRunAction::printTypeEff() {
 	G4cout<<"--------------------------------------------"<<G4endl;
 }
 
-void DevRunAction::EndOfRunAction(const G4Run*) {
+void DevRunAction::EndOfRunAction(const G4Run* aRun) {
+
 	std::ofstream eff;
 	eff.open("../Results/Eff.dat",std::ios_base::app);
 	eff<<PADDING<<" "<<((nGood+nAlright+nBad)/100240.0)<<std::endl;
 
-	printTypeEff();
+	printTypeEff(aRun);
 
 	G4AnalysisManager* manager = G4AnalysisManager::Instance();
 	manager->Write();
 	manager->CloseFile();
 
-	G4cout<<"RUN END==============================="<<G4endl;
+	if (IsMaster())
+		G4cout<<"RUN MASTER END================================"<<G4endl;
+	else
+		G4cout<<"RUN LOCAL END ================================"<<G4endl;
 
 }
 

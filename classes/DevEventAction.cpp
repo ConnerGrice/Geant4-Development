@@ -11,6 +11,8 @@ DevEventAction::DevEventAction(DevRunAction* runAction) {
 	rAction = runAction;
 	manager = G4AnalysisManager::Instance();
 
+
+
 }
 
 DevEventAction::~DevEventAction() {
@@ -77,7 +79,7 @@ hitContainer DevEventAction::doBothHit(G4VHitsCollection* collection) {
 	return result;
 }
 
-DevEventAction::EventSuccess DevEventAction::classifyParticle(G4int particleID,hitContainer bHits,hitContainer cHits,hitContainer dHits) {
+DevEventAction::EventSuccess DevEventAction::classifyParticle(G4int particleID,hitContainer& bHits,hitContainer& cHits,hitContainer& dHits) {
 	G4int staveB = bHits[particleID];
 	G4int staveC = cHits[particleID];
 	G4int staveD = dHits[particleID];
@@ -105,13 +107,21 @@ void DevEventAction::classifyEvent(G4VHitsCollection* dCol,G4VHitsCollection* bC
 	DevEventAction::EventSuccess p2Level = classifyParticle(1,bHits,cHits,dHits);
 
 	if (p1Level == InvalidEvent || p2Level == InvalidEvent) {
-		rAction->addInvalid();
+		G4cout<<"INVALID"<<G4endl;
+		//rAction->addInvalid();
+
 	} else if (p1Level == BadEvent || p2Level == BadEvent) {
-		rAction->addBad();
+		G4cout<<"BAD"<<G4endl;
+
+		//rAction->addBad();
 	} else if (p1Level == AlrightEvent || p2Level == AlrightEvent) {
-		rAction->addAlright();
+		G4cout<<"ALRIGHT"<<G4endl;
+		//rAction->addAlright();
+
 	} else if (p1Level == GoodEvent || p2Level == GoodEvent) {
-		rAction->addGood();
+		G4cout<<"GOOD"<<G4endl;
+		//rAction->addGood();
+
 	}
 
 }
@@ -225,7 +235,7 @@ void DevEventAction::EndOfEventAction(const G4Event* anEvent) {
 	//Sums the number of hits for each layer
 	sumNumOfHits(dHitsCol,bHitsCol,cHitsCol);
 
-	classifyEvent(dHitsCol,bHitsCol,cHitsCol);
+	//classifyEvent(dHitsCol,bHitsCol,cHitsCol);
 
 	//rAction->printCount();
 	//rAction->printType();

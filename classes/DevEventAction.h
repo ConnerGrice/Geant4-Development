@@ -12,6 +12,7 @@
 
 #include <G4SDManager.hh>
 #include <G4HCofThisEvent.hh>
+#include <G4RunManager.hh>
 #include <G4Event.hh>
 #include <g4root.hh>
 
@@ -19,6 +20,7 @@
 
 #include "DevRunAction.h"
 #include "DevHit.h"
+#include "DevRun.h"
 
 typedef std::vector<G4int> hitContainer;
 
@@ -48,7 +50,7 @@ private:
 	//Makes sure each particle hits a detector only once
 	hitContainer doBothHit(G4VHitsCollection* collection);
 
-	EventSuccess classifyParticle(G4int particleID,hitContainer bHits,hitContainer cHits,hitContainer dHits);
+	EventSuccess classifyParticle(G4int particleID,hitContainer& bHits,hitContainer& cHits,hitContainer& dHits);
 
 	//Classifies if event was good, alright, or bad
 	void classifyEvent(G4VHitsCollection* dCol,
