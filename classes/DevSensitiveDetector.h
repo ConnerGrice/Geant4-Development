@@ -13,7 +13,6 @@
 #include <G4SDManager.hh>
 #include <G4RunManager.hh>
 #include <G4RotationMatrix.hh>
-#include <G4AffineTransform.hh>
 
 #include "DevHit.h"
 #include "DevDetectorConstruction.h"
@@ -27,8 +26,6 @@ public:
 	void Initialize(G4HCofThisEvent*) override;
 	G4bool ProcessHits(G4Step* aStep,G4TouchableHistory*) override;
 	void EndOfEvent(G4HCofThisEvent*) override;
-
-
 
 private:
 	DevHitsCollection* pHitCollection;

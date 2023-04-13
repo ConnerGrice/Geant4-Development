@@ -18,17 +18,12 @@ public:
 	virtual ~DevHit();
 
 public:
-	//Get-Set copy number
 	inline G4ThreeVector GetExactPosition() { return exactPos; };
 	inline void SetExactPosition(G4ThreeVector num) { exactPos = num; };
 
 	inline G4ThreeVector GetDigitisedPosition() { return digitPos; };
 	inline void SetDigitisedPosition(G4ThreeVector num) { digitPos = num; };
 
-	inline G4int GetEventID() { return evntID; };
-	inline void SetEventID(G4int id) {evntID = id;};
-
-	//Get-Set trackID
 	inline G4int GetTrackID() { return trkID; };
 	inline void SetTrackID(G4int id) { trkID = id; };
 private:

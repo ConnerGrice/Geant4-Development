@@ -7,14 +7,16 @@
 
 #include "DevRunAction.h"
 
-DevRunAction::DevRunAction(): bTotal(0),cTotal(0),dTotal(0),
-nGood(0),nAlright(0),nBad(0),nInvalid(0) {
-
+DevRunAction::DevRunAction(): nGood(0),nAlright(0),nBad(0),nInvalid(0) {
 	G4AnalysisManager* manager = G4AnalysisManager::Instance();
+
+	//Combines results from each worker into a single file
 	manager->SetNtupleMerging(true);
 
+	//Defines output file
 	manager->SetFileName("../Results/data.root");
 
+	//Create a table for each stave layer
 	metricsTable("StaveB",0,manager);
 	metricsTable("StaveC",1,manager);
 	metricsTable("StaveD",2,manager);
@@ -26,11 +28,11 @@ DevRunAction::~DevRunAction() {
 }
 
 G4Run* DevRunAction::GenerateRun() {
+	//Use custom Run class instead of standard G4Run
 	return new DevRun;
 }
 
 void DevRunAction::BeginOfRunAction(const G4Run*) {
-
 	if (IsMaster())
 		G4cout<<"RUN MASTER START================================"<<G4endl;
 	else
@@ -42,6 +44,7 @@ void DevRunAction::BeginOfRunAction(const G4Run*) {
 
 void DevRunAction::metricsTable(G4String name, G4int tupleID, G4AnalysisManager* manager) {
 
+	//Defines all columns that will be needed
 	manager->CreateNtuple(name,"Metrics");
 	manager->CreateNtupleDColumn("xDiff1");
 	manager->CreateNtupleDColumn("yDiff1");
@@ -58,44 +61,29 @@ void DevRunAction::metricsTable(G4String name, G4int tupleID, G4AnalysisManager*
 	manager->CreateNtupleDColumn("zPos2");
 
 	manager->CreateNtupleIColumn("Event");
+
 	manager->FinishNtuple(tupleID);
 }
 
-void DevRunAction::printCount() {
-	G4cout<<"StaveB Count: "<<bTotal<<G4endl;
-	G4cout<<"StaveD Count: "<<dTotal<<G4endl;
-	G4cout<<"StaveC Count: "<<cTotal<<G4endl;
-
-}
-
-void DevRunAction::printCountEff() {
-	G4double dEff = dTotal/200480.0;
-	G4cout<<"StaveD Eff: "<<dTotal<<"/200480"<<" = "<<dEff<<G4endl;
-	G4double bEff = bTotal/200480.0;
-	G4cout<<"StaveB Eff: "<<bTotal<<"/200480"<<" = "<<bEff<<G4endl;
-	G4double cEff = cTotal/200480.0;
-	G4cout<<"StaveC Eff: "<<cTotal<<"/200480"<<" = "<<cEff<<G4endl;
-}
-
-void DevRunAction::printType() {
-	G4cout<<"Good Count: "<<nGood<<G4endl;
-	G4cout<<"Alright Count: "<<nAlright<<G4endl;
-	G4cout<<"Bad Count: "<<nBad<<G4endl;
-}
-
 void DevRunAction::printTypeEff(const G4Run* aRun) {
+	//Gets current run and converts it to my custom run
 	const DevRun* run = static_cast<const DevRun*>(aRun);
+
+	//Gets values for efficiency calculations from run current run
 	nGood = run->getGood();
 	nAlright = run->getAlright();
 	nBad = run->getBad();
 	nInvalid = run->getInvalid();
 
+	//Calculates different values
 	G4int successful = nGood + nAlright + nBad;
 	G4int total = successful + nInvalid;
 	G4double succEff = successful/(G4double)total;
 	G4double goodEff = nGood/(G4double)successful;
 	G4double alrightEff = nAlright/(G4double)successful;
 	G4double badEff = nBad/(G4double)successful;
+
+	//Prints results
 	if (IsMaster())
 		G4cout<<"MASTER RESULTS================================"<<G4endl;
 	else
@@ -109,11 +97,12 @@ void DevRunAction::printTypeEff(const G4Run* aRun) {
 }
 
 void DevRunAction::EndOfRunAction(const G4Run* aRun) {
-
+	//Entres data into simple data file for special cases
 	std::ofstream eff;
 	eff.open("../Results/Eff.dat",std::ios_base::app);
 	eff<<PADDING<<" "<<((nGood+nAlright+nBad)/100240.0)<<std::endl;
 
+	//Print efficiency
 	printTypeEff(aRun);
 
 	G4AnalysisManager* manager = G4AnalysisManager::Instance();
@@ -124,7 +113,6 @@ void DevRunAction::EndOfRunAction(const G4Run* aRun) {
 		G4cout<<"RUN MASTER END================================"<<G4endl;
 	else
 		G4cout<<"RUN LOCAL END ================================"<<G4endl;
-
 }
 
 

@@ -23,22 +23,25 @@ void DevSensitiveDetector::Initialize(G4HCofThisEvent* hce) {
 }
 
 G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
-	//Gets the copy number of hit detector
+	//Gets preStep point and Post step point of current step
 	G4StepPoint* prePoint = aStep->GetPreStepPoint();
 	G4StepPoint* postPoint = aStep->GetPostStepPoint();
 
+	//Touchable of current step
 	const G4VTouchable* touchable = prePoint->GetTouchable();
 
+	//Stave number
 	G4int stave = touchable->GetCopyNumber(5);
 
 	//Variables for getting volume position
-	G4ThreeVector digitised;	//Digitised position
-	G4ThreeVector temp;			//Volumes position wrt mother volume
+	G4ThreeVector digitised;
+	G4ThreeVector temp;
 	G4double tempRot;
-	G4double rot = 0;//Sum of volume rotations
+	G4double rot = 0;
 
+	//Traverse volume tree
 	for (int i=5;i>-1;i--) {
-		//Get volume long tree of volumes
+		//Get volume along tree of volumes
 		G4VPhysicalVolume* vol = touchable->GetVolume(i);
 
 		//Get volume Position relative to mother
@@ -68,7 +71,6 @@ G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
 	hit->SetTrackID(trackID);
 	hit->SetExactPosition(exact);
 	hit->SetDigitisedPosition(digitised);
-	//hit->SetEventID(eventID);
 
 	pHitCollection->insert(hit);
 

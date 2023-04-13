@@ -8,8 +8,6 @@
 #include "DevRun.h"
 
 DevRun::DevRun() {
-	G4cout<<"RECORDING"<<G4endl;
-
 }
 
 DevRun::~DevRun() {
@@ -47,20 +45,23 @@ G4VHitsCollection* DevRun::getHitCollection(const G4Event* anEvent, G4String hcN
 
 hitContainer DevRun::doBothHit(G4VHitsCollection* collection) {
 	G4int hitCount = collection->GetSize();
-
 	DevHit* hit = new DevHit();
 	G4int particle1 = 0;
 	G4int particle2 = 0;
 	hitContainer result {particle1,particle2};
 
-	//Get how many times each particle hit the layer
+	//Loop through each hit
 	for (int i = 0;i < hitCount;i++) {
 
+		//Finish early if both particles have hit the layer
 		if (result[0] == 1 && result[1] == 1)
 			break;
 
+		//Get hit from collection and its particle ID
 		hit = (DevHit*)collection->GetHit(i);
 		G4int whichParticle = hit->GetTrackID();
+
+		//Checks which particle made contact
 		if (whichParticle == 1) {
 			result[0] = 1;
 		} else if (whichParticle == 2) {
@@ -71,11 +72,14 @@ hitContainer DevRun::doBothHit(G4VHitsCollection* collection) {
 }
 
 DevRun::EventSuccess DevRun::classifyParticle(G4int particleID,hitContainer& bHits,hitContainer& cHits,hitContainer& dHits) {
+	//Variables indicating which layers the particle hit
 	G4int staveB = bHits[particleID];
 	G4int staveC = cHits[particleID];
 	G4int staveD = dHits[particleID];
+
 	G4int total = staveB + staveC + staveD;
 
+	//Classify by which layers the particle hits
 	if ((total == 3) || (staveB && staveC)) {
 		return GoodEvent;
 	} else if (staveB && staveD) {
@@ -90,13 +94,16 @@ DevRun::EventSuccess DevRun::classifyParticle(G4int particleID,hitContainer& bHi
 
 DevRun::EventSuccess DevRun::classifyEvent(G4VHitsCollection* dCol,G4VHitsCollection* bCol,G4VHitsCollection* cCol) {
 
+	//Gets containers with information about which layers were hit by which particles
 	hitContainer bHits = doBothHit(bCol);
 	hitContainer cHits = doBothHit(cCol);
 	hitContainer dHits = doBothHit(dCol);
 
+	//Gets the success level of each particle
 	DevRun::EventSuccess p1Level = classifyParticle(0,bHits,cHits,dHits);
 	DevRun::EventSuccess p2Level = classifyParticle(1,bHits,cHits,dHits);
 
+	//Classify event level according to particle with the lowest level
 	if (p1Level == InvalidEvent || p2Level == InvalidEvent) {
 		nInvalid++;
 		return InvalidEvent;
@@ -110,17 +117,18 @@ DevRun::EventSuccess DevRun::classifyEvent(G4VHitsCollection* dCol,G4VHitsCollec
 		nGood++;
 		return GoodEvent;
 	}
+	//Default outcome
 	return InvalidEvent;
-
 }
 
 void DevRun::recordStaveData(const G4Event* anEvent,
 		G4VHitsCollection* collection, G4int tupleID) {
 
 	G4AnalysisManager* manager = G4AnalysisManager::Instance();
+
 	//Flag to pick which data will be recorded
-	G4bool errorFlag = false;	//Difference between exact* and digitised position
-	G4bool positionFlag = true;	//Digitised position
+	G4bool errorFlag = false;
+	G4bool positionFlag = true;
 
 	G4int hitCount = collection->GetSize();
 	DevHit* hit = new DevHit();
@@ -134,12 +142,15 @@ void DevRun::recordStaveData(const G4Event* anEvent,
 
 	G4int eventID = anEvent->GetEventID();
 
+	//Loops through each hit in the event
 	for (int i=0;i<hitCount;i++) {
 		hit = (DevHit*)collection->GetHit(i);
 		G4int trackID = hit->GetTrackID();
 		G4ThreeVector position = hit->GetDigitisedPosition();
 		G4ThreeVector exact = hit->GetExactPosition();
 
+		//Determine which particle caused the hit
+		//Sum up positions of all hits by the same particle
 		if (trackID == 1) {
 			p1Count++;
 			p1Pos += position;
@@ -152,14 +163,17 @@ void DevRun::recordStaveData(const G4Event* anEvent,
 
 	}
 
+	//Check for invalid events
 	if (p1Count == 0 || p2Count == 0)
 		return;
 
+	//Calculate average positions
 	G4ThreeVector p1AvgPos = p1Pos/(G4double)p1Count;
 	G4ThreeVector p2AvgPos = p2Pos/(G4double)p2Count;
 	G4ThreeVector p1AvgExt = p1Ext/(G4double)p1Count;
 	G4ThreeVector p2AvgExt = p2Ext/(G4double)p2Count;
 
+	//Record digitisation error results
 	if (errorFlag) {
 		G4ThreeVector p1Diff = p1AvgPos - p1AvgExt;
 		G4ThreeVector p2Diff = p2AvgPos - p2AvgExt;
@@ -173,6 +187,7 @@ void DevRun::recordStaveData(const G4Event* anEvent,
 
 	}
 
+	//Record digitised position data
 	if (positionFlag) {
 		manager->FillNtupleDColumn(tupleID,6,p1AvgPos.getX());
 		manager->FillNtupleDColumn(tupleID,7,p1AvgPos.getY());
@@ -183,6 +198,7 @@ void DevRun::recordStaveData(const G4Event* anEvent,
 		manager->FillNtupleDColumn(tupleID,11,p2AvgPos.getZ());
 	}
 
+	//Record event ID
 	manager->FillNtupleIColumn(tupleID,12,eventID);
 	manager->AddNtupleRow(tupleID);
 }
@@ -190,6 +206,7 @@ void DevRun::recordStaveData(const G4Event* anEvent,
 void DevRun::recordData(const G4Event* anEvent,
 		G4VHitsCollection* dCol,G4VHitsCollection* bCol,G4VHitsCollection* cCol) {
 
+	//Record results for each layer
 	recordStaveData(anEvent,bCol,0);
 	recordStaveData(anEvent,cCol,1);
 	recordStaveData(anEvent,dCol,2);
@@ -206,16 +223,23 @@ void DevRun::RecordEvent(const G4Event* anEvent) {
 	G4String cName = "StaveCCollection";
 	G4VHitsCollection* cHitsCol = getHitCollection(anEvent,cName);
 
+	//Get the outcome of the event
 	DevRun::EventSuccess outcome = classifyEvent(dHitsCol,bHitsCol,cHitsCol);
 
+	//Only record event if it was valid
 	if (outcome != InvalidEvent)
 		recordData(anEvent,dHitsCol,bHitsCol,cHitsCol);
 
+	//Increment event
 	G4Run::RecordEvent(anEvent);
 }
 
+
 void DevRun::Merge(const G4Run* aRun) {
+	//Get the local run object
 	const DevRun* localRun = static_cast<const DevRun*>(aRun);
+
+	//Add to the master run values
 	nGood += localRun->nGood;
 	nAlright += localRun->nAlright;
 	nBad += localRun->nBad;

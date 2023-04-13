@@ -32,6 +32,7 @@
 #include <G4VUserDetectorConstruction.hh>
 
 #include "DevSensitiveDetector.h"
+#include "HICUnit.h"
 #include "parameters.h"
 
 class DevDetectorConstruction: public G4VUserDetectorConstruction {
@@ -81,8 +82,8 @@ private:
 	G4LogicalVolume* HICChipSegment(G4double thickness,G4VisAttributes* visual);
 
 	//Defines the volume of the active area of the ALPIDE chip
-	G4LogicalVolume* HCIPixelStrip(G4double thickness,G4String name, G4Material* material,G4VisAttributes* visual);
-	G4LogicalVolume* HCIPixel(G4double thickness,G4String name, G4Material* material,G4VisAttributes* visual);
+	G4LogicalVolume* HCIPixelStrip(G4double thickness,G4String name, G4Material* material);
+	G4LogicalVolume* HCIPixel(G4double thickness,G4String name, G4Material* material);
 
 	//Generates physical volumes for a HCI layer
 	void buildHCILayer(G4String name,G4double thickness, G4Material* mat,G4VisAttributes* visual,G4ThreeVector pos);

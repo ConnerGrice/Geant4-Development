@@ -30,28 +30,13 @@ public:
 	void EndOfRunAction(const G4Run*) override;
 
 public:
+	//Creates tables where data will be stored
 	void metricsTable(G4String name, G4int tupleID, G4AnalysisManager* manager);
 
-	//Prints to hit counts for each layer
-	void printCount();
-	void printCountEff();
-	void printType();
+	//Prints efficiency values
 	void printTypeEff(const G4Run* aRun);
 
-	//Hit counter for each layer
-	inline void addBHits(G4int hits) { bTotal += hits; };
-	inline void addCHits(G4int hits) { cTotal += hits; };
-	inline void addDHits(G4int hits) { dTotal += hits; };
-
-	//Level of success classifiers
-	inline void addGood() { nGood++; };
-	inline void addAlright() { nAlright++; };
-	inline void addBad() { nBad++; };
-	inline void addInvalid() { nInvalid++; };
-
 private:
-	G4int bTotal,cTotal,dTotal;
-
 	G4int nGood,nAlright,nBad,nInvalid;
 
 };
