@@ -32,7 +32,7 @@
 #include <G4VUserDetectorConstruction.hh>
 
 #include "DevSensitiveDetector.h"
-#include "HICUnit.h"
+#include "Stave.h"
 #include "parameters.h"
 
 class DevDetectorConstruction: public G4VUserDetectorConstruction {

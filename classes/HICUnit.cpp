@@ -7,7 +7,7 @@
 
 #include "HICUnit.h"
 
-HICUnit::HICUnit(G4LogicalVolume* motherLogical): pGrandmother(motherLogical) {
+HICUnit::HICUnit(G4LogicalVolume* root): pWorldVol(root) {
 	//Gets material definitions
 	G4NistManager* pNist = G4NistManager::Instance();
 	G4Material* space = pNist->FindOrBuildMaterial("G4_Galactic");
@@ -24,8 +24,6 @@ HICUnit::HICUnit(G4LogicalVolume* motherLogical): pGrandmother(motherLogical) {
 	pSubstrate = kapton;
 
 	pMother = defineMother(false);
-
-	new G4PVPlacement(0,G4ThreeVector(0,0,0),pMother,"Testing",motherLogical,false,1,true);
 }
 
 G4LogicalVolume* HICUnit::defineMother(G4bool visibility) {
@@ -40,25 +38,19 @@ G4LogicalVolume* HICUnit::defineMother(G4bool visibility) {
 	return motherLogical;
 }
 
-template<Layers L>
-G4LogicalVolume* layerDefinitions::defineLayer(G4bool visibility,G4String name) {
+G4LogicalVolume* HICUnit::defineLayer(G4bool visibility,G4String name,G4double layer) {
 
-	G4Box* layerSolid =
-			new G4Box(name+"S",HICUnit::HICWidth/2.0,L*um/2.0,HICUnit::HICLength/2.0);
+	G4Box* layerSolid;
+	G4double width;
 
-	G4LogicalVolume* layerLogical =
-			new G4LogicalVolume(layerSolid,HICUnit::pEmpty,name+"L");
+	if (name == "Chips")
+		width = HICWidth-passiveWidth;
+	else if (name == "Passive")
+		width = passiveWidth;
+	else
+		width = HICWidth;
 
-	G4VisAttributes* visAtt = new G4VisAttributes(visibility);
-	layerLogical->SetVisAttributes(visAtt);
-
-	return layerLogical;
-}
-
-template<>
-G4LogicalVolume* HICUnit::defineLayer<Chips>(G4bool visibility,G4String name) {
-	G4Box* layerSolid =
-			new G4Box(name+"S",HICWidth/2.0-passiveWidth/2.0,Chips*um/2.0,HICLength/2.0);
+	layerSolid = new G4Box(name+"S",width/2.0,layer/2.0,HICLength/2.0);
 
 	G4LogicalVolume* layerLogical =
 			new G4LogicalVolume(layerSolid,pEmpty,name+"L");
@@ -69,63 +61,162 @@ G4LogicalVolume* HICUnit::defineLayer<Chips>(G4bool visibility,G4String name) {
 	return layerLogical;
 }
 
-template<>
-G4LogicalVolume* HICUnit::defineLayer<Passive>(G4bool visibility,G4String name) {
-	G4Box* layerSolid =
-			new G4Box(name+"S",passiveWidth/2.0,Passive*um/2.0,HICLength/2.0);
+G4LogicalVolume* HICUnit::defineSection(G4bool visibility,G4String name,G4double layer,G4Material* mat,G4Colour col) {
 
-	G4LogicalVolume* layerLogical =
-			new G4LogicalVolume(layerSolid,pEmpty,name+"L");
+	G4Box* sectionSolid;
+	G4double width;
 
-	G4VisAttributes* visAtt = new G4VisAttributes(visibility);
-	layerLogical->SetVisAttributes(visAtt);
+	if (name == "Chips")
+		width = HICWidth-passiveWidth;
+	else if (name == "Passive")
+		width = passiveWidth;
+	else
+		width = HICWidth;
 
-	return layerLogical;
-}
-
-template<Layers L>
-G4LogicalVolume* HICUnit::defineSection(G4bool visibility,G4String name) {
-
-	G4Box* sectionSolid =
-			new G4Box(name+"SecS",HICWidth/2.0,L*um/2.0,HICSectionLength/2.0);
+	sectionSolid = new G4Box(name+"SecS",width/2.0,layer/2.0,HICSectionLength/2.0);
 
 	G4LogicalVolume* sectionLogical =
-			new G4LogicalVolume(sectionSolid,pEmpty,name+"SecL");
+			new G4LogicalVolume(sectionSolid,mat,name+"SecL");
 
-	sectionLogical->SetVisAttributes(new G4VisAttributes(visibility));
+	sectionLogical->SetVisAttributes(new G4VisAttributes(visibility,col));
 	return sectionLogical;
 }
 
-template<>
-G4LogicalVolume* HICUnit::defineSection<Chips>(G4bool visibility,G4String name,) {
+G4LogicalVolume* HICUnit::definePixelStrip(G4bool visibility,G4String name,G4double layer,G4Colour col) {
+	G4Box* stripSolid = new G4Box(name+"PStripS",pixelLength/2.0,layer/2.0,HICSectionLength/2.0);
+	G4LogicalVolume* stripLogical = new G4LogicalVolume(stripSolid,pEmpty,name+"pStripL");
 
-	G4Box* sectionSolid =
-			new G4Box(name+"SecS",HICWidth/2.0-passiveWidth,Chips*um/2.0,HICSectionLength/2.0);
+	stripLogical->SetVisAttributes(new G4VisAttributes(visibility,col));
+	return stripLogical;
 
-	G4LogicalVolume* sectionLogical =
-			new G4LogicalVolume(sectionSolid,pEmpty,name+"SecL");
-
-	sectionLogical->SetVisAttributes(new G4VisAttributes(visibility));
-	return sectionLogical;
 }
 
-template<>
-G4LogicalVolume* HICUnit::defineSection<Passive>(G4bool visibility,G4String name,) {
 
-	G4Box* sectionSolid =
-			new G4Box(name+"SecS",passiveWidth,Passive*um/2.0,HICSectionLength/2.0);
+G4LogicalVolume* HICUnit::definePixel(G4bool visibility,G4String name,G4double layer,G4Material* mat,G4Colour col) {
+	G4Box* pixelSolid = new G4Box(name+"PixelS",pixelLength/2.0,layer/2.0,pixelLength/2.0);
+	G4LogicalVolume* pixelLogical = new G4LogicalVolume(pixelSolid,mat,name+"PixelL");
 
-	G4LogicalVolume* sectionLogical =
-			new G4LogicalVolume(sectionSolid,pEmpty,name+"SecL");
-
-	sectionLogical->SetVisAttributes(new G4VisAttributes(visibility));
-	return sectionLogical;
+	pixelLogical->SetVisAttributes(new G4VisAttributes(visibility,col));
+	return pixelLogical;
 }
 
-void HICUnit::placeLayer() {
-	new G4PVPlacement(0,G4ThreeVector(0,0,0),pMother,"Testing",pGrandmother,false,1,true);
+void HICUnit::buildLayer(G4bool visibility,G4String name,G4double layer,G4double yShift,G4Material* mat, G4Colour col) {
+	G4LogicalVolume* layerUnit = defineLayer(false,name,layer);
+	G4LogicalVolume* sectionUnit = defineSection(visibility,name,layer,mat,col);
+
+	for (int i = 0;i < 9;i++) {
+		G4double zShift = (-HICLength/2.0)+(HICSectionLength/2.0)+(i*(HICSectionLength+sectionGap));
+		new G4PVPlacement(0,G4ThreeVector(0,0,zShift),sectionUnit,name+"Section",layerUnit,false,0);
+	}
+
+	new G4PVPlacement(0,G4ThreeVector(0,yShift+(layer/2.0),0),layerUnit,name+"Layer",pMother,false,1);
 }
 
+void HICUnit::buildActiveLayer(G4bool visibility,
+		G4String name,G4double layer,G4double yShift,G4Material* mat,G4Colour col) {
+
+	G4LogicalVolume* layerUnit = defineLayer(false,name,layer);
+	G4LogicalVolume* sectionUnit = defineSection(visibility,name,layer,pEmpty,col);
+	G4LogicalVolume* pixelStrip = definePixelStrip(false,name,layer,col);
+	G4LogicalVolume* pixel = definePixel(false,name,layer,mat,col);
+
+	new G4PVReplica(name+"PixelStrip",pixelStrip,sectionUnit,kXAxis,460,pixelLength);
+	new G4PVReplica(name+"Pixel",pixel,pixelStrip,kZAxis,1000,pixelLength);
+
+	for (int i = 0; i < 9; i++) {
+		G4double zShift = (-HICLength/2.0)+(HICSectionLength/2.0)+(i*(HICSectionLength+sectionGap));
+		new G4PVPlacement(0,G4ThreeVector(0,0,zShift),sectionUnit,name+"Section",layerUnit,false,0);
+	}
+	new G4PVPlacement(0,G4ThreeVector(-passiveWidth/2.0,yShift+(layer/2.0),0),layerUnit,name+"Layer",pMother,false,1);
+}
+
+void HICUnit::buildPassiveLayer(G4bool visibility,
+		G4String name,G4double layer,G4double yShift,G4Material* mat,G4Colour col) {
+
+	G4LogicalVolume* layerUnit = defineLayer(false,name,layer);
+	G4LogicalVolume* sectionUnit = defineSection(visibility,name,layer,mat,col);
+
+	for (int i = 0; i < 9; i++) {
+		G4double zShift = (-HICLength/2.0)+(HICSectionLength/2.0)+(i*(HICSectionLength+sectionGap));
+		new G4PVPlacement(0,G4ThreeVector(0,0,zShift),sectionUnit,name+"Section",layerUnit,false,0);
+	}
+	new G4PVPlacement(0,G4ThreeVector(HICWidth/2.0-passiveWidth/2.0,yShift+(layer/2.0),0),layerUnit,name+"Layer",pMother,false,1);
+}
+
+void HICUnit::placeLayers() {
+
+	std::vector<G4String> layerNames {
+		"GlueA",
+		"Chips",
+		"Passive",
+		"GlueB",
+		"SolderA",
+		"ConductingA",
+		"Substrate",
+		"ConductingB",
+		"SolderB"
+	};
+
+	std::vector<G4Material*> layerMats {
+		pGlue,
+		pChips,
+		pChips,
+		pGlue,
+		pSolder,
+		pConducting,
+		pSubstrate,
+		pConducting,
+		pSolder
+	};
+
+	G4Colour glueCol = G4Colour(0.0,0.0,1.0);
+	G4Colour chipsCol = G4Colour(0.0,1.0,0.0);
+	G4Colour solderCol = G4Colour(1.0,0.0,1.0);
+	G4Colour conductingCol = G4Colour(0.0,1.0,1.0);
+	G4Colour substrateCol = G4Colour(1.0,0.0,0.0);
+
+	std::vector<G4Colour> layerCols {
+		glueCol,
+		chipsCol,
+		chipsCol,
+		glueCol,
+		solderCol,
+		conductingCol,
+		substrateCol,
+		conductingCol,
+		solderCol
+	};
+
+	std::vector<G4double> layerThicks {
+		40*um,
+		50*um,
+		50*um,
+		40*um,
+		30*um,
+		10*um,
+		75*um,
+		10*um,
+		30*um
+	};
+
+	G4double height = -HICThickness/2.0;
+	for (size_t i = 0; i<9;i++) {
+		G4String layerName = layerNames[i];
+		G4double layerThick = layerThicks[i];
+		G4Material* layerMat = layerMats[i];
+		G4Colour layerCol = layerCols[i];
+
+		if (layerName == "Chips")
+			buildActiveLayer(visibleLayers[i],layerName,layerThick,height,layerMat,layerCol);
+		else if (layerName == "Passive") {
+			height -= layerThick;
+			buildPassiveLayer(visibleLayers[i],layerName,layerThick,height,layerMat,layerCol);
+		} else
+			buildLayer(visibleLayers[i],layerName,layerThick,height,layerMat,layerCol);
+
+		height += layerThick;
+	}
+}
 
 
 

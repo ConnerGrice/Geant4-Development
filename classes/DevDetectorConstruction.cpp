@@ -166,7 +166,7 @@ G4LogicalVolume* DevDetectorConstruction::HICChipSegment(G4double thickness,G4Vi
 G4LogicalVolume* DevDetectorConstruction::HCIPixelStrip(G4double thickness,G4String name, G4Material* material) {
 	G4double length = 30*mm;
 	G4Box* pixelStripS = new G4Box(name+"PStripS",HCIPixelSide/2.0,thickness/2.0,length/2.0);
-	G4LogicalVolume* pixelStripL = new G4LogicalVolume(pixelStripS,material,name+"PStripS");
+	G4LogicalVolume* pixelStripL = new G4LogicalVolume(pixelStripS,material,name+"PStripL");
 
 	//Visual parameters
 	G4VisAttributes* visAtt = new G4VisAttributes(false);
@@ -317,9 +317,14 @@ G4VPhysicalVolume* DevDetectorConstruction::Construct() {
 	pLogicalWorld = new G4LogicalVolume(pSolidWorld,pWorldMat,"WorldL");
 	G4PVPlacement* pPhysicalWorld = new G4PVPlacement(0,G4ThreeVector(0,0,0),pLogicalWorld,"WorldP",0,false,0,true);
 
-	HICUnit HICConstructor(pLogicalWorld);
+	//HICUnit HICConstructor(pLogicalWorld);
 
-	HICConstructor.placeLayer();
+	Stave staveConstructor(2,pLogicalWorld);
+
+	//HICConstructor.placeUnit(G4ThreeVector(0,0,0));
+
+	staveConstructor.buildStave();
+
 
 	/*
 	//Place liquid H2 target

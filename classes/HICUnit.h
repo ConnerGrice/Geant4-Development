@@ -14,81 +14,89 @@
 #include <G4VisAttributes.hh>
 #include <G4SystemOfUnits.hh>
 #include <G4PVPlacement.hh>
+#include <G4PVReplica.hh>
 
-#include <tuple>
-
-	enum Layers {
-		GlueA = 40,
-		Chips = 50,
-		Passive = 50,
-		GlueB = 40,
-		SolderA = 30,
-		ConductingA = 10,
-		Substrate = 75,
-		ConductingB = 10,
-		SolderB = 30
-	};
-
-namespace layerDefinitions {
-	template<Layers L> G4LogicalVolume* defineLayer(G4bool,G4String);
-	template<> G4LogicalVolume* defineLayer<Chips>(G4bool,G4String);
-	template<> G4LogicalVolume* defineLayer<Passive>(G4bool,G4String);
-}
-
-namespace sectionDefinitions {
-	template<Layers L> G4LogicalVolume* defineSection(G4bool,G4String);
-	template<> G4LogicalVolume* defineSection<Chips>(G4bool,G4String);
-	template<> G4LogicalVolume* defineSection<Passive>(G4bool,G4String);
-}
-
+#include <map>
+#include <vector>
 
 class HICUnit {
 public:
+	static constexpr G4double         HICWidth = 15*mm;
+	static constexpr G4double        HICLength = 271.6*mm;
+	static constexpr G4double     HICThickness = 285*um;
+	static constexpr G4double 	   pixelLength = 30*um;
+	static constexpr G4double HICSectionLength = 30*mm;
+	static constexpr G4double     passiveWidth = 1.2*mm;
+	static constexpr G4double       sectionGap = 0.2*mm;
 
-	HICUnit(G4LogicalVolume* motherLogical);
+	//Constructor
+	HICUnit(G4LogicalVolume* root);
 
+	//Places mother volume containing all layers
+	inline void placeUnit(G4ThreeVector position) {
+		placeLayers();
+		new G4PVPlacement(0,position,pMother,"Testing",pWorldVol,false,1,true);
+	}
 
+private:
+	//Defines mother logical volume
 	G4LogicalVolume* defineMother(G4bool visibility);
 
-	template<Layers L> G4LogicalVolume* defineLayer(G4bool visibility,G4String name) {
-		return layerDefinitions::defineLayer<L>(visibility,name);
-		//template<> G4LogicalVolume* defineLayer<Passive>(G4bool visibility,G4String name);
-	}
+	//Defines a single layer mother volume
+	G4LogicalVolume* defineLayer(G4bool visibility,
+			G4String name,G4double layer);
 
+	//Defines a single section mother volume
+	G4LogicalVolume* defineSection(G4bool visibility,
+			G4String name,G4double layer,G4Material* mat,G4Colour col);
 
-	template<Layers L> G4LogicalVolume* defineSection(G4bool visibility,G4String name) {
-		return sectionDefinitions::defineSection<L>(visibility,name);
-	}
+	//Defines a single strip mother volume
+	G4LogicalVolume* definePixelStrip(G4bool visibility,
+			G4String name,G4double layer,G4Colour col);
 
+	//Defines a single pizel mother volume
+	G4LogicalVolume* definePixel(G4bool visibility,
+			G4String name,G4double layer,G4Material* mat,G4Colour col);
 
-	G4LogicalVolume* definePassiveChipLayer(G4bool visibility,
-								G4double thickness);
+	//generates physical volumes related to passive layers
+	void buildLayer(G4bool visibility,
+			G4String name,G4double layer,G4double yShift,G4Material* mat,G4Colour col);
 
+	//Generates physical volumes related to active chip layer
+	void buildActiveLayer(G4bool visibility,
+			G4String name,G4double layer,G4double yShift,G4Material* mat,G4Colour col);
 
-	G4LogicalVolume* definePassiveChipSection();
+	//Generates physical volumes related to passive chip layer
+	void buildPassiveLayer(G4bool visibility,
+			G4String name,G4double layer,G4double yShift,G4Material* mat,G4Colour col);
 
-	G4LogicalVolume* defineActiveChipStrip();
-	G4LogicalVolume* defineActiveChipPixel();
+	//Places layers for a single unit
+	void placeLayers();
 
-	void placeLayer();
-	void placeUnit();
-
-	G4LogicalVolume* pGrandmother;
+private:
+	G4LogicalVolume* pWorldVol;
 	G4LogicalVolume* pMother;
 
-	static G4Material* pEmpty;
-	static G4Material* pGlue;
-	static G4Material* pChips;
-	static G4Material* pSolder;
-	static G4Material* pConducting;
-	static G4Material* pSubstrate;
 
-	static constexpr G4double HICWidth = 15*mm;
-	static constexpr G4double HICLength = 271.6*mm;
-	static constexpr  G4double HICThickness = 285*mm;
-	static constexpr  G4double pixelLength = 30*um;
-	static constexpr G4double HICSectionLength = 30*mm;
-	static constexpr G4double passiveWidth = 1.2*mm;
+	std::vector<G4bool> visibleLayers {
+		true,	//GlueA
+		true,	//Chips
+		true,	//Passive
+		true,	//GLueB
+		true, 	//SolderA
+		true,	//ConductingA
+		true,	//Substrate
+		true,	//ConductingB
+		true	//SolderB
+	};
+
+	G4Material* pEmpty;
+	G4Material* pGlue;
+	G4Material* pChips;
+	G4Material* pSolder;
+	G4Material* pConducting;
+	G4Material* pSubstrate;
+
 };
 
 #endif /* GEANT4_DEVELOPMENT_CLASSES_HICUNIT_H_ */
