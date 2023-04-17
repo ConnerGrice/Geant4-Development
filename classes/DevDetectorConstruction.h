@@ -8,31 +8,19 @@
 #ifndef INCLUDE_DEVDETECTORCONSTRUCTION_H_
 #define INCLUDE_DEVDETECTORCONSTRUCTION_H_
 
-#include <G4VPhysicalVolume.hh>
+#include <G4VUserDetectorConstruction.hh>
+
 #include <G4LogicalVolume.hh>
 #include <G4PVPlacement.hh>
-#include <G4PVReplica.hh>
-#include <G4PVDivision.hh>
-#include <G4PVParameterised.hh>
-#include <G4ReplicatedSlice.hh>
-#include <G4NistManager.hh>
 #include <G4Material.hh>
 #include <G4Box.hh>
 #include <G4Tubs.hh>
 #include <G4SystemOfUnits.hh>
-#include <G4AssemblyVolume.hh>
-#include <G4Transform3D.hh>
-#include <G4Colour.hh>
 #include <G4VisAttributes.hh>
-
-#include <cmath>
-#include <vector>
-#include <string>
-
-#include <G4VUserDetectorConstruction.hh>
 
 #include "DevSensitiveDetector.h"
 #include "Stave.h"
+#include "Materials.h"
 #include "parameters.h"
 
 class DevDetectorConstruction: public G4VUserDetectorConstruction {

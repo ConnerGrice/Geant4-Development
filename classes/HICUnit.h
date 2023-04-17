@@ -9,15 +9,17 @@
 #define GEANT4_DEVELOPMENT_CLASSES_HICUNIT_H_
 
 #include <G4LogicalVolume.hh>
-#include <G4NistManager.hh>
 #include <G4Box.hh>
 #include <G4VisAttributes.hh>
 #include <G4SystemOfUnits.hh>
 #include <G4PVPlacement.hh>
 #include <G4PVReplica.hh>
+#include <G4ThreeVector.hh>
+#include <G4Colour.hh>
 
-#include <map>
 #include <vector>
+
+#include "Materials.h"
 
 class HICUnit {
 public:

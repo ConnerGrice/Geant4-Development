@@ -7,15 +7,11 @@
 
 #include "Stave.h"
 
-Stave::Stave(G4int numOfHICs,HICUnit unitConstructor,G4LogicalVolume* root): nHICs(numOfHICs), pWorldVol(root), HIC(unitConstructor) {
-	//Gets material definitions
-	G4NistManager* pNist = G4NistManager::Instance();
-	G4Material* space = pNist->FindOrBuildMaterial("G4_Galactic");
-	G4Material* C = pNist->FindOrBuildMaterial("G4_C");
-
-	pEmpty = space;
-	pPlateMat = C;
-	pFleeceMat = C;
+Stave::Stave(G4int numOfHICs,HICUnit unitConstructor,G4LogicalVolume* root):
+nHICs(numOfHICs), pWorldVol(root), HIC(unitConstructor) {
+	pEmpty = Materials::space;
+	pPlateMat = Materials::carbon;
+	pFleeceMat = Materials::carbon;
 
 	staveWidth = getWidth();
 	staveRadius = getRadius();

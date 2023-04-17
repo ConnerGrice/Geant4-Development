@@ -9,20 +9,13 @@
 
 HICUnit::HICUnit(G4LogicalVolume* root,
 		G4String staveName): pWorldVol(root), userName(staveName) {
-	//Gets material definitions
-	G4NistManager* pNist = G4NistManager::Instance();
-	G4Material* space = pNist->FindOrBuildMaterial("G4_Galactic");
-	G4Material* C = pNist->FindOrBuildMaterial("G4_C");
-	G4Material* Si = pNist->FindOrBuildMaterial("G4_Si");
-	G4Material* Al = pNist->FindOrBuildMaterial("G4_Al");
-	G4Material* kapton = pNist->FindOrBuildMaterial("G4_KAPTON");
 
-	pEmpty = space;
-	pGlue = C;
-	pChips = Si;
-	pSolder = C;
-	pConducting = Al;
-	pSubstrate = kapton;
+	pEmpty = Materials::space;
+	pGlue = Materials::carbon;
+	pChips = Materials::silicon;
+	pSolder = Materials::carbon;
+	pConducting = Materials::aluminum;
+	pSubstrate = Materials::kapton;
 
 	pMother = defineMother(false);
 	placeLayers();

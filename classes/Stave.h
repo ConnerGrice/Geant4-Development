@@ -8,9 +8,19 @@
 #ifndef GEANT4_DEVELOPMENT_CLASSES_STAVE_H_
 #define GEANT4_DEVELOPMENT_CLASSES_STAVE_H_
 
+#include <G4PVPlacement.hh>
+#include <G4SystemOfUnits.hh>
+#include <G4Box.hh>
+#include <G4Material.hh>
+#include <G4LogicalVolume.hh>
+#include <G4VisAttributes.hh>
+#include <G4ThreeVector.hh>
+#include <G4RotationMatrix.hh>
+
 #include <string>
 
 #include "HICUnit.h"
+#include "Materials.h"
 #include "parameters.h"
 
 class Stave {

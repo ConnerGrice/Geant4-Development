@@ -8,10 +8,8 @@
 #include "DevDetectorConstruction.h"
 
 DevDetectorConstruction::DevDetectorConstruction(){
-	//Defines that maertial variables
-	G4NistManager* pNist = G4NistManager::Instance();
-	pWorldMat = pNist->FindOrBuildMaterial("G4_Galactic");
-	pTargetMat = pNist->FindOrBuildMaterial("G4_lH2");
+	pWorldMat = Materials::space;
+	pTargetMat = Materials::lHydrogen;
 	HICConstructor = HICUnit();
 }
 
