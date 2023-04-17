@@ -89,4 +89,10 @@ Total valid: 67.87%
 - Alright: 15.12%
 - Bad: 12.11%
 
+## 17/04/2023
+
+### Geometry Generation Refactoring
+
+As the project has progressed the code has become less modular and harder to modify in simple ways. For this reason I have refactored to code that generates the geometry.
+
 
