@@ -44,79 +44,15 @@ public:
 	G4VPhysicalVolume* Construct() override;
 	void ConstructSDandField() override;
 
-public:
-	//Initialises material definitions
-	void DefineMaterials();
-
-	//Methods for constructing a stave
-	//Gets the width of the stave based on the number of HCIs
-	inline G4double getPlateWidth(G4int numOfHCIs){
-		return (HCIWidth*numOfHCIs)/2.0 + PADDING;
-	}
-
-	//Gets the radius of the hexagon in order to make all staves touch
-	inline G4double getPlateRadius(G4double plateWidth){
-		return (plateWidth/tan(angle/2.0))+plateThickness/2+fleeceThickness;
-	}
-
 private:
-	//Defines volume containing all stave components
-	G4LogicalVolume* staveMother(G4double width);
-
-	//Defines plate and fleece volumes
-	G4LogicalVolume* coldPlate(G4double width);
-	G4LogicalVolume* fleece(G4double width);
-
-	//Builds the plate the HCI units are attached to
-	void buildPlate(G4double width);
-
-	//Defines volume that will contain a HCI unit
-	G4LogicalVolume* HCIUnitMother();
-
-	//Defines volume that will contain a layer a segment of that layer
-	G4LogicalVolume* HCILayerMother(G4double thickness,G4String name);
-	G4LogicalVolume* HCISegment(G4double thickness,G4String name,G4Material* material,G4VisAttributes* visual);
-
-	//Defines volume that will contain the passive area of the ALPIDE chip
-	G4LogicalVolume* HICChipLayerMother(G4double thickness);
-	G4LogicalVolume* HICChipSegment(G4double thickness,G4VisAttributes* visual);
-
-	//Defines the volume of the active area of the ALPIDE chip
-	G4LogicalVolume* HCIPixelStrip(G4double thickness,G4String name, G4Material* material);
-	G4LogicalVolume* HCIPixel(G4double thickness,G4String name, G4Material* material);
-
-	//Generates physical volumes for a HCI layer
-	void buildHCILayer(G4String name,G4double thickness, G4Material* mat,G4VisAttributes* visual,G4ThreeVector pos);
-
-	//Builds a single HCI unit
-	void buildHCI(G4String name);
-
-	//Builds all staves
-	void ConstructStaves(G4int numOfHCIs, G4String name);
+	//Build a complete layer for the detector
+	void buildLayer(G4String name, G4int numOfHICs);
 
 	G4LogicalVolume* pLogicalWorld;
-	G4LogicalVolume* staveL;
-	G4LogicalVolume* HCIUnitL;
+	HICUnit HICConstructor;
 
 	G4Material* pWorldMat;
-	G4Material* pPlateMat;
-	G4Material* pFleeceMat;
-	G4Material* pGlue;
-	G4Material* pChips;
-	G4Material* pSolder;
-	G4Material* pConducting;
-	G4Material* pSubstrate;
-	G4Material* pTarget;
+	G4Material* pTargetMat;
 
-public:
-	G4double HCIWidth;
-	G4double staveLength;
-	G4double HCILength;
-	G4double HCIUnitThickness;
-	G4double HCIPixelSide;
-	G4int sides;
-	G4double angle;
-	G4double plateThickness;
-	G4double fleeceThickness;
 };
 #endif /* INCLUDE_DEVDETECTORCONSTRUCTION_H_ */

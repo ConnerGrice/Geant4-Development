@@ -127,7 +127,7 @@ void DevRun::recordStaveData(const G4Event* anEvent,
 	G4AnalysisManager* manager = G4AnalysisManager::Instance();
 
 	//Flag to pick which data will be recorded
-	G4bool errorFlag = false;
+	G4bool errorFlag = true;
 	G4bool positionFlag = true;
 
 	G4int hitCount = collection->GetSize();

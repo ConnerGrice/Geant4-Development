@@ -21,22 +21,18 @@
 
 class HICUnit {
 public:
-	static constexpr G4double         HICWidth = 15*mm;
-	static constexpr G4double        HICLength = 271.6*mm;
-	static constexpr G4double     HICThickness = 285*um;
-	static constexpr G4double 	   pixelLength = 30*um;
-	static constexpr G4double HICSectionLength = 30*mm;
-	static constexpr G4double     passiveWidth = 1.2*mm;
-	static constexpr G4double       sectionGap = 0.2*mm;
-
 	//Constructor
-	HICUnit(G4LogicalVolume* root);
+	HICUnit() = default;
+	HICUnit(G4LogicalVolume* root,G4String staveName);
 
-	//Places mother volume containing all layers
-	inline void placeUnit(G4ThreeVector position) {
-		placeLayers();
-		new G4PVPlacement(0,position,pMother,"Testing",pWorldVol,false,1,true);
-	}
+	//Places layers for a single unit
+	void placeLayers();
+
+	//Getters
+	inline G4LogicalVolume* getMother() { return pMother; };
+	inline G4double getWidth() { return HICWidth; };
+	inline G4double getThickness() { return HICThickness; };
+	inline G4double getLength() { return HICLength; };
 
 private:
 	//Defines mother logical volume
@@ -64,32 +60,44 @@ private:
 
 	//Generates physical volumes related to active chip layer
 	void buildActiveLayer(G4bool visibility,
-			G4String name,G4double layer,G4double yShift,G4Material* mat,G4Colour col);
+			G4String volName,G4double layer,G4double yShift,G4Material* mat,G4Colour col);
 
 	//Generates physical volumes related to passive chip layer
 	void buildPassiveLayer(G4bool visibility,
 			G4String name,G4double layer,G4double yShift,G4Material* mat,G4Colour col);
 
-	//Places layers for a single unit
-	void placeLayers();
 
 private:
+	//Volumes
 	G4LogicalVolume* pWorldVol;
 	G4LogicalVolume* pMother;
 
+	//Naming convention
+	G4String userName;
 
+	//Unit parameters
+	static constexpr G4double         HICWidth = 15*mm;
+	static constexpr G4double        HICLength = 271.6*mm;
+	static constexpr G4double     HICThickness = 285*um;
+	static constexpr G4double 	   pixelLength = 30*um;
+	static constexpr G4double HICSectionLength = 30*mm;
+	static constexpr G4double     passiveWidth = 1.2*mm;
+	static constexpr G4double       sectionGap = 0.2*mm;
+
+	//visibility settings
 	std::vector<G4bool> visibleLayers {
-		true,	//GlueA
+		false,	//GlueA
 		true,	//Chips
 		true,	//Passive
-		true,	//GLueB
-		true, 	//SolderA
-		true,	//ConductingA
-		true,	//Substrate
-		true,	//ConductingB
-		true	//SolderB
+		false,	//GLueB
+		false, 	//SolderA
+		false,	//ConductingA
+		false,	//Substrate
+		false,	//ConductingB
+		false	//SolderB
 	};
 
+	//Materials
 	G4Material* pEmpty;
 	G4Material* pGlue;
 	G4Material* pChips;

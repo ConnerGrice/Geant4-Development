@@ -7,7 +7,8 @@
 
 #include "HICUnit.h"
 
-HICUnit::HICUnit(G4LogicalVolume* root): pWorldVol(root) {
+HICUnit::HICUnit(G4LogicalVolume* root,
+		G4String staveName): pWorldVol(root), userName(staveName) {
 	//Gets material definitions
 	G4NistManager* pNist = G4NistManager::Instance();
 	G4Material* space = pNist->FindOrBuildMaterial("G4_Galactic");
@@ -24,6 +25,7 @@ HICUnit::HICUnit(G4LogicalVolume* root): pWorldVol(root) {
 	pSubstrate = kapton;
 
 	pMother = defineMother(false);
+	placeLayers();
 }
 
 G4LogicalVolume* HICUnit::defineMother(G4bool visibility) {
@@ -39,7 +41,6 @@ G4LogicalVolume* HICUnit::defineMother(G4bool visibility) {
 }
 
 G4LogicalVolume* HICUnit::defineLayer(G4bool visibility,G4String name,G4double layer) {
-
 	G4Box* layerSolid;
 	G4double width;
 
@@ -61,8 +62,8 @@ G4LogicalVolume* HICUnit::defineLayer(G4bool visibility,G4String name,G4double l
 	return layerLogical;
 }
 
-G4LogicalVolume* HICUnit::defineSection(G4bool visibility,G4String name,G4double layer,G4Material* mat,G4Colour col) {
-
+G4LogicalVolume* HICUnit::defineSection(G4bool visibility,
+		G4String name,G4double layer,G4Material* mat,G4Colour col) {
 	G4Box* sectionSolid;
 	G4double width;
 
@@ -82,17 +83,17 @@ G4LogicalVolume* HICUnit::defineSection(G4bool visibility,G4String name,G4double
 	return sectionLogical;
 }
 
-G4LogicalVolume* HICUnit::definePixelStrip(G4bool visibility,G4String name,G4double layer,G4Colour col) {
+G4LogicalVolume* HICUnit::definePixelStrip(G4bool visibility,
+		G4String name,G4double layer,G4Colour col) {
 	G4Box* stripSolid = new G4Box(name+"PStripS",pixelLength/2.0,layer/2.0,HICSectionLength/2.0);
 	G4LogicalVolume* stripLogical = new G4LogicalVolume(stripSolid,pEmpty,name+"pStripL");
 
 	stripLogical->SetVisAttributes(new G4VisAttributes(visibility,col));
 	return stripLogical;
-
 }
 
-
-G4LogicalVolume* HICUnit::definePixel(G4bool visibility,G4String name,G4double layer,G4Material* mat,G4Colour col) {
+G4LogicalVolume* HICUnit::definePixel(G4bool visibility,
+		G4String name,G4double layer,G4Material* mat,G4Colour col) {
 	G4Box* pixelSolid = new G4Box(name+"PixelS",pixelLength/2.0,layer/2.0,pixelLength/2.0);
 	G4LogicalVolume* pixelLogical = new G4LogicalVolume(pixelSolid,mat,name+"PixelL");
 
@@ -100,7 +101,8 @@ G4LogicalVolume* HICUnit::definePixel(G4bool visibility,G4String name,G4double l
 	return pixelLogical;
 }
 
-void HICUnit::buildLayer(G4bool visibility,G4String name,G4double layer,G4double yShift,G4Material* mat, G4Colour col) {
+void HICUnit::buildLayer(G4bool visibility,
+		G4String name,G4double layer,G4double yShift,G4Material* mat, G4Colour col) {
 	G4LogicalVolume* layerUnit = defineLayer(false,name,layer);
 	G4LogicalVolume* sectionUnit = defineSection(visibility,name,layer,mat,col);
 
@@ -113,11 +115,12 @@ void HICUnit::buildLayer(G4bool visibility,G4String name,G4double layer,G4double
 }
 
 void HICUnit::buildActiveLayer(G4bool visibility,
-		G4String name,G4double layer,G4double yShift,G4Material* mat,G4Colour col) {
+		G4String volName,G4double layer,G4double yShift,G4Material* mat,G4Colour col) {
 
-	G4LogicalVolume* layerUnit = defineLayer(false,name,layer);
-	G4LogicalVolume* sectionUnit = defineSection(visibility,name,layer,pEmpty,col);
-	G4LogicalVolume* pixelStrip = definePixelStrip(false,name,layer,col);
+	G4String name = userName + volName;
+	G4LogicalVolume* layerUnit = defineLayer(false,volName,layer);
+	G4LogicalVolume* sectionUnit = defineSection(visibility,volName,layer,pEmpty,col);
+	G4LogicalVolume* pixelStrip = definePixelStrip(false,volName,layer,col);
 	G4LogicalVolume* pixel = definePixel(false,name,layer,mat,col);
 
 	new G4PVReplica(name+"PixelStrip",pixelStrip,sectionUnit,kXAxis,460,pixelLength);
