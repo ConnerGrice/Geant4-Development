@@ -15,6 +15,7 @@
 #include <G4Material.hh>
 #include <G4Box.hh>
 #include <G4Tubs.hh>
+#include <G4Sphere.hh>
 #include <G4SystemOfUnits.hh>
 #include <G4VisAttributes.hh>
 
@@ -39,12 +40,15 @@ private:
 	//Build the particle source and its mylar jacket
 	void buildSource(G4bool visibility);
 
+	void buildCALIFA(G4bool visibility);
+
 	G4LogicalVolume* pLogicalWorld;
 	HICUnit HICConstructor;
 
 	G4Material* pWorldMat;
 	G4Material* pTargetMat;
 	G4Material* pMylarMat;
+	G4Material* pCalifaMat;
 
 };
 #endif /* INCLUDE_DEVDETECTORCONSTRUCTION_H_ */

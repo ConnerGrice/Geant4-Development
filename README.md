@@ -132,4 +132,12 @@ Here is the difference in efficiency with the new layout
 |Alright|15.12|10.57|
 |Bad|12.11|1.37|
 
+### Adding CALIFA
+
+In order to measure the energy of the particles, a calorimeter must be introduced. I have generated that geometry
+
+![califa](screenshots/CALIFA_Wire.png)
+
+- Inner diameter: 40cm
+- Thickness: 44cm
 

@@ -19,6 +19,7 @@ struct Materials {
 	static G4Material* kapton;
 	static G4Material* lHydrogen;
 	static G4Material* mylar;
+	static G4Material* ceasiumIodide;
 
 };
 
@@ -30,6 +31,7 @@ G4Material* Materials::aluminum = pNist->FindOrBuildMaterial("G4_Al");
 G4Material* Materials::kapton = pNist->FindOrBuildMaterial("G4_KAPTON");
 G4Material* Materials::lHydrogen = pNist->FindOrBuildMaterial("G4_lH2");
 G4Material* Materials::mylar = pNist->FindOrBuildMaterial("G4_MYLAR");
+G4Material* Materials::ceasiumIodide = pNist->FindOrBuildMaterial("G4_CESIUM_IODIDE");
 }
 
 #endif /* GEANT4_DEVELOPMENT_CLASSES_MATERIALS_H_ */

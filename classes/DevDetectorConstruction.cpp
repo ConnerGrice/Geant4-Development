@@ -11,6 +11,7 @@ DevDetectorConstruction::DevDetectorConstruction(): pLogicalWorld(0){
 	pWorldMat = Materials::space;
 	pTargetMat = Materials::lHydrogen;
 	pMylarMat = Materials::mylar;
+	pCalifaMat = Materials::ceasiumIodide;
 	HICConstructor = HICUnit();
 }
 
@@ -57,6 +58,18 @@ void DevDetectorConstruction::buildSource(G4bool visibility) {
 	new G4PVPlacement(0,targetPosition - zShift,capL,"CapA",pLogicalWorld,false,8);
 }
 
+void DevDetectorConstruction::buildCALIFA(G4bool visibility) {
+	G4double calEmpty = 40*cm;
+	G4double calThickness = 44*cm;
+	G4double calDiam = calEmpty + calThickness;
+
+	G4Sphere* calSolid = new G4Sphere("CALIFAS",calEmpty/2.0,calDiam/2.0,0,2*M_PI,0,M_PI);
+	G4LogicalVolume* calLogical = new G4LogicalVolume(calSolid,pCalifaMat,"CALIFAL");
+	calLogical->SetVisAttributes(G4VisAttributes(visibility));
+	new G4PVPlacement(0,G4ThreeVector(0,0,0),calLogical,"CALIFA",pLogicalWorld,false,3,true);
+
+}
+
 G4VPhysicalVolume* DevDetectorConstruction::Construct() {
 	//Defining world volume
 	G4Box* pSolidWorld = new G4Box("WorldS",500*cm,500*cm,500*cm);
@@ -69,6 +82,7 @@ G4VPhysicalVolume* DevDetectorConstruction::Construct() {
 	buildLayer("D",4);
 
 	buildSource(true);
+	buildCALIFA(false);
 
 	return pPhysicalWorld;
 }
