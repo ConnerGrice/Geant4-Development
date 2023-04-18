@@ -20,6 +20,7 @@ DevRunAction::DevRunAction(): nGood(0),nAlright(0),nBad(0),nInvalid(0) {
 	metricsTable("StaveB",0,manager);
 	metricsTable("StaveC",1,manager);
 	metricsTable("StaveD",2,manager);
+	energyTable(3,manager);
 }
 
 
@@ -62,6 +63,14 @@ void DevRunAction::metricsTable(G4String name, G4int tupleID, G4AnalysisManager*
 
 	manager->CreateNtupleIColumn("Event");
 
+	manager->FinishNtuple(tupleID);
+}
+
+void DevRunAction::energyTable(G4int tupleID,G4AnalysisManager* manager) {
+	manager->CreateNtuple("CALIFA","Energy");
+	manager->CreateNtupleDColumn("p1Energy");
+	manager->CreateNtupleDColumn("p2Energy");
+	manager->CreateNtupleIColumn("Event");
 	manager->FinishNtuple(tupleID);
 }
 

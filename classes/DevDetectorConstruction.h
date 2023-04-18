@@ -33,6 +33,8 @@ public:
 	G4VPhysicalVolume* Construct() override;
 	void ConstructSDandField() override;
 
+	G4LogicalVolume* getScoringVolume() const { return pScoringVolume; };
+
 private:
 	//Build a complete layer for the detector
 	void buildLayer(G4String name, G4int numOfHICs);
@@ -43,6 +45,7 @@ private:
 	void buildCALIFA(G4bool visibility);
 
 	G4LogicalVolume* pLogicalWorld;
+	G4LogicalVolume* pScoringVolume;
 	HICUnit HICConstructor;
 
 	G4Material* pWorldMat;

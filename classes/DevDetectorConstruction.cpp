@@ -65,6 +65,9 @@ void DevDetectorConstruction::buildCALIFA(G4bool visibility) {
 
 	G4Sphere* calSolid = new G4Sphere("CALIFAS",calEmpty/2.0,calDiam/2.0,0,2*M_PI,0,M_PI);
 	G4LogicalVolume* calLogical = new G4LogicalVolume(calSolid,pCalifaMat,"CALIFAL");
+
+	pScoringVolume = calLogical;
+
 	calLogical->SetVisAttributes(G4VisAttributes(visibility));
 	new G4PVPlacement(0,G4ThreeVector(0,0,0),calLogical,"CALIFA",pLogicalWorld,false,3,true);
 

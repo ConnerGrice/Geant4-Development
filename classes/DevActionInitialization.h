@@ -14,6 +14,7 @@
 #include "DevRunAction.h"
 #include "DevEventAction.h"
 #include "DevStackingAction.h"
+#include "DevSteppingAction.h"
 
 class DevActionInitialization: public G4VUserActionInitialization {
 public:

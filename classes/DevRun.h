@@ -53,6 +53,9 @@ public:
 	inline void addInvalid() { nInvalid++; };
 	inline G4int getInvalid() const { return nInvalid; };
 
+	void setp1Energy(G4double e) { p1Energy = e; };
+	void setp2Energy(G4double e) { p2Energy = e; };
+
 private:
 	//Fetches a hit collection by name
 	G4VHitsCollection* getHitCollection(const G4Event* anEvent,G4String hcName);
@@ -72,17 +75,23 @@ private:
 	void recordStaveData(const G4Event* anEvent,
 			G4VHitsCollection* collection, G4int tupleID);
 
+	void recordCalifaData(const G4Event* anEvent,G4int tupleID);
+
 	//Records data for all layers
 	void recordData(const G4Event* anEvent,
 			G4VHitsCollection* dCol,
 			G4VHitsCollection* bCol,
 			G4VHitsCollection* cCol);
 
+
 private:
 	G4int nGood = 0;
 	G4int nAlright = 0;
 	G4int nBad = 0;
 	G4int nInvalid = 0;
+
+	G4double p1Energy = 0;
+	G4double p2Energy = 0;
 };
 
 #endif /* GEANT4_DEVELOPMENT_CLASSES_DEVRUN_H_ */

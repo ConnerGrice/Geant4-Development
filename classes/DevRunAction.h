@@ -32,6 +32,7 @@ public:
 public:
 	//Creates tables where data will be stored
 	void metricsTable(G4String name, G4int tupleID, G4AnalysisManager* manager);
+	void energyTable(G4int tupleID,G4AnalysisManager* manager);
 
 	//Prints efficiency values
 	void printTypeEff(const G4Run* aRun);

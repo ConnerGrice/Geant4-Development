@@ -20,6 +20,13 @@ public:
 public:
 	void BeginOfEventAction(const G4Event*) override;
 	void EndOfEventAction(const G4Event* anEvent) override;
+
+	void setp1Energy(G4double e) { p1Energy = e; };
+	void setp2Energy(G4double e) { p2Energy = e; };
+
+private:
+	G4double p1Energy;
+	G4double p2Energy;
 };
 
 #endif /* CLASSES_DEVEVENTACTION_H_ */

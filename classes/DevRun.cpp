@@ -203,6 +203,17 @@ void DevRun::recordStaveData(const G4Event* anEvent,
 	manager->AddNtupleRow(tupleID);
 }
 
+void DevRun::recordCalifaData(const G4Event* anEvent,G4int tupleID) {
+	G4AnalysisManager* manager = G4AnalysisManager::Instance();
+	G4int eventID = anEvent->GetEventID();
+
+	manager->FillNtupleDColumn(tupleID,0,p1Energy);
+	manager->FillNtupleDColumn(tupleID,1,p2Energy);
+	manager->FillNtupleIColumn(tupleID,2,eventID);
+	manager->AddNtupleRow(tupleID);
+
+}
+
 void DevRun::recordData(const G4Event* anEvent,
 		G4VHitsCollection* dCol,G4VHitsCollection* bCol,G4VHitsCollection* cCol) {
 
@@ -210,6 +221,7 @@ void DevRun::recordData(const G4Event* anEvent,
 	recordStaveData(anEvent,bCol,0);
 	recordStaveData(anEvent,cCol,1);
 	recordStaveData(anEvent,dCol,2);
+	recordCalifaData(anEvent,3);
 }
 
 void DevRun::RecordEvent(const G4Event* anEvent) {
@@ -226,6 +238,7 @@ void DevRun::RecordEvent(const G4Event* anEvent) {
 	//Get the outcome of the event
 	DevRun::EventSuccess outcome = classifyEvent(dHitsCol,bHitsCol,cHitsCol);
 
+	G4cout<<p1Energy<<":"<<p2Energy<<G4endl;
 	//Only record event if it was valid
 	if (outcome != InvalidEvent)
 		recordData(anEvent,dHitsCol,bHitsCol,cHitsCol);
