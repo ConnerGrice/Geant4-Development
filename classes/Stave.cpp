@@ -15,6 +15,7 @@ nHICs(numOfHICs), pWorldVol(root), HIC(unitConstructor) {
 
 	staveWidth = getWidth();
 	staveRadius = getRadius();
+	G4cout<<staveRadius<<G4endl;
 
 	pMother = defineMother(false);
 
@@ -65,6 +66,7 @@ void Stave::buildStave() {
 	G4ThreeVector HICPos = G4ThreeVector(-staveWidth/2.0 + PADDING + HICWidth/2.0,0,HCIZ);
 	G4RotationMatrix* HICRot = new G4RotationMatrix;
 	G4double yShift = plateThickness/2.0 + fleeceThickness + (HIC.getThickness()/2.0);
+	G4double xShift;
 
 	G4LogicalVolume* HICMother = HIC.getMother();
 
@@ -72,13 +74,15 @@ void Stave::buildStave() {
 		if (i%2 == 0) {
 			HICPos.setY(yShift);
 			HICRot = new G4RotationMatrix(0,0,0);
+			xShift = HICWidth-2*HIC.getPassiveWidth();
 		} else {
 			HICPos.setY(-yShift);
 			HICRot = new G4RotationMatrix(0,0,M_PI);
+			xShift = HICWidth;
 		}
 
 		new G4PVPlacement(HICRot,HICPos,HICMother,"HICUnit",pMother,false, i);
-		HICPos += G4ThreeVector(HICWidth,0,0);
+		HICPos += G4ThreeVector(xShift,0,0);
 	}
 }
 

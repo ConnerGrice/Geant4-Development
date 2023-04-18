@@ -35,6 +35,7 @@ public:
 	inline G4double getWidth() { return HICWidth; };
 	inline G4double getThickness() { return HICThickness; };
 	inline G4double getLength() { return HICLength; };
+	inline G4double getPassiveWidth() { return passiveWidth; };
 
 private:
 	//Defines mother logical volume

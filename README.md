@@ -101,5 +101,24 @@ As the project has progressed the code has become less modular and harder to mod
 
 In the real detector, the liquid hydrogen target that will produce the particles must be kept in a container. The container that will be used is made of a material called "Mylar". I have added this to the geometry system. It was give a thickness of 100um but this can be changed.
 
+### Reducing passive area
+
+As a way to further increase the efficiency of the detector the passive area must be reduced. I have done this by overlapping the HIC units on either side of the plate in a way that the passive area created by the auxiliary chips is removed.
+
+![overlap](screenshots/Passive_Overlap.png)
+
+However, due to this overlapping the width of the stave is reduced in order to keep the padding on either side the same. Stave that have an odd number of HIC units result in a passive auxiliary chip to be on the outer side of the plate, I have taking this into account to keep the plate padding a constant for all stave layers.
+
+|Normal padding|Modified padding
+|---|---|
+|![padding](screenshots/Passive_Padding.png)|![padding-mod](screenshots/Passive_Padding_Mod.png)|
+
+As a result of this new plate width, the radius of the detector must also change to make sure all the plates are touching at the corners
+
+|Stave|Old (mm)|New (mm)|
+|---|---|---|
+|B|33.03|29.24|
+|C|46.02|41.19|
+|D|59.00|53.14|
 
 

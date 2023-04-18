@@ -32,9 +32,10 @@ public:
 	void placeStaves();
 
 private:
+
 	//Calculates width of stave given by number of HIC units
 	inline G4double getWidth() {
-		return (HIC.getWidth()*nHICs) + (PADDING*2);
+		return (HIC.getWidth()*nHICs) - (nHICs*HIC.getPassiveWidth()) + (PADDING*2);
 	}
 
 	//Calculates distance stave is from centre
