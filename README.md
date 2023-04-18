@@ -95,4 +95,11 @@ Total valid: 67.87%
 
 As the project has progressed the code has become less modular and harder to modify in simple ways. For this reason I have refactored to code that generates the geometry.
 
+## 18/04/2023
+
+### Mylar Jacket
+
+In the real detector, the liquid hydrogen target that will produce the particles must be kept in a container. The container that will be used is made of a material called "Mylar". I have added this to the geometry system. It was give a thickness of 100um but this can be changed.
+
+
 
