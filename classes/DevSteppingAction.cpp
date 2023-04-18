@@ -26,7 +26,7 @@ void DevSteppingAction::UserSteppingAction(const G4Step* aStep) {
 		return;
 
 	G4int particleID = aTrack->GetTrackID();
-	G4double energy = aTrack->GetTotalEnergy();
+	G4double energy = aTrack->GetKineticEnergy();
 
 	DevRun* run = static_cast<DevRun*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
 

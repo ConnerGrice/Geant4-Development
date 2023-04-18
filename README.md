@@ -151,3 +151,10 @@ After implementing the ability for the energy data recovered from the CALIFA to 
 
 As seen, the measured values are very wrong considering that the perfect readings dont go higher than 800, while the measured reading start at this value. I know that the readings given from my program is in keV but more investigation is needed.
 
+### Better results
+
+In Geant, I am able to get a particles total energy or just the kinetic energy. Originally, I was getting the total energy. I have now change that to just get the kinetic energy the new results are:
+
+![em2](Results/Mk2_Energy.png)
+
+These results are much closer to the original (they don't go above 800keV).
