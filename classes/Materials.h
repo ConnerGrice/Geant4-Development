@@ -18,6 +18,7 @@ struct Materials {
 	static G4Material* aluminum;
 	static G4Material* kapton;
 	static G4Material* lHydrogen;
+	static G4Material* mylar;
 
 };
 
@@ -28,6 +29,7 @@ G4Material* Materials::silicon = pNist->FindOrBuildMaterial("G4_Si");
 G4Material* Materials::aluminum = pNist->FindOrBuildMaterial("G4_Al");
 G4Material* Materials::kapton = pNist->FindOrBuildMaterial("G4_KAPTON");
 G4Material* Materials::lHydrogen = pNist->FindOrBuildMaterial("G4_lH2");
+G4Material* Materials::mylar = pNist->FindOrBuildMaterial("G4_MYLAR");
 }
 
 #endif /* GEANT4_DEVELOPMENT_CLASSES_MATERIALS_H_ */

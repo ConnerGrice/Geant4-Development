@@ -36,11 +36,15 @@ private:
 	//Build a complete layer for the detector
 	void buildLayer(G4String name, G4int numOfHICs);
 
+	//Build the particle source and its mylar jacket
+	void buildSource(G4bool visibility);
+
 	G4LogicalVolume* pLogicalWorld;
 	HICUnit HICConstructor;
 
 	G4Material* pWorldMat;
 	G4Material* pTargetMat;
+	G4Material* pMylarMat;
 
 };
 #endif /* INCLUDE_DEVDETECTORCONSTRUCTION_H_ */
