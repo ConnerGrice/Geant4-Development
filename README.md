@@ -121,4 +121,15 @@ As a result of this new plate width, the radius of the detector must also change
 |C|46.02|41.19|
 |D|59.00|53.14|
 
+### Test results
+
+Here is the difference in efficiency with the new layout
+
+|Level of success|Old (%)|New (%)|
+|---|---|---|
+|Valid|67.87|71.68|
+|Good|72.77|88.06|
+|Alright|15.12|10.57|
+|Bad|12.11|1.37|
+
 

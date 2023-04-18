@@ -15,10 +15,8 @@ nHICs(numOfHICs), pWorldVol(root), HIC(unitConstructor) {
 
 	staveWidth = getWidth();
 	staveRadius = getRadius();
-	G4cout<<staveRadius<<G4endl;
 
 	pMother = defineMother(false);
-
 }
 
 G4LogicalVolume* Stave::defineMother(G4bool visibility) {
@@ -27,8 +25,6 @@ G4LogicalVolume* Stave::defineMother(G4bool visibility) {
 
 	motherLogical->SetVisAttributes(new G4VisAttributes(visibility));
 	return motherLogical;
-
-
 }
 
 G4LogicalVolume* Stave::definePlate(G4bool visibility) {
