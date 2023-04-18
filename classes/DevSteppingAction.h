@@ -24,9 +24,6 @@ public:
 	virtual ~DevSteppingAction();
 
 	void UserSteppingAction(const G4Step* aStep) override;
-
-private:
-	//DevRun* run;
 };
 
 #endif /* GEANT4_DEVELOPMENT_CLASSES_DEVSTEPPINGACTION_H_ */

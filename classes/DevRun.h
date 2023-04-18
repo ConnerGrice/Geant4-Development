@@ -53,6 +53,7 @@ public:
 	inline void addInvalid() { nInvalid++; };
 	inline G4int getInvalid() const { return nInvalid; };
 
+	//Particle energy value setters
 	void setp1Energy(G4double e) { p1Energy = e; };
 	void setp2Energy(G4double e) { p2Energy = e; };
 
@@ -75,6 +76,7 @@ private:
 	void recordStaveData(const G4Event* anEvent,
 			G4VHitsCollection* collection, G4int tupleID);
 
+	//Record data give by CALIFA
 	void recordCalifaData(const G4Event* anEvent,G4int tupleID);
 
 	//Records data for all layers
