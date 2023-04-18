@@ -146,6 +146,7 @@ In order to measure the energy of the particles, a calorimeter must be introduce
 After implementing the ability for the energy data recovered from the CALIFA to be recorded I carried out an experiment.
 
 |Measured|Perfect|
+|---|---|
 |![e-measured](Results/Mk1_Energy.png)|![perf-energy](Results/Perfect_Energy.png)|
 
 As seen, the measured values are very wrong considering that the perfect readings dont go higher than 800, while the measured reading start at this value. I know that the readings given from my program is in keV but more investigation is needed.
