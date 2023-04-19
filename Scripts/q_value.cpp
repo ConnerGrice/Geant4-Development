@@ -35,6 +35,11 @@ double momentum(double energy, const double mass){
 }
 
 void q_value() {
+
+	TH1F* hist = new TH1F("QHist","Q Value",1000,-13000,-11700);
+	hist->GetXaxis()->SetTitle("Q Value (keV/c^2)");
+	hist->GetYaxis()->SetTitle("Frequency");
+
 	TFile tree("../Results/data.root");
 
 	TTree* mergedTree= nullptr;
@@ -134,15 +139,9 @@ void q_value() {
 		bool cHit = false;
 		bool dHit = false;
 
-		auto fIter = fragData.find(i);
-		if (fIter != fragData.end()) {
-			particle.push_back(fIter->second);
-		}
-
 		auto iter = bData.find(i);
 		if (iter != bData.end()){
 			bHit = true;
-			std::cout<<"B";
 			particle.push_back(iter->second[0]);
 			particle.push_back(iter->second[1]);
 		}
@@ -150,7 +149,6 @@ void q_value() {
 		iter = cData.find(i);
 		if (iter != cData.end()) {
 			cHit = true;
-			std::cout<<" C";
 			particle.push_back(iter->second[0]);
 			particle.push_back(iter->second[1]);
 		}
@@ -158,20 +156,16 @@ void q_value() {
 		iter = dData.find(i);
 		if (iter != dData.end()) {
 			dHit = true;
-			std::cout<<" D";
 			particle.push_back(iter->second[0]);
 			particle.push_back(iter->second[1]);
 		}
 
-
 		auto eIter = ergyData.find(i);
 		if (eIter != ergyData.end()) {
-			std::cout<<" E";
 			energy = eIter->second;
 		}
 
 		if (bHit + cHit + dHit >= 2) {
-			std::cout<<" "<<i<<std::endl;
 			events[i] = std::make_pair(energy,particle);
 		}
 	}
@@ -197,16 +191,13 @@ void q_value() {
 
 	TLorentzVector momentumIn = beamLMomentum + targetLMomentum;
 
-	TH1F* hist = new TH1F("QHist","Q Value",1000,-1100,-1500);
-	hist->GetXaxis()->SetTitle("Q Value (keV/c^2)");
-	hist->GetYaxis()->SetTitle("Frequency");
 
 	for (const auto& event : events) {
 		std::vector<TVector3> points = event.second.second;
 		std::vector<double> energies = event.second.first;
 
-		TVector3 p1Direction = (points[1] - points[3]).Unit();
-		TVector3 p2Direction = (points[2] - points[4]).Unit();
+		TVector3 p1Direction = (points[2] - points[0]).Unit();
+		TVector3 p2Direction = (points[3] - points[1]).Unit();
 
 		double p1MomMag = momentum(energies[0],protonMass);
 		double p2MomMag = momentum(energies[1],protonMass);
@@ -230,7 +221,10 @@ void q_value() {
 
 	TCanvas* cv = new TCanvas();
 	hist->Draw();
-	hist->SaveAs("../Results/QValue.root");
+	hist->Write();
+	cv->SaveAs("../Results/QValue.root");
+
+
 
 	tree.Close();
 	quasi.Close();

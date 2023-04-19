@@ -168,3 +168,10 @@ The script that calculates the Q value is now complete and I have been able to g
 ![q1](Results/QValueMk1.svg)
 
 From my disseration project, I found that the missing mass calculated from the primary generator values produces a plot that shows slightly larger values (around -13300 at the centre).
+
+### Error in value
+
+I found a bug in the script that meant that the incorrect Q value was calculated. This has been fixed and here are the results:
+
+![q2](Results/QValueMk2.svg)
+
