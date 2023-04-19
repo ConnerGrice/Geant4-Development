@@ -51,10 +51,12 @@ void DevPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
 
 	//Define and shoot outgoing particle 1
 	pParticleGun->SetParticleMomentum(G4ParticleMomentum(px1,py1,pz1));
+	G4cout<<"P1: "<<pParticleGun->GetParticleEnergy()<<G4endl;
 	pParticleGun->GeneratePrimaryVertex(anEvent);
 
 	//Define and shoot outgoing particle 2
 	pParticleGun->SetParticleMomentum(G4ParticleMomentum(px2,py2,pz2));
+	G4cout<<"P2: "<<pParticleGun->GetParticleEnergy()<<G4endl;
 	pParticleGun->GeneratePrimaryVertex(anEvent);
 
 /*

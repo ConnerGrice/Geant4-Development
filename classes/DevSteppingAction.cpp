@@ -28,6 +28,8 @@ void DevSteppingAction::UserSteppingAction(const G4Step* aStep) {
 	G4int particleID = aTrack->GetTrackID();
 	G4double energy = aTrack->GetKineticEnergy();
 
+	G4cout<<"K"<<particleID<<" ENERGY: "<<energy<<G4endl;
+
 	DevRun* run = static_cast<DevRun*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
 
 	//Determines which particle needs which energy

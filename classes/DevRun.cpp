@@ -238,7 +238,6 @@ void DevRun::RecordEvent(const G4Event* anEvent) {
 	//Get the outcome of the event
 	DevRun::EventSuccess outcome = classifyEvent(dHitsCol,bHitsCol,cHitsCol);
 
-	G4cout<<p1Energy<<":"<<p2Energy<<G4endl;
 	//Only record event if it was valid
 	if (outcome != InvalidEvent)
 		recordData(anEvent,dHitsCol,bHitsCol,cHitsCol);

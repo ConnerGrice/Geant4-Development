@@ -190,3 +190,18 @@ After doing some sanity checks comparing the measured energy to the actual energ
 The first number is the event ID, the next 2 numbers are the measured energies, the next 2 numbers are the respective actual values, and finally, the last 2 numbers is the difference between them.
 
 The first thing to notice is that the difference for some of the readings is negative, meaning that the simulation recorded a higher energy than the particle started with. This implies that there is an error somewhere. The expected difference in values should be between 0.4-0.8.
+
+### Pinpointing issue
+
+The issue is NOT within the simluation, I have directly pulled the initial energy values and their respective measured energies from the simluation, then did the same for the Q value script and found that the initial values are not matching up:
+
+Event 1000126
+
+|Particle|Initial Simluation (MeV)|Initial Script (MeV)|Measured (MeV)|
+|---|---|---|---|
+|1|69.0623|18.5151|55.6619|
+|2|438.32|292.644|376.98|
+
+Therefore, the issue is with the script.
+
+
