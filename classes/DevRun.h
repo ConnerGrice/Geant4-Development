@@ -14,9 +14,11 @@
 #include <G4HCofThisEvent.hh>
 #include <G4Event.hh>
 #include <G4SDManager.hh>
+#include <G4RunManager.hh>
 #include <g4root.hh>
 
 #include "DevHit.h"
+#include "DevPrimaryGeneratorAction.h"
 
 //Will hold the number of layers each particle hits
 typedef std::vector<G4int> hitContainer;

@@ -7,7 +7,7 @@
 
 #include "DevPrimaryGeneratorAction.h"
 
-DevPrimaryGeneratorAction::DevPrimaryGeneratorAction() {
+DevPrimaryGeneratorAction::DevPrimaryGeneratorAction(): e1(0),e2(0) {
 	//Default number of particles shot with each "GeneratePrimaryVertex" call
 	G4int numOfParticles = 1;
 	pParticleGun = new G4ParticleGun(numOfParticles);
@@ -41,6 +41,8 @@ void DevPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
 	reader->SetNtupleDColumn(ntupleID,"P2x",px2);
 	reader->SetNtupleDColumn(ntupleID,"P2y",py2);
 	reader->SetNtupleDColumn(ntupleID,"P2z",pz2);
+	reader->SetNtupleDColumn(ntupleID,"E1",e1);
+	reader->SetNtupleDColumn(ntupleID,"E2",e2);
 
 	//Get values
 	reader->GetNtupleRow();

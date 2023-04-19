@@ -70,6 +70,8 @@ void DevRunAction::energyTable(G4int tupleID,G4AnalysisManager* manager) {
 	manager->CreateNtuple("CALIFA","Energy");
 	manager->CreateNtupleDColumn("p1Energy");
 	manager->CreateNtupleDColumn("p2Energy");
+	manager->CreateNtupleDColumn("p1Gen");
+	manager->CreateNtupleDColumn("p2Gen");
 	manager->CreateNtupleIColumn("Event");
 	manager->FinishNtuple(tupleID);
 }

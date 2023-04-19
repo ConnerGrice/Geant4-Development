@@ -148,10 +148,9 @@ void q_value() {
 
 	TTreeReaderValue<double> e1 = {reader,"CALIFA.p1Energy"};
 	TTreeReaderValue<double> e2 = {reader,"CALIFA.p2Energy"};
+	TTreeReaderValue<double> e1Gen = {reader,"CALIFA.p1Gen"};
+	TTreeReaderValue<double> e2Gen = {reader,"CALIFA.p2Gen"};
 	TTreeReaderValue<int> eEvnt = {reader,"CALIFA.Event"};
-
-	TTreeReaderValue<double> e1Gen = {reader,"Particles.E1"};
-	TTreeReaderValue<double> e2Gen = {reader,"Particles.E2"};
 
 	//Initialise data containers
 	eventContainer bData;
@@ -181,23 +180,24 @@ void q_value() {
 		}
 
 		if (c < nE) {
-			std::vector<double> energy{*e1,*e2};
+			std::vector<double> energy{*e1,*e2,*e1Gen,*e2Gen};
+			//std::cout<<*e1<<":"<<*e1Gen<<std::endl;
 			ergyData[*eEvnt] = energy;
 		}
 
+		/*
 		std::vector<double> energyGen{*e1Gen,*e2Gen};
 		ergyGenData[c] = energyGen;
-
+		*/
 		c++;
 	}
 
 	for (const auto& t : ergyData) {
 		std::vector<double> energies = t.second;
-		std::vector<double> genEnergies = ergyGenData[t.first];
 		std::cout<<t.first<<"|";
 		std::cout<<energies[0]<<","<<energies[1];
-		std::cout<<" : "<<genEnergies[0]<<","<<genEnergies[1];
-		std::cout<<" ("<<genEnergies[0]-energies[0]<<","<<genEnergies[1]-energies[1]<<")"<<std::endl;
+		std::cout<<" : "<<energies[2]<<","<<energies[3];
+		std::cout<<" ("<<energies[2]-energies[0]<<","<<energies[3]-energies[1]<<")"<<std::endl;
 	}
 
 	//Data containers for each event

@@ -26,8 +26,12 @@ public:
 public:
 	void GeneratePrimaries(G4Event* anEvent) override;
 
+	G4double getE1() const { return e1; };
+	G4double getE2() const { return e2; };
+
 private:
 	G4ParticleGun* pParticleGun;
+	G4double e1,e2;
 };
 
 #endif /* INCLUDE_DEVPRIMARYGENERATORACTION_H_ */
