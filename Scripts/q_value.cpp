@@ -20,6 +20,13 @@
 
 #include "info.h"
 
+//Component parameters
+const double protonMass = Ma;
+const double fragMass = MB;
+
+//Full width at half height at 1%
+const double FWHW = 0.01/2.35;
+
 typedef std::map<int,std::vector<TVector3>> eventContainer;
 
 void fillStaveData(eventContainer& map,int event,double x1,double y1,double z1,
@@ -34,14 +41,56 @@ double momentum(double energy, const double mass){
 	return sqrt((energy*energy)+(2*energy*mass));
 }
 
-void q_value() {
+TLorentzVector calculateLMomentum(int particleID,std::vector<TVector3> points,std::vector<double> energies,TRandom3& rand3) {
+	TVector3 unitVector = (points[particleID+1] - points[particleID-1]).Unit();
+	double momentumMagnitude = momentum(energies[particleID-1],protonMass);
+	double momentumMagnitudeRandom = rand3.Gaus(momentumMagnitude,momentumMagnitude*FWHW);
 
+	unitVector = momentumMagnitudeRandom*unitVector;
+	return TLorentzVector(unitVector,energies[particleID-1]);
+}
+
+TLorentzVector calculateBeamMomentum() {
+	//Beam momentum
+	const double beamMass = MA;
+	const double beamEnergy = ENERGY;
+	const double beamMomentum = momentum(beamEnergy,beamMass);
+	return TLorentzVector(0,0,beamMomentum,beamEnergy);
+}
+
+TLorentzVector calculateTargetMomentum() {
+	//Target momentum
+	const double targetMass = protonMass;
+	return TLorentzVector(0,0,0,targetMass);
+}
+
+bool recordHit(int event,eventContainer& data,std::vector<TVector3>& collection,eventContainer::iterator& iter) {
+	iter = data.find(event);
+	if (iter != data.end()){
+		collection.push_back(iter->second[0]);
+		collection.push_back(iter->second[1]);
+		return true;
+	}
+	return false;
+}
+
+void recordEnergies(int event, std::map<int,std::vector<double>>& data, std::vector<double>& collection, std::map<int,std::vector<double>>::iterator& iter) {
+	iter = data.find(event);
+	if (iter != data.end()) {
+		collection = iter->second;
+	}
+}
+
+void q_value() {
+	//Declare histogram
 	TH1F* hist = new TH1F("QHist","Q Value",1000,-13000,-11700);
 	hist->GetXaxis()->SetTitle("Q Value (keV/c^2)");
 	hist->GetYaxis()->SetTitle("Frequency");
 
+	//Get results data
 	TFile tree("../Results/data.root");
 
+	//Get wanted branches from tree
 	TTree* mergedTree= nullptr;
 	tree.GetObject("StaveB",mergedTree);
 	int nB = mergedTree->GetEntries();
@@ -58,18 +107,19 @@ void q_value() {
 	tree.GetObject("CALIFA",califa);
 	int nE = califa->GetEntries();
 
+	//Get original data tree
 	TFile quasi("../quasi.root");
 	TTree* generator = nullptr;
 	quasi.GetObject("Particles",generator);
 	int nGenerator = generator->GetEntries();
 
+	//Combine branches together
 	mergedTree->AddFriend(staveC);
 	mergedTree->AddFriend(staveD);
 	mergedTree->AddFriend(califa);
 
-
+	//Get values from tree using the reader
 	TTreeReader reader(mergedTree);
-
 
 	TTreeReaderValue<double> bX1 = {reader,"xPos1"};
 	TTreeReaderValue<double> bY1 = {reader,"yPos1"};
@@ -99,14 +149,17 @@ void q_value() {
 	TTreeReaderValue<double> e2 = {reader,"CALIFA.p2Energy"};
 	TTreeReaderValue<int> eEvnt = {reader,"CALIFA.Event"};
 
+	//Initialise data containers
 	eventContainer bData;
 	eventContainer cData;
 	eventContainer dData;
 	std::map<int,TVector3> fragData;
 	std::map<int,std::vector<double>> ergyData;
 
+	//Loop through each value inside the tree
 	int c = 0;
 	while (reader.Next()) {
+		//Only fill containers until the data from the branch runs out
 		if (c < nB) {
 			fillStaveData(bData,*bEvnt,*bX1,*bY1,*bZ1,
 					*bX2,*bY2,*bZ2);
@@ -129,88 +182,53 @@ void q_value() {
 		c++;
 	}
 
+	//Data containers for each event
 	std::map<int,std::pair<std::vector<double>,std::vector<TVector3>>> events;
 
+	//Loop though all values collected from tree
 	for (int i = 0; i < nGenerator; i++) {
 		std::vector<TVector3> particle;
 		std::vector<double> energy;
 
-		bool bHit = false;
-		bool cHit = false;
-		bool dHit = false;
+		eventContainer::iterator iter;
+		bool bHit = recordHit(i,bData,particle,iter);
+		bool cHit = recordHit(i,cData,particle,iter);
+		bool dHit = recordHit(i,dData,particle,iter);
 
-		auto iter = bData.find(i);
-		if (iter != bData.end()){
-			bHit = true;
-			particle.push_back(iter->second[0]);
-			particle.push_back(iter->second[1]);
-		}
+		std::map<int,std::vector<double>>::iterator eIter;
+		recordEnergies(i,ergyData,energy,eIter);
 
-		iter = cData.find(i);
-		if (iter != cData.end()) {
-			cHit = true;
-			particle.push_back(iter->second[0]);
-			particle.push_back(iter->second[1]);
-		}
-
-		iter = dData.find(i);
-		if (iter != dData.end()) {
-			dHit = true;
-			particle.push_back(iter->second[0]);
-			particle.push_back(iter->second[1]);
-		}
-
-		auto eIter = ergyData.find(i);
-		if (eIter != ergyData.end()) {
-			energy = eIter->second;
-		}
-
+		//Only add value events to the data container
 		if (bHit + cHit + dHit >= 2) {
 			events[i] = std::make_pair(energy,particle);
 		}
 	}
 
-	std::cout<<events.size()<<std::endl;
-
+	//Random generator
 	gRandom = new TRandom3();
 	gRandom->SetSeed(0);
 	TRandom3 rand3;
 	rand3.SetSeed(0);
 
-	const double protonMass = Ma;
-	const double fragMass = MB;
-	const double FWHW = 0.01/2.35;
-
-	const double beamMass = MA;
-	const double beamEnergy = ENERGY;
-	const double beamMomentum = momentum(beamEnergy,beamMass);
-	TLorentzVector beamLMomentum = TLorentzVector(0,0,beamMomentum,beamEnergy);
-
-	const double targetMass = protonMass;
-	TLorentzVector targetLMomentum = TLorentzVector(0,0,0,targetMass);
-
+	//Calculate initial momentum
+	TLorentzVector beamLMomentum = calculateBeamMomentum();
+	TLorentzVector targetLMomentum = calculateTargetMomentum();
 	TLorentzVector momentumIn = beamLMomentum + targetLMomentum;
 
-
+	//Loop through each valid event
 	for (const auto& event : events) {
+		//Get values from container
 		std::vector<TVector3> points = event.second.second;
 		std::vector<double> energies = event.second.first;
 
-		TVector3 p1Direction = (points[2] - points[0]).Unit();
-		TVector3 p2Direction = (points[3] - points[1]).Unit();
+		//Calculate momentums for each particle
+		TLorentzVector p1LMomentum = calculateLMomentum(1,points,energies,rand3);
+		TLorentzVector p2LMomentum = calculateLMomentum(2,points,energies,rand3);
 
-		double p1MomMag = momentum(energies[0],protonMass);
-		double p2MomMag = momentum(energies[1],protonMass);
-		double p1MomMagRand = rand3.Gaus(p1MomMag,p1MomMag*FWHW);
-		double p2MomMagRand = rand3.Gaus(p2MomMag,p2MomMag*FWHW);
-
-		p1Direction = p1MomMagRand*p1Direction;
-		p2Direction = p2MomMagRand*p2Direction;
-
-		TLorentzVector p1LMomentum = TLorentzVector(p1Direction,energies[0]);
-		TLorentzVector p2LMomentum = TLorentzVector(p2Direction,energies[1]);
-
+		//Calculate momentum after scattering
 		TLorentzVector momentumOut = p1LMomentum + p2LMomentum;
+
+		//Calulate Q value
 		TLorentzVector missingLMomentum = momentumIn - momentumOut;
 		double qValue = missingLMomentum.M()-fragMass;
 
@@ -221,10 +239,7 @@ void q_value() {
 
 	TCanvas* cv = new TCanvas();
 	hist->Draw();
-	hist->Write();
 	cv->SaveAs("../Results/QValue.root");
-
-
 
 	tree.Close();
 	quasi.Close();
