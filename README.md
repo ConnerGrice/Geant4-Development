@@ -158,3 +158,13 @@ In Geant, I am able to get a particles total energy or just the kinetic energy. 
 ![em2](Results/Mk2_Energy.png)
 
 These results are much closer to the original (they don't go above 800keV).
+
+## 19/04/2023
+
+### First Q value results
+
+The script that calculates the Q value is now complete and I have been able to get a histogram of Q values, there are the results:
+
+![q1](Results/QValueMk1.svg)
+
+From my disseration project, I found that the missing mass calculated from the primary generator values produces a plot that shows slightly larger values (around -13300 at the centre).

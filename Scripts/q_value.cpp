@@ -5,33 +5,52 @@
  *      Author: local1
  */
 #include <TFile.h>
+#include <TCanvas.h>
+#include <TH1F.h>
 #include <TTree.h>
 #include <TTreeReader.h>
 #include <TVector3.h>
+#include <TRandom3.h>
+#include <TSystem.h>
+#include <TLorentzVector.h>
 
 #include <iostream>
 #include <vector>
 #include <map>
 
+#include "info.h"
+
 typedef std::map<int,std::vector<TVector3>> eventContainer;
 
-void fillStaveData(eventContainer& map,
-		int event,double x1,double y1,double z1,
-		double x2,double y2,double z2);
+void fillStaveData(eventContainer& map,int event,double x1,double y1,double z1,
+		double x2,double y2,double z2) {
+	TVector3 p1{x1,y1,z1};
+	TVector3 p2{x2,y2,z2};
+	std::vector<TVector3> data{p1,p2};
+	map[event] = data;
+}
+
+double momentum(double energy, const double mass){
+	return sqrt((energy*energy)+(2*energy*mass));
+}
 
 void q_value() {
-	TFile results("../Results/data.root");
-	TTree* staveB = nullptr;
-	results.GetObject("StaveB",staveB);
-	int nB = staveB->GetEntries();
+	TFile tree("../Results/data.root");
+
+	TTree* mergedTree= nullptr;
+	tree.GetObject("StaveB",mergedTree);
+	int nB = mergedTree->GetEntries();
+
 	TTree* staveC = nullptr;
-	results.GetObject("StaveC",staveC);
+	tree.GetObject("StaveC",staveC);
 	int nC = staveC->GetEntries();
+
 	TTree* staveD = nullptr;
-	results.GetObject("StaveD",staveD);
+	tree.GetObject("StaveD",staveD);
 	int nD = staveD->GetEntries();
+
 	TTree* califa = nullptr;
-	results.GetObject("CALIFA",califa);
+	tree.GetObject("CALIFA",califa);
 	int nE = califa->GetEntries();
 
 	TFile quasi("../quasi.root");
@@ -39,12 +58,13 @@ void q_value() {
 	quasi.GetObject("Particles",generator);
 	int nGenerator = generator->GetEntries();
 
-	staveB->AddFriend(staveC);
-	staveB->AddFriend(staveD);
-	staveB->AddFriend(califa);
-	staveB->AddFriend(generator);
+	mergedTree->AddFriend(staveC);
+	mergedTree->AddFriend(staveD);
+	mergedTree->AddFriend(califa);
 
-	TTreeReader reader(staveB);
+
+	TTreeReader reader(mergedTree);
+
 
 	TTreeReaderValue<double> bX1 = {reader,"xPos1"};
 	TTreeReaderValue<double> bY1 = {reader,"yPos1"};
@@ -74,12 +94,6 @@ void q_value() {
 	TTreeReaderValue<double> e2 = {reader,"CALIFA.p2Energy"};
 	TTreeReaderValue<int> eEvnt = {reader,"CALIFA.Event"};
 
-	TTreeReaderValue<double> fragX = {reader,"Particles.PBx"};
-	TTreeReaderValue<double> fragY = {reader,"Particles.PBy"};
-	TTreeReaderValue<double> fragZ = {reader,"Particles.PBz_lab"};
-
-	std::cout<<nB<<":"<<nC<<":"<<nD<<":"<<nE<<":"<<nGenerator<<std::endl;
-
 	eventContainer bData;
 	eventContainer cData;
 	eventContainer dData;
@@ -106,11 +120,6 @@ void q_value() {
 		if (c < nE) {
 			std::vector<double> energy{*e1,*e2};
 			ergyData[*eEvnt] = energy;
-		}
-
-		if (c < nGenerator) {
-		TVector3 frag{*fragX,*fragY,*fragZ};
-		fragData[c] = frag;
 		}
 		c++;
 	}
@@ -169,23 +178,61 @@ void q_value() {
 
 	std::cout<<events.size()<<std::endl;
 
+	gRandom = new TRandom3();
+	gRandom->SetSeed(0);
+	TRandom3 rand3;
+	rand3.SetSeed(0);
+
+	const double protonMass = Ma;
+	const double fragMass = MB;
+	const double FWHW = 0.01/2.35;
+
+	const double beamMass = MA;
+	const double beamEnergy = ENERGY;
+	const double beamMomentum = momentum(beamEnergy,beamMass);
+	TLorentzVector beamLMomentum = TLorentzVector(0,0,beamMomentum,beamEnergy);
+
+	const double targetMass = protonMass;
+	TLorentzVector targetLMomentum = TLorentzVector(0,0,0,targetMass);
+
+	TLorentzVector momentumIn = beamLMomentum + targetLMomentum;
+
+	TH1F* hist = new TH1F("QHist","Q Value",1000,-1100,-1500);
+	hist->GetXaxis()->SetTitle("Q Value (keV/c^2)");
+	hist->GetYaxis()->SetTitle("Frequency");
+
 	for (const auto& event : events) {
-		std::cout<<event.second.second.size()<<std::endl;
+		std::vector<TVector3> points = event.second.second;
+		std::vector<double> energies = event.second.first;
+
+		TVector3 p1Direction = (points[1] - points[3]).Unit();
+		TVector3 p2Direction = (points[2] - points[4]).Unit();
+
+		double p1MomMag = momentum(energies[0],protonMass);
+		double p2MomMag = momentum(energies[1],protonMass);
+		double p1MomMagRand = rand3.Gaus(p1MomMag,p1MomMag*FWHW);
+		double p2MomMagRand = rand3.Gaus(p2MomMag,p2MomMag*FWHW);
+
+		p1Direction = p1MomMagRand*p1Direction;
+		p2Direction = p2MomMagRand*p2Direction;
+
+		TLorentzVector p1LMomentum = TLorentzVector(p1Direction,energies[0]);
+		TLorentzVector p2LMomentum = TLorentzVector(p2Direction,energies[1]);
+
+		TLorentzVector momentumOut = p1LMomentum + p2LMomentum;
+		TLorentzVector missingLMomentum = momentumIn - momentumOut;
+		double qValue = missingLMomentum.M()-fragMass;
+
+		std::cout<<qValue<<std::endl;
+		hist->Fill(qValue);
+
 	}
 
-}
+	TCanvas* cv = new TCanvas();
+	hist->Draw();
+	hist->SaveAs("../Results/QValue.root");
 
-
-
-
-
-void fillStaveData(eventContainer& map,
-		int event,double x1,double y1,double z1,
-		double x2,double y2,double z2) {
-
-	TVector3 p1{x1,y1,z1};
-	TVector3 p2{x2,y2,z2};
-	std::vector<TVector3> data{p1,p2};
-	map[event] = data;
+	tree.Close();
+	quasi.Close();
 }
 
