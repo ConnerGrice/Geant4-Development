@@ -7,7 +7,7 @@
 
 #include "DevEventAction.h"
 
-DevEventAction::DevEventAction(): p1Energy(0),p2Energy(0) {
+DevEventAction::DevEventAction(){
 }
 
 DevEventAction::~DevEventAction() {

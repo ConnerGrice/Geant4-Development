@@ -117,6 +117,7 @@ void q_value() {
 	mergedTree->AddFriend(staveC);
 	mergedTree->AddFriend(staveD);
 	mergedTree->AddFriend(califa);
+	mergedTree->AddFriend(generator);
 
 	//Get values from tree using the reader
 	TTreeReader reader(mergedTree);
@@ -149,12 +150,16 @@ void q_value() {
 	TTreeReaderValue<double> e2 = {reader,"CALIFA.p2Energy"};
 	TTreeReaderValue<int> eEvnt = {reader,"CALIFA.Event"};
 
+	TTreeReaderValue<double> e1Gen = {reader,"Particles.E1"};
+	TTreeReaderValue<double> e2Gen = {reader,"Particles.E2"};
+
 	//Initialise data containers
 	eventContainer bData;
 	eventContainer cData;
 	eventContainer dData;
 	std::map<int,TVector3> fragData;
 	std::map<int,std::vector<double>> ergyData;
+	std::map<int,std::vector<double>> ergyGenData;
 
 	//Loop through each value inside the tree
 	int c = 0;
@@ -179,7 +184,20 @@ void q_value() {
 			std::vector<double> energy{*e1,*e2};
 			ergyData[*eEvnt] = energy;
 		}
+
+		std::vector<double> energyGen{*e1Gen,*e2Gen};
+		ergyGenData[c] = energyGen;
+
 		c++;
+	}
+
+	for (const auto& t : ergyData) {
+		std::vector<double> energies = t.second;
+		std::vector<double> genEnergies = ergyGenData[t.first];
+		std::cout<<t.first<<"|";
+		std::cout<<energies[0]<<","<<energies[1];
+		std::cout<<" : "<<genEnergies[0]<<","<<genEnergies[1];
+		std::cout<<" ("<<genEnergies[0]-energies[0]<<","<<genEnergies[1]-energies[1]<<")"<<std::endl;
 	}
 
 	//Data containers for each event
@@ -189,6 +207,7 @@ void q_value() {
 	for (int i = 0; i < nGenerator; i++) {
 		std::vector<TVector3> particle;
 		std::vector<double> energy;
+		std::vector<double> energyGen;
 
 		eventContainer::iterator iter;
 		bool bHit = recordHit(i,bData,particle,iter);
@@ -197,11 +216,11 @@ void q_value() {
 
 		std::map<int,std::vector<double>>::iterator eIter;
 		recordEnergies(i,ergyData,energy,eIter);
+		//recordEnergies(i,ergyGenData,energy,eIter);
 
 		//Only add value events to the data container
-		if (bHit + cHit + dHit >= 2) {
+		if (bHit + cHit + dHit >= 2)
 			events[i] = std::make_pair(energy,particle);
-		}
 	}
 
 	//Random generator
@@ -232,7 +251,7 @@ void q_value() {
 		TLorentzVector missingLMomentum = momentumIn - momentumOut;
 		double qValue = missingLMomentum.M()-fragMass;
 
-		std::cout<<qValue<<std::endl;
+		//std::cout<<qValue<<std::endl;
 		hist->Fill(qValue);
 
 	}

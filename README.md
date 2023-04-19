@@ -175,3 +175,18 @@ I found a bug in the script that meant that the incorrect Q value was calculated
 
 ![q2](Results/QValueMk2.svg)
 
+### Varification of energy values
+
+After doing some sanity checks comparing the measured energy to the actual energy of the protons there have been some discoveries. Consider these comparisons:
+
+```cmd
+100233|152.512,82.2573 : 279.303,194.81 (126.792,112.553)
+100234|360.02,79.3748 : 152.492,207.374 (-207.528,127.999)
+100235|188.304,265.554 : 218.816,231.639 (30.5126,-33.9142)
+100236|259.255,120.591 : 14.9842,429.228 (-244.271,308.637)
+100239|371.045,211.776 : 356.709,142.713 (-14.3362,-69.0632)
+```
+
+The first number is the event ID, the next 2 numbers are the measured energies, the next 2 numbers are the respective actual values, and finally, the last 2 numbers is the difference between them.
+
+The first thing to notice is that the difference for some of the readings is negative, meaning that the simulation recorded a higher energy than the particle started with. This implies that there is an error somewhere. The expected difference in values should be between 0.4-0.8.
