@@ -50,13 +50,14 @@ void energyLoss() {
 
 	if (theta) {
 		plot = new TGraph(n,p1Theta,e1Diff);
-		plot->GetXaxis()->SetTitle("Emission angle phi (about z axis)");
+		plot->GetXaxis()->SetTitle("Emission angle theta (about x axis)");
 		plot->GetYaxis()->SetTitle("Energy loss (MeV)");
-		plot->Fit("pol1");
-		gStyle->SetOptFit();
+		//plot->Fit("pol1");
+		//gStyle->SetOptFit();
 	} else if (phi) {
 		plot = new TGraph(n,p1Phi,e1Diff);
-		plot->GetXaxis()->SetTitle("Emission angle theta (about x axis)");
+		plot->GetXaxis()->SetTitle("Emission angle phi (about z axis)");
+
 		plot->GetYaxis()->SetTitle("Energy loss (MeV)");
 	}
 
