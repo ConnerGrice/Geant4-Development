@@ -232,3 +232,11 @@ There is a pattern to be seen in the theta angle. The pattern being that the sha
 
 It is interesting to see the gaps in the Phi plot. These are due to the padding at the edges of the hexagon detectors. Therefore, no particles are detected if they are shot at that angle. 
 
+### Fitting to the plot
+
+In order to use this information to estimate the energy loss by the particle, a function must be fit on the plot. To me, this plot looks like a stright line would be a good fit. Therefore, I have fit that line and got the following:
+
+![edtf](Results/Energy_Loss_Theta_Fit.svg)
+
+As can be seen, the gradient of the line is -464.6, while the y intercept is 582.2. The largest loss of energy is roughtly 800-900 MeV, which seems a bit high. This would make more sense if the units were in keV, however. 
+
