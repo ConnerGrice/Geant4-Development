@@ -222,7 +222,7 @@ I fixed the energy loss by writing the data to the file at an earlier stage.
 
 In the primary generator there are 2 different angles the initial particles are given. This is because they are in 3D space.
 
-The first angle is **theta**, this is the angle from the z axis (about the x axis) the particle will be. This angle is only between $0 /rightarrow /approx 1.4 /text{rads}$. This makes sense since the particles will have some forward momentum due to the direction of the initial beam. The other angle is **phi**, this is the angle from the x axis (about the z axis) that the particles will be shot. This angle ranges from $-\pi \rightarrow /pi$, which also makes sense since the particles can be shot anywhere within a cone area pointing in the +z direction.
+The first angle is **theta**, this is the angle from the z axis (about the x axis) the particle will be. This angle is only between $0 \rightarrow \approx 1.4 \text{rads}$. This makes sense since the particles will have some forward momentum due to the direction of the initial beam. The other angle is **phi**, this is the angle from the x axis (about the z axis) that the particles will be shot. This angle ranges from $-\pi \rightarrow /pi$, which also makes sense since the particles can be shot anywhere within a cone area pointing in the +z direction.
 
 |Theta|Phi|
 |---|---|
