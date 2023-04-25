@@ -45,6 +45,8 @@ void DevPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
 	reader->SetNtupleDColumn(ntupleID,"E2",e2);
 	reader->SetNtupleDColumn(ntupleID,"theta_1",t1);
 	reader->SetNtupleDColumn(ntupleID,"theta_2",t2);
+	reader->SetNtupleDColumn(ntupleID,"phi_1",ph1);
+	reader->SetNtupleDColumn(ntupleID,"phi_2",ph2);
 
 	//Get values
 	reader->GetNtupleRow();
@@ -63,6 +65,14 @@ void DevPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
 	G4cout<<"P2: "<<pParticleGun->GetParticleEnergy()<<G4endl;
 	pParticleGun->GeneratePrimaryVertex(anEvent);
 
+	G4AnalysisManager* manager = G4AnalysisManager::Instance();
+	manager->FillNtupleDColumn(3,2,e1);
+	manager->FillNtupleDColumn(3,3,e2);
+	manager->FillNtupleDColumn(3,4,t1);
+	manager->FillNtupleDColumn(3,5,t2);
+	manager->FillNtupleDColumn(3,6,ph1);
+	manager->FillNtupleDColumn(3,7,ph2);
+	//manager->AddNtupleRow(3);
 /*
 	pParticleGun->SetParticleDefinition(G4Proton::Definition());
 

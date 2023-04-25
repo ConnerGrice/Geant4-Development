@@ -217,11 +217,7 @@ void DevRun::recordCalifaData(const G4Event* anEvent,G4int tupleID) {
 
 	manager->FillNtupleDColumn(tupleID,0,p1Energy);
 	manager->FillNtupleDColumn(tupleID,1,p2Energy);
-	manager->FillNtupleDColumn(tupleID,2,e1Diff);
-	manager->FillNtupleDColumn(tupleID,3,e2Diff);
-	manager->FillNtupleDColumn(tupleID,4,t1);
-	manager->FillNtupleDColumn(tupleID,5,t2);
-	manager->FillNtupleIColumn(tupleID,6,eventID);
+	manager->FillNtupleIColumn(tupleID,8,eventID);
 	manager->AddNtupleRow(tupleID);
 
 }

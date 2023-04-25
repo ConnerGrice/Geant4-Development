@@ -214,3 +214,21 @@ While trying to fix the mismatch in the exact energy value and the measured ener
 
 This indicates there is an issue in the part of the simluation that reads the energy value in through the generator root file. 
 
+### Fixing energy loss
+
+I fixed the energy loss by writing the data to the file at an earlier stage.
+
+### Energy loss
+
+In the primary generator there are 2 different angles the initial particles are given. This is because they are in 3D space.
+
+The first angle is **theta**, this is the angle from the z axis (about the x axis) the particle will be. This angle is only between $0 /rightarrow /approx 1.4 /text{rads}$. This makes sense since the particles will have some forward momentum due to the direction of the initial beam. The other angle is **phi**, this is the angle from the x axis (about the z axis) that the particles will be shot. This angle ranges from $-\pi \rightarrow /pi$, which also makes sense since the particles can be shot anywhere within a cone area pointing in the +z direction.
+
+|Theta|Phi|
+|---|---|
+|![elt](Results/Energy_Loss_Theta.svg)|![elp](Results/Energy_Loss_Phi.svg)|
+
+There is a pattern to be seen in the theta angle. The pattern being that the shallower the angle, the more energy is lost. This makes sense since the shallower the angle, the more time the particles are traveling through the materal. 
+
+It is interesting to see the gaps in the Phi plot. These are due to the padding at the edges of the hexagon detectors. Therefore, no particles are detected if they are shot at that angle. 
+
