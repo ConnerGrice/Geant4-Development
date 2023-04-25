@@ -150,6 +150,8 @@ void q_value() {
 	TTreeReaderValue<double> e2 = {reader,"CALIFA.p2Energy"};
 	TTreeReaderValue<double> e1Gen = {reader,"CALIFA.p1Gen"};
 	TTreeReaderValue<double> e2Gen = {reader,"CALIFA.p2Gen"};
+	TTreeReaderValue<double> t1 = {reader,"CALIFA.p1Theta"};
+	TTreeReaderValue<double> t2 = {reader,"CALIFA.p2Theta"};
 	TTreeReaderValue<int> eEvnt = {reader,"CALIFA.Event"};
 
 	//Initialise data containers
@@ -180,6 +182,7 @@ void q_value() {
 		}
 
 		if (c < nE) {
+
 			std::vector<double> energy{*e1,*e2,*e1Gen,*e2Gen};
 			//std::cout<<*e1<<":"<<*e1Gen<<std::endl;
 			ergyData[*eEvnt] = energy;

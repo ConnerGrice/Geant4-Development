@@ -43,6 +43,8 @@ void DevPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
 	reader->SetNtupleDColumn(ntupleID,"P2z",pz2);
 	reader->SetNtupleDColumn(ntupleID,"E1",e1);
 	reader->SetNtupleDColumn(ntupleID,"E2",e2);
+	reader->SetNtupleDColumn(ntupleID,"theta_1",t1);
+	reader->SetNtupleDColumn(ntupleID,"theta_2",t2);
 
 	//Get values
 	reader->GetNtupleRow();

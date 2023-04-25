@@ -204,4 +204,13 @@ Event 1000126
 
 Therefore, the issue is with the script.
 
+## 25/04/2023
+
+### Energy loss function
+
+While trying to fix the mismatch in the exact energy value and the measured energy values, I decided to simply record the exact energy values into the root file as the measured values during the simluation. This has somewhat fixed the issue and **most** of the values line up. However, there are still sometimes impossible negative differences. This is shown below in a histogram containing all the values for the differences in energy during the simluation. The small number of negative values is causing the x-range to be extended in the negative direction.
+
+![ed1](Results/Energy_Diff.png)
+
+This indicates there is an issue in the part of the simluation that reads the energy value in through the generator root file. 
 

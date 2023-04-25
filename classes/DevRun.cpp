@@ -210,12 +210,18 @@ void DevRun::recordCalifaData(const G4Event* anEvent,G4int tupleID) {
 	const DevPrimaryGeneratorAction* priGen = static_cast<const DevPrimaryGeneratorAction*>(G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction());
 	const G4double e1 = priGen->getE1();
 	const G4double e2 = priGen->getE2();
+	G4double e1Diff = e1 - p1Energy;
+	G4double e2Diff = e2 - p2Energy;
+	const G4double t1 = priGen->getT1();
+	const G4double t2 = priGen->getT2();
 
 	manager->FillNtupleDColumn(tupleID,0,p1Energy);
 	manager->FillNtupleDColumn(tupleID,1,p2Energy);
-	manager->FillNtupleDColumn(tupleID,2,e1);
-	manager->FillNtupleDColumn(tupleID,3,e2);
-	manager->FillNtupleIColumn(tupleID,4,eventID);
+	manager->FillNtupleDColumn(tupleID,2,e1Diff);
+	manager->FillNtupleDColumn(tupleID,3,e2Diff);
+	manager->FillNtupleDColumn(tupleID,4,t1);
+	manager->FillNtupleDColumn(tupleID,5,t2);
+	manager->FillNtupleIColumn(tupleID,6,eventID);
 	manager->AddNtupleRow(tupleID);
 
 }

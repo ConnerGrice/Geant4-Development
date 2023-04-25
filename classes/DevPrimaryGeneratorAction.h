@@ -28,10 +28,12 @@ public:
 
 	G4double getE1() const { return e1; };
 	G4double getE2() const { return e2; };
+	G4double getT1() const { return t1; };
+	G4double getT2() const { return t2; };
 
 private:
 	G4ParticleGun* pParticleGun;
-	G4double e1,e2;
+	G4double e1,e2,t1,t2;
 };
 
 #endif /* INCLUDE_DEVPRIMARYGENERATORACTION_H_ */
