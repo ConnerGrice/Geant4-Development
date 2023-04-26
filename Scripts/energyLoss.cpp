@@ -14,8 +14,8 @@
 
 void energyLoss() {
 
-	bool theta = false;
-	bool phi = true;
+	//OPtio
+	bool theta = true;
 
 	TFile tree("../Results/data.root");
 
@@ -40,7 +40,7 @@ void energyLoss() {
 
 		double eDiff = *e1Gen - *e1;
 
-		std::cout<<*event<<": "<<*e1Gen<<" - "<<*e1<<" = "<<eDiff<<std::endl;
+		//std::cout<<*event<<": "<<*e1Gen<<" - "<<*e1<<" = "<<eDiff<<std::endl;
 
 		e1Diff[c] = eDiff;
 		p1Theta[c] = *t1;
@@ -56,9 +56,9 @@ void energyLoss() {
 		plot = new TGraph(n,p1Theta,e1Diff);
 		plot->GetXaxis()->SetTitle("Emission angle theta (about x axis)");
 		plot->GetYaxis()->SetTitle("Energy loss (MeV)");
-		//plot->Fit("pol1");
-		//gStyle->SetOptFit();
-	} else if (phi) {
+		plot->Fit("pol3");
+		gStyle->SetOptFit();
+	} else{
 		plot = new TGraph(n,p1Phi,e1Diff);
 		plot->GetXaxis()->SetTitle("Emission angle phi (about z axis)");
 
