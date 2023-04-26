@@ -292,4 +292,19 @@ A found that a cubic fits onto the plot relativly well since it also takes into 
 
 ![ed1f3](Results/Energy_Loss_mk1_Fit3.svg)
 
+### Energy loss magntiude
+
+After some discussion, one of the reasons that the energy loss rate is much higher than expected could be due to the particles traveling some distance into CALIFA before the kinetic energy is taken, therefore, allowing for energy to be lost and inflating the energy loss rate value.
+
+This was changed by using the PreStepPoint rather than the Track. Here are the results:
+
+![edm2f2](Results/Energy_Loss_mk2_Fit2.svg)
+
+Note that the fitted line on this plot is a quadratic rather than a cubic. It can be seen that the energy loss rate has dropped, to a much more sensible value. This fitting line has the equation:
+
+$$
+E_{loss} = 15.5458\theta^2 - 18.0095\theta + 7.72777
+$$
+
+
 

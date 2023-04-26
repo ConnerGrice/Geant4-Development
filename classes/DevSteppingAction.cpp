@@ -16,9 +16,10 @@ void DevSteppingAction::UserSteppingAction(const G4Step* aStep) {
 
 	//The track that will be used multiple times
 	G4Track* aTrack = aStep->GetTrack();
+	auto aTrack1 = aStep->GetPreStepPoint();
 
 	G4LogicalVolume* currentVol =
-			aTrack->GetTouchable()->GetVolume()->GetLogicalVolume();
+			aTrack1->GetTouchable()->GetVolume()->GetLogicalVolume();
 
 	const DevDetectorConstruction* construction =
 			static_cast<const DevDetectorConstruction*> (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
@@ -29,8 +30,7 @@ void DevSteppingAction::UserSteppingAction(const G4Step* aStep) {
 		return;
 
 	G4int particleID = aTrack->GetTrackID();
-	G4double energy = aTrack->GetKineticEnergy();
-
+	G4double energy = aTrack1->GetKineticEnergy();
 	G4cout<<"K"<<particleID<<" ENERGY: "<<energy<<G4endl;
 
 

@@ -8,6 +8,7 @@
 #include <TTree.h>
 #include <TTreeReader.h>
 #include <TGraph.h>
+#include <TF1.h>
 #include <TCanvas.h>
 #include <TAxis.h>
 #include <TStyle.h>
@@ -56,7 +57,13 @@ void energyLoss() {
 		plot = new TGraph(n,p1Theta,e1Diff);
 		plot->GetXaxis()->SetTitle("Emission angle theta (about x axis)");
 		plot->GetYaxis()->SetTitle("Energy loss (MeV)");
-		plot->Fit("pol3");
+
+		auto line = new TF1("gfit","pol2");
+
+		plot->Fit("gfit","pol2");
+
+		std::cout<<line->GetParameter(0)<<std::endl;
+
 		gStyle->SetOptFit();
 	} else{
 		plot = new TGraph(n,p1Phi,e1Diff);

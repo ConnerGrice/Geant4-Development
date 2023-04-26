@@ -7,16 +7,20 @@
 #include <TFile.h>
 #include <TCanvas.h>
 #include <TH1F.h>
+#include <TGraph.h>
+#include <TF1.h>
 #include <TTree.h>
 #include <TTreeReader.h>
 #include <TVector3.h>
 #include <TRandom3.h>
 #include <TSystem.h>
+#include <TStyle.h>
 #include <TLorentzVector.h>
 
 #include <iostream>
 #include <vector>
 #include <map>
+#include <string>
 
 #include "info.h"
 
@@ -80,6 +84,27 @@ void recordEnergies(int event, std::map<int,std::vector<double>>& data, std::vec
 		collection = iter->second;
 	}
 }
+
+std::vector<double> energyLossParameters(int order,double* diff, double* angle,int size) {
+	auto plot = new TGraph(size,angle,diff);
+	std::string poly = "pol" + std::to_string(order);
+	auto formula = poly.c_str();
+
+	auto line = new TF1("gfit",formula);
+	plot->Fit("gfit",formula);
+
+	std::vector<double> output;
+	for (int i = 0; i < order + 1; i++) {
+		output.push_back(line->GetParameter(i));
+	}
+
+	return output;
+}
+
+double func(double x, std::vector<double> coeff) {
+	return coeff[0] + (x*coeff[1]) + (x*x*coeff[2]) + (x*x*x*coeff[3]);
+}
+
 
 void q_value() {
 	//Declare histogram
@@ -161,6 +186,10 @@ void q_value() {
 	std::map<int,TVector3> fragData;
 	std::map<int,std::vector<double>> ergyData;
 	std::map<int,std::vector<double>> ergyGenData;
+	double e1Diff[nE];
+	double e2Diff[nE];
+	double p1Theta[nE];
+	double p2Theta[nE];
 
 	//Loop through each value inside the tree
 	int c = 0;
@@ -183,24 +212,21 @@ void q_value() {
 
 		if (c < nE) {
 
-			std::vector<double> energy{*e1,*e2,*e1Gen,*e2Gen};
+			std::vector<double> energy{*e1,*e2,};
 			//std::cout<<*e1<<":"<<*e1Gen<<std::endl;
 			ergyData[*eEvnt] = energy;
+			e1Diff[c] = *e1 - *e1Gen;
+			e2Diff[c] = *e1 - *e1Gen;
+			p1Theta[c] = *t1;
+			p2Theta[c] = *t2;
 		}
-
-		/*
-		std::vector<double> energyGen{*e1Gen,*e2Gen};
-		ergyGenData[c] = energyGen;
-		*/
 		c++;
 	}
 
-	for (const auto& t : ergyData) {
-		std::vector<double> energies = t.second;
-		std::cout<<t.first<<"|";
-		std::cout<<energies[0]<<","<<energies[1];
-		std::cout<<" : "<<energies[2]<<","<<energies[3];
-		std::cout<<" ("<<energies[2]-energies[0]<<","<<energies[3]-energies[1]<<")"<<std::endl;
+	auto p1Fit = energyLossParameters(3,e1Diff,p1Theta,nE);
+
+	for (const auto param : p1Fit){
+		std::cout<<param<<std::endl;
 	}
 
 	//Data containers for each event
