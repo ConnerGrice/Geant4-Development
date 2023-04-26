@@ -7,7 +7,7 @@
 
 #include "DevPrimaryGeneratorAction.h"
 
-DevPrimaryGeneratorAction::DevPrimaryGeneratorAction(): e1(0),e2(0) {
+DevPrimaryGeneratorAction::DevPrimaryGeneratorAction(): e1(0),e2(0),t1(0),t2(0), ph1(0),ph2(0) {
 	//Default number of particles shot with each "GeneratePrimaryVertex" call
 	G4int numOfParticles = 1;
 	pParticleGun = new G4ParticleGun(numOfParticles);
@@ -56,12 +56,14 @@ void DevPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
 	pParticleGun->SetParticlePosition(G4ThreeVector(x,y,(z/10.0)-HCIHalfLength+HCIZ));
 
 	//Define and shoot outgoing particle 1
-	pParticleGun->SetParticleMomentum(G4ParticleMomentum(px1,py1,pz1));
+	pParticleGun->SetParticleMomentumDirection(G4ParticleMomentum(px1,py1,pz1));
+	pParticleGun->SetParticleEnergy(e1);
 	G4cout<<"P1: "<<pParticleGun->GetParticleEnergy()<<G4endl;
 	pParticleGun->GeneratePrimaryVertex(anEvent);
 
 	//Define and shoot outgoing particle 2
-	pParticleGun->SetParticleMomentum(G4ParticleMomentum(px2,py2,pz2));
+	pParticleGun->SetParticleMomentumDirection(G4ParticleMomentum(px2,py2,pz2));
+	pParticleGun->SetParticleEnergy(e2);
 	G4cout<<"P2: "<<pParticleGun->GetParticleEnergy()<<G4endl;
 	pParticleGun->GeneratePrimaryVertex(anEvent);
 

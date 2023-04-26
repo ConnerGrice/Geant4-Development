@@ -238,5 +238,44 @@ In order to use this information to estimate the energy loss by the particle, a 
 
 ![edtf](Results/Energy_Loss_Theta_Fit.svg)
 
-As can be seen, the gradient of the line is -464.6, while the y intercept is 582.2. The largest loss of energy is roughtly 800-900 MeV, which seems a bit high. This would make more sense if the units were in keV, however. 
+As can be seen, the gradient of the line is -464.6, while the y intercept is 582.2. The largest loss of energy is roughtly 800-900 MeV, which seems a bit high. This would make more sense if the units were in keV, however.
+
+## 26/04/2023
+
+### Mistakes in plot
+
+It turns out that the data that was being plotted was simply the kinetic energy of the particles rather than the energy loss. After fixing this issue I found that the problem with large negative values persists. However, it seems like all the incorrect energy values come from particles that are emitted at a large angle and therefore, have smaller starting kinetic energies.
+
+![edb](Results/Energy_Loss_Bad.svg)
+
+After printing out all the events that gave negative values, the smaller energies can be seen.
+
+```cmd
+19.5115 - 451.886 = -432.374
+19.5816 - 243.937 = -224.355
+23.2865 - 265.273 = -241.986
+23.5332 - 239.299 = -215.766
+19.6914 - 106.163 = -86.4713
+22.2647 - 201.467 = -179.202
+21.8534 - 256.736 = -234.883
+22.0448 - 476.068 = -454.023
+23.5674 - 38.1439 = -14.5764
+22.5094 - 232.823 = -210.313
+21.3801 - 64.6005 = -43.2205
+21.4124 - 56.1836 = -34.7712
+20.4309 - 122.025 = -101.594
+23.9683 - 436.687 = -412.718
+20.2897 - 59.8048 = -39.5151
+21.4684 - 404.024 = -382.556
+22.4751 - 285.455 = -262.98
+```
+
+### Potential fix
+
+The issue that was occuring was the fact that some events would be classed as valid since both particles hit at least 2 layers. However, some of the time, those particles would not hit the califa. This meant that the energy reading given was the energy of the last particle that hit the CALIFA. I fixed this by only classing an event as valid if both particles hit at least 2 layers and both particle also hit the CALIFA. Since this was a very rare occurance, the effect on efficiency was very small.
+
+Here are the new results:
+
+![ed1](Results/Energy_Loss_mk1.svg)
+
 

@@ -59,6 +59,9 @@ public:
 	void setp1Energy(G4double e) { p1Energy = e; };
 	void setp2Energy(G4double e) { p2Energy = e; };
 
+	void p1Hit(bool status) { p1HitCalifa = status; };
+	void p2Hit(bool status) { p2HitCalifa = status; };
+
 private:
 	//Fetches a hit collection by name
 	G4VHitsCollection* getHitCollection(const G4Event* anEvent,G4String hcName);
@@ -96,6 +99,9 @@ private:
 
 	G4double p1Energy = 0;
 	G4double p2Energy = 0;
+
+	bool p1HitCalifa = false;
+	bool p2HitCalifa = false;
 };
 
 #endif /* GEANT4_DEVELOPMENT_CLASSES_DEVRUN_H_ */

@@ -11,6 +11,9 @@ DevSteppingAction::~DevSteppingAction() {
 }
 
 void DevSteppingAction::UserSteppingAction(const G4Step* aStep) {
+	//Gets the current run object
+	DevRun* run = static_cast<DevRun*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+
 	//The track that will be used multiple times
 	G4Track* aTrack = aStep->GetTrack();
 
@@ -30,15 +33,17 @@ void DevSteppingAction::UserSteppingAction(const G4Step* aStep) {
 
 	G4cout<<"K"<<particleID<<" ENERGY: "<<energy<<G4endl;
 
-	DevRun* run = static_cast<DevRun*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
 
 	//Determines which particle needs which energy
 	switch(particleID) {
 	case(1):
+			//Sets energy and califa flag in DevRun
 			run->setp1Energy(energy);
+			run->p1Hit(true);
 			break;
 	case(2):
 			run->setp2Energy(energy);
+			run->p2Hit(true);
 			break;
 	default:
 		break;

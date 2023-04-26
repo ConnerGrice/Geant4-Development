@@ -220,6 +220,9 @@ void DevRun::recordCalifaData(const G4Event* anEvent,G4int tupleID) {
 	manager->FillNtupleIColumn(tupleID,8,eventID);
 	manager->AddNtupleRow(tupleID);
 
+	p1Energy = 0;
+	p2Energy = 0;
+
 }
 
 void DevRun::recordData(const G4Event* anEvent,
@@ -247,8 +250,13 @@ void DevRun::RecordEvent(const G4Event* anEvent) {
 	DevRun::EventSuccess outcome = classifyEvent(dHitsCol,bHitsCol,cHitsCol);
 
 	//Only record event if it was valid
-	if (outcome != InvalidEvent)
+	if ((outcome != InvalidEvent) && p1HitCalifa && p2HitCalifa) {
 		recordData(anEvent,dHitsCol,bHitsCol,cHitsCol);
+	}
+
+	//Resets flags that are set in DevSteppingAction::UserSteppingAction
+	p1HitCalifa = false;
+	p2HitCalifa = false;
 
 	//Increment event
 	G4Run::RecordEvent(anEvent);

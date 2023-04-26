@@ -37,8 +37,14 @@ void energyLoss() {
 	double p1Phi[n];
 
 	while (reader.Next()) {
+
+		double eDiff = *e1Gen - *e1;
+
+		if (eDiff < 0)
+			std::cout<<*event<<": "<<*e1Gen<<" - "<<*e1<<" = "<<eDiff<<std::endl;
 		//double diff = *e1Gen - *e1;
-		e1Diff[c] = *e1Gen;
+
+		e1Diff[c] = eDiff;
 		p1Theta[c] = *t1;
 		p1Phi[c] = *ph1;
 		c++;

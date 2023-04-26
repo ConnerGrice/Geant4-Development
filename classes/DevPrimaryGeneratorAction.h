@@ -33,7 +33,7 @@ public:
 
 private:
 	G4ParticleGun* pParticleGun;
-	G4double e1,e2,t1,t2,ph2,ph1;
+	G4double e1,e2,t1,t2,ph1,ph2;
 };
 
 #endif /* INCLUDE_DEVPRIMARYGENERATORACTION_H_ */
