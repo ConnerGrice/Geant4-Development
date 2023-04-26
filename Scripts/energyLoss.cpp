@@ -14,8 +14,8 @@
 
 void energyLoss() {
 
-	bool theta = true;
-	bool phi = false;
+	bool theta = false;
+	bool phi = true;
 
 	TFile tree("../Results/data.root");
 
@@ -40,9 +40,7 @@ void energyLoss() {
 
 		double eDiff = *e1Gen - *e1;
 
-		if (eDiff < 0)
-			std::cout<<*event<<": "<<*e1Gen<<" - "<<*e1<<" = "<<eDiff<<std::endl;
-		//double diff = *e1Gen - *e1;
+		std::cout<<*event<<": "<<*e1Gen<<" - "<<*e1<<" = "<<eDiff<<std::endl;
 
 		e1Diff[c] = eDiff;
 		p1Theta[c] = *t1;

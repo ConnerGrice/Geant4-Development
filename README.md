@@ -280,4 +280,12 @@ Here are the new results:
 
 Though this is the energy loss instead of the kinetic energy, the actual values still seem quite high compared to the few hundred keV that should have been expected.
 
+### Further investigation
+
+![edp1](Results/Energy_Loss_Phi_mk1.svg)
+
+I decided to look at the energy loss realted to the Phi angle. It seems, just like the theta plot, that most particles have an energy loss close to 20MeV. It also seems that with the theta plot, as the angle gets shallower more particles have less than this 20MeV cutoff.
+
+
+
 
