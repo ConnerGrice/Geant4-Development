@@ -278,4 +278,6 @@ Here are the new results:
 
 ![ed1](Results/Energy_Loss_mk1.svg)
 
+Though this is the energy loss instead of the kinetic energy, the actual values still seem quite high compared to the few hundred keV that should have been expected.
+
 
