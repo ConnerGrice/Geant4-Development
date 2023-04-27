@@ -306,5 +306,25 @@ $$
 E_{loss} = 15.5458\theta^2 - 18.0095\theta + 7.72777
 $$
 
+### Applying energy loss
 
+The next step is to take the energy that the CALIFA measures, calculate the approximate energy loss given by the above function and add that onto the measured value. This should somewhat counteract the energy lost in the layers of the detector. 
 
+I have done this in the script that calculates the Q value. However, there seems to be little change:
+
+Original mean Q: -12330 keV/c^2
+New mean Q: -12320 keV/c^2
+
+This is not correct and something must be incorrect. Further investigation is needed.
+
+## 27/04/2023
+
+### Finding errors in Q value
+
+The first issue with the Q value is the fact that it is actaully given in MeV/c^2, not keV/c^2.  Therefore, the given values are actaully extremely high. 
+
+The next issue I solved was the fact that when calculating the 4-momentum vectors, the energy componant of that was the kinetic energy. However, this value should have been the total energy. This has been fixed and not the correct 4-momentum vectors are being calculated. 
+
+Finally, the energy value used for the beam 4-momentum was given as 500MeV. However, this is the energy of a single atom in the beam nucleus. In reality, there are 12 atoms so this 500MeV must be multipled by 12.
+
+After doing all this correcting, the new Q values are given to be quite close to 0, which is also not what I would have expected.

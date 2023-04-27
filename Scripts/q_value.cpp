@@ -45,21 +45,50 @@ double momentum(double energy, const double mass){
 	return sqrt((energy*energy)+(2*energy*mass));
 }
 
-TLorentzVector calculateLMomentum(int particleID,std::vector<TVector3> points,std::vector<double> energies,TRandom3& rand3) {
+double totalEnergy(double momentum,const double mass) {
+	return sqrt((mass*mass) + (momentum*momentum));
+}
+
+double func(double x, std::vector<double> coeff) {
+	return coeff[0] + coeff[1]*x + coeff[2]*x*x;
+}
+
+TLorentzVector calculateLMomentum(
+		int particleID,std::vector<TVector3> points,
+		std::vector<double> energies,TRandom3& rand3,std::vector<double> coefficients) {
+
 	TVector3 unitVector = (points[particleID+1] - points[particleID-1]).Unit();
-	double momentumMagnitude = momentum(energies[particleID-1],protonMass);
+
+	double energyApprox = energies[particleID-1] + func(energies[particleID+1],coefficients);
+	double energy = energies[particleID-1];
+
+	//std::cout<<"Init: "<<energies[particleID-1]<<std::endl;
+	//std::cout<<"Lost: "<<func(energies[particleID+1],coefficients)<<std::endl;
+	//std::cout<<"Final: "<<energyApprox<<std::endl;
+
+	double momentumMagnitude = momentum(energyApprox,protonMass);
 	double momentumMagnitudeRandom = rand3.Gaus(momentumMagnitude,momentumMagnitude*FWHW);
 
+	double totalMomentumEnergy = totalEnergy(momentumMagnitudeRandom,protonMass);
+
 	unitVector = momentumMagnitudeRandom*unitVector;
-	return TLorentzVector(unitVector,energies[particleID-1]);
+	auto output = TLorentzVector(unitVector,totalMomentumEnergy);
+	auto test = TLorentzVector(unitVector,energy);
+	//std::cout<<output.M()<<":"<<test.M()<<std::endl;
+	return output;
 }
 
 TLorentzVector calculateBeamMomentum() {
 	//Beam momentum
 	const double beamMass = MA;
-	const double beamEnergy = ENERGY;
+	const double beamEnergy = ENERGY * A;
 	const double beamMomentum = momentum(beamEnergy,beamMass);
-	return TLorentzVector(0,0,beamMomentum,beamEnergy);
+	const double totalBeamEnergy = totalEnergy(beamMomentum,beamMass);
+
+	auto output = TLorentzVector(0,0,beamMomentum,totalBeamEnergy);
+	std::cout<<"Mag"<<output.M()<<std::endl;
+	std::cout<<"Mom"<<beamMomentum<<std::endl;
+	return output;
 }
 
 TLorentzVector calculateTargetMomentum() {
@@ -78,11 +107,13 @@ bool recordHit(int event,eventContainer& data,std::vector<TVector3>& collection,
 	return false;
 }
 
-void recordEnergies(int event, std::map<int,std::vector<double>>& data, std::vector<double>& collection, std::map<int,std::vector<double>>::iterator& iter) {
+bool recordEnergies(int event, std::map<int,std::vector<double>>& data, std::vector<double>& collection, std::map<int,std::vector<double>>::iterator& iter) {
 	iter = data.find(event);
 	if (iter != data.end()) {
 		collection = iter->second;
+		return true;
 	}
+	return false;
 }
 
 std::vector<double> energyLossParameters(int order,double* diff, double* angle,int size) {
@@ -101,14 +132,9 @@ std::vector<double> energyLossParameters(int order,double* diff, double* angle,i
 	return output;
 }
 
-double func(double x, std::vector<double> coeff) {
-	return coeff[0] + (x*coeff[1]) + (x*x*coeff[2]) + (x*x*x*coeff[3]);
-}
-
-
 void q_value() {
 	//Declare histogram
-	TH1F* hist = new TH1F("QHist","Q Value",1000,-13000,-11700);
+	TH1F* hist = new TH1F("QHist","Q Value",1000,-10,10);
 	hist->GetXaxis()->SetTitle("Q Value (keV/c^2)");
 	hist->GetYaxis()->SetTitle("Frequency");
 
@@ -183,7 +209,6 @@ void q_value() {
 	eventContainer bData;
 	eventContainer cData;
 	eventContainer dData;
-	std::map<int,TVector3> fragData;
 	std::map<int,std::vector<double>> ergyData;
 	std::map<int,std::vector<double>> ergyGenData;
 	double e1Diff[nE];
@@ -212,22 +237,18 @@ void q_value() {
 
 		if (c < nE) {
 
-			std::vector<double> energy{*e1,*e2,};
+			std::vector<double> energy{*e1,*e2,*t1,*t2};
 			//std::cout<<*e1<<":"<<*e1Gen<<std::endl;
 			ergyData[*eEvnt] = energy;
-			e1Diff[c] = *e1 - *e1Gen;
-			e2Diff[c] = *e1 - *e1Gen;
+			e1Diff[c] = *e1Gen - *e1;
+			e2Diff[c] = *e2Gen - *e2;
 			p1Theta[c] = *t1;
 			p2Theta[c] = *t2;
 		}
 		c++;
 	}
 
-	auto p1Fit = energyLossParameters(3,e1Diff,p1Theta,nE);
 
-	for (const auto param : p1Fit){
-		std::cout<<param<<std::endl;
-	}
 
 	//Data containers for each event
 	std::map<int,std::pair<std::vector<double>,std::vector<TVector3>>> events;
@@ -244,11 +265,11 @@ void q_value() {
 		bool dHit = recordHit(i,dData,particle,iter);
 
 		std::map<int,std::vector<double>>::iterator eIter;
-		recordEnergies(i,ergyData,energy,eIter);
+		bool calHit = recordEnergies(i,ergyData,energy,eIter);
 		//recordEnergies(i,ergyGenData,energy,eIter);
 
 		//Only add value events to the data container
-		if (bHit + cHit + dHit >= 2)
+		if ((bHit + cHit + dHit >= 2) && calHit)
 			events[i] = std::make_pair(energy,particle);
 	}
 
@@ -261,7 +282,13 @@ void q_value() {
 	//Calculate initial momentum
 	TLorentzVector beamLMomentum = calculateBeamMomentum();
 	TLorentzVector targetLMomentum = calculateTargetMomentum();
+	std::cout<<beamLMomentum.M()<<",";
+	std::cout<<targetLMomentum.M()<<std::endl;
+
 	TLorentzVector momentumIn = beamLMomentum + targetLMomentum;
+
+	auto p1Fit = energyLossParameters(2,e1Diff,p1Theta,nE);
+	auto p2Fit = energyLossParameters(2,e2Diff,p2Theta,nE);
 
 	//Loop through each valid event
 	for (const auto& event : events) {
@@ -270,17 +297,18 @@ void q_value() {
 		std::vector<double> energies = event.second.first;
 
 		//Calculate momentums for each particle
-		TLorentzVector p1LMomentum = calculateLMomentum(1,points,energies,rand3);
-		TLorentzVector p2LMomentum = calculateLMomentum(2,points,energies,rand3);
+		TLorentzVector p1LMomentum = calculateLMomentum(1,points,energies,rand3,p1Fit);
+		TLorentzVector p2LMomentum = calculateLMomentum(2,points,energies,rand3,p2Fit);
 
 		//Calculate momentum after scattering
 		TLorentzVector momentumOut = p1LMomentum + p2LMomentum;
 
 		//Calulate Q value
 		TLorentzVector missingLMomentum = momentumIn - momentumOut;
-		double qValue = missingLMomentum.M()-fragMass;
 
+		double qValue = missingLMomentum.M()-fragMass;
 		//std::cout<<qValue<<std::endl;
+
 		hist->Fill(qValue);
 
 	}
