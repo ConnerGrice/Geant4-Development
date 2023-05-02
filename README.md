@@ -328,3 +328,11 @@ The next issue I solved was the fact that when calculating the 4-momentum vector
 Finally, the energy value used for the beam 4-momentum was given as 500MeV. However, this is the energy of a single atom in the beam nucleus. In reality, there are 12 atoms so this 500MeV must be multipled by 12.
 
 After doing all this correcting, the new Q values are given to be quite close to 0, which is also not what I would have expected.
+
+## 02/05/2023
+
+### Finding the issue
+
+After further investigation not much progress is being made. Below is the current q value results that are being generated.
+
+![q1](Results/QValue_mk1.png)

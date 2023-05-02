@@ -94,12 +94,12 @@ std::vector<double> energyLossParameters(int order,double* diff, double* angle,i
 }
 /*Calculates the relativistic momentum from the particle mass and kinetic energy*/
 double momentum(double energy, const double mass){
-	return sqrt((energy*energy)+(2*energy*mass));
+	return std::sqrt((energy*energy)+(2*energy*mass));
 }
 
 /*Calculates a particles total energy from its momentum and mass*/
 double totalEnergy(double momentum,const double mass) {
-	return sqrt((mass*mass) + (momentum*momentum));
+	return std::sqrt((mass*mass) + (momentum*momentum));
 }
 
 /*Quadratic for energy loss correction*/
@@ -121,7 +121,6 @@ TLorentzVector calculateBeamMomentum() {
 
 	//Beam along z axis
 	auto output = TLorentzVector(0,0,beamMomentum,totalBeamEnergy);
-	std::cout<<"Beam Mass: "<<output.M()<<std::endl;
 	return output;
 }
 
@@ -129,7 +128,6 @@ TLorentzVector calculateBeamMomentum() {
 TLorentzVector calculateTargetMomentum() {
 	//Target momentum
 	const double targetMass = protonMass;
-	std::cout<<"Target Mass: "<<targetMass<<std::endl;
 	return TLorentzVector(0,0,0,targetMass);
 }
 
@@ -149,7 +147,6 @@ TLorentzVector calculateLMomentum(
 	/*
 	 * points = [p1layer1, p2layer1, p1layer2, p2layer2]
 	 */
-
 	//Particle direction of travel
 	TVector3 unitVector = (points[particleID+1] - points[particleID-1]).Unit();
 
@@ -179,7 +176,7 @@ TLorentzVector calculateLMomentum(
 void q_value() {
 	//Declare histogram
 	TH1F* hist = new TH1F("QHist","Q Value",1000,-10,10);
-	hist->GetXaxis()->SetTitle("Q Value (keV/c^2)");
+	hist->GetXaxis()->SetTitle("Q Value (MeV/c^2)");
 	hist->GetYaxis()->SetTitle("Frequency");
 
 	//Get results data
@@ -339,8 +336,6 @@ void q_value() {
 	TLorentzVector beamLMomentum = calculateBeamMomentum();
 	TLorentzVector targetLMomentum = calculateTargetMomentum();
 	TLorentzVector momentumIn = beamLMomentum + targetLMomentum;
-	std::cout<<beamLMomentum.M()<<",";
-	std::cout<<targetLMomentum.M()<<std::endl;
 
 	//Get energy loss function parameters for each particle
 	auto p1Fit = energyLossParameters(2,e1Diff,p1Theta,nE);
@@ -358,13 +353,16 @@ void q_value() {
 
 		//Calculate momentum after scattering
 		TLorentzVector momentumOut = p1LMomentum + p2LMomentum;
+		//std::cout<<"Particle MASS: "<<momentumOut.M()-2*protonMass<<std::endl;
+		//std::cout<<"Fragment: "<<fragMass<<std::endl;
+		//std::cout<<"Input: "<<momentumIn.M()<<std::endl;
 
 		//Calculate total 4-momentum by finding the difference in initial and final momentum (excluding fragment)
 		TLorentzVector missingLMomentum = momentumIn - momentumOut;
 
 		//Remove mass of the fragment to get final q value
 		double qValue = missingLMomentum.M()-fragMass;
-		//std::cout<<qValue<<std::endl;
+		std::cout<<qValue<<std::endl;
 
 		hist->Fill(qValue);
 
