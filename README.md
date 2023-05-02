@@ -407,3 +407,5 @@ double totalEnergy(double momentum,const double mass) {
 
 I cannot see any issues with this code apart from the outputting results. This is leading me to think that there might be something wrong with the event generator itself.
 
+However, if this is the case, and the generator actually gives a Q value of 0, then my script calculating the Q value from the measured values may be correct, since it has a mean around 0 when the energy correction was **NOT** applied, shown [here](#finding-the-issue)
+
