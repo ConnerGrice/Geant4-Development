@@ -13,6 +13,7 @@
 #include <G4ParticleGun.hh>
 #include <G4Proton.hh>
 #include <G4SystemOfUnits.hh>
+#include <G4Event.hh>
 //#include <G4RootAnalysisReader.hh>
 #include <g4root.hh>
 

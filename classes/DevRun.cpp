@@ -205,19 +205,9 @@ void DevRun::recordStaveData(const G4Event* anEvent,
 
 void DevRun::recordCalifaData(const G4Event* anEvent,G4int tupleID) {
 	G4AnalysisManager* manager = G4AnalysisManager::Instance();
-	G4int eventID = anEvent->GetEventID();
-
-	const DevPrimaryGeneratorAction* priGen = static_cast<const DevPrimaryGeneratorAction*>(G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction());
-	const G4double e1 = priGen->getE1();
-	const G4double e2 = priGen->getE2();
-	G4double e1Diff = e1 - p1Energy;
-	G4double e2Diff = e2 - p2Energy;
-	const G4double t1 = priGen->getT1();
-	const G4double t2 = priGen->getT2();
 
 	manager->FillNtupleDColumn(tupleID,0,p1Energy);
 	manager->FillNtupleDColumn(tupleID,1,p2Energy);
-	manager->FillNtupleIColumn(tupleID,8,eventID);
 	manager->AddNtupleRow(tupleID);
 
 	p1Energy = 0;

@@ -155,7 +155,7 @@ TLorentzVector calculateLMomentum(
 	 * energies = [energy1,energy2,emissionAngle1,emissionAngle2]
 	 */
 	//Energy + correction
-	double energyApprox = energies[particleID-1] + func(energies[particleID+1],coefficients);
+	double energyApprox = energies[particleID-1];// + func(energies[particleID+1],coefficients);
 
 	//Particle momentum
 	double momentumMagnitude = momentum(energyApprox,protonMass);

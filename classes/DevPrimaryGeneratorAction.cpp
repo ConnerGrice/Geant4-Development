@@ -68,13 +68,14 @@ void DevPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
 	pParticleGun->GeneratePrimaryVertex(anEvent);
 
 	G4AnalysisManager* manager = G4AnalysisManager::Instance();
+	G4int eventID = anEvent->GetEventID();
 	manager->FillNtupleDColumn(3,2,e1);
 	manager->FillNtupleDColumn(3,3,e2);
 	manager->FillNtupleDColumn(3,4,t1);
 	manager->FillNtupleDColumn(3,5,t2);
 	manager->FillNtupleDColumn(3,6,ph1);
 	manager->FillNtupleDColumn(3,7,ph2);
-	//manager->AddNtupleRow(3);
+	manager->FillNtupleIColumn(3,8,eventID);
 /*
 	pParticleGun->SetParticleDefinition(G4Proton::Definition());
 

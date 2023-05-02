@@ -336,3 +336,12 @@ After doing all this correcting, the new Q values are given to be quite close to
 After further investigation not much progress is being made. Below is the current q value results that are being generated.
 
 ![q1](Results/QValue_mk1.png)
+
+### Without energy correction
+
+I removed the energy correction and got the following result:
+
+![qnoCorr](Results/QValue_NoCorrection.png)
+
+As seen, the correction only changes the mean Q value by around 0.5MeV. Therefore, this is not what is cuasing the issue.
+
