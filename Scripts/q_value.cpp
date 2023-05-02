@@ -106,6 +106,7 @@ double totalEnergy(double momentum,const double mass) {
 double func(double x, std::vector<double> coeff) {
 	return coeff[0] + coeff[1]*x + coeff[2]*x*x;
 }
+
 /*
  * Calculates the 4-momentum of the C12 beam
  */
@@ -120,8 +121,7 @@ TLorentzVector calculateBeamMomentum() {
 
 	//Beam along z axis
 	auto output = TLorentzVector(0,0,beamMomentum,totalBeamEnergy);
-	std::cout<<"Mag"<<output.M()<<std::endl;
-	std::cout<<"Mom"<<beamMomentum<<std::endl;
+	std::cout<<"Beam Mass: "<<output.M()<<std::endl;
 	return output;
 }
 
@@ -129,6 +129,7 @@ TLorentzVector calculateBeamMomentum() {
 TLorentzVector calculateTargetMomentum() {
 	//Target momentum
 	const double targetMass = protonMass;
+	std::cout<<"Target Mass: "<<targetMass<<std::endl;
 	return TLorentzVector(0,0,0,targetMass);
 }
 
@@ -145,15 +146,19 @@ TLorentzVector calculateLMomentum(
 		int particleID,std::vector<TVector3> points,
 		std::vector<double> energies,TRandom3& rand3,std::vector<double> coefficients) {
 
+	/*
+	 * points = [p1layer1, p2layer1, p1layer2, p2layer2]
+	 */
+
 	//Particle direction of travel
 	TVector3 unitVector = (points[particleID+1] - points[particleID-1]).Unit();
 
+
+	/*
+	 * energies = [energy1,energy2,emissionAngle1,emissionAngle2]
+	 */
 	//Energy + correction
 	double energyApprox = energies[particleID-1] + func(energies[particleID+1],coefficients);
-
-	//std::cout<<"Init: "<<energies[particleID-1]<<std::endl;
-	//std::cout<<"Lost: "<<func(energies[particleID+1],coefficients)<<std::endl;
-	//std::cout<<"Final: "<<energyApprox<<std::endl;
 
 	//Particle momentum
 	double momentumMagnitude = momentum(energyApprox,protonMass);
@@ -251,7 +256,7 @@ void q_value() {
 	eventContainer cData;
 	eventContainer dData;
 
-	//Energy data for each layer
+	//Energy data for each event
 	std::map<int,std::vector<double>> ergyData;
 
 	//Arrays for energy correction plot
@@ -359,7 +364,7 @@ void q_value() {
 
 		//Remove mass of the fragment to get final q value
 		double qValue = missingLMomentum.M()-fragMass;
-		std::cout<<qValue<<std::endl;
+		//std::cout<<qValue<<std::endl;
 
 		hist->Fill(qValue);
 
