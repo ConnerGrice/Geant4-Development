@@ -112,7 +112,7 @@ double func(double x, std::vector<double> coeff) {
 TLorentzVector calculateBeamMomentum() {
 	//Beam momentum
 	const double beamMass = MA;	//12 atomic mass units
-	const double beamEnergy = ENERGY * A; //Total energy of beam (energy * 12)
+	const double beamEnergy = ENERGY * A; //Total kinetic energy of beam (energy * 12)
 
 	//Momentum and energy values
 	const double beamMomentum = momentum(beamEnergy,beamMass);
