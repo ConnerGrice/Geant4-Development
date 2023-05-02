@@ -31,8 +31,10 @@ const double fragMass = MB;
 //Full width at half height at 1%
 const double FWHW = 0.01/2.35;
 
+/*dict containing the position vectors of both particles*/
 typedef std::map<int,std::vector<TVector3>> eventContainer;
 
+/*Puts position values into the event container in vector format*/
 void fillStaveData(eventContainer& map,int event,double x1,double y1,double z1,
 		double x2,double y2,double z2) {
 	TVector3 p1{x1,y1,z1};
@@ -41,62 +43,10 @@ void fillStaveData(eventContainer& map,int event,double x1,double y1,double z1,
 	map[event] = data;
 }
 
-double momentum(double energy, const double mass){
-	return sqrt((energy*energy)+(2*energy*mass));
-}
-
-double totalEnergy(double momentum,const double mass) {
-	return sqrt((mass*mass) + (momentum*momentum));
-}
-
-double func(double x, std::vector<double> coeff) {
-	return coeff[0] + coeff[1]*x + coeff[2]*x*x;
-}
-
-TLorentzVector calculateLMomentum(
-		int particleID,std::vector<TVector3> points,
-		std::vector<double> energies,TRandom3& rand3,std::vector<double> coefficients) {
-
-	TVector3 unitVector = (points[particleID+1] - points[particleID-1]).Unit();
-
-	double energyApprox = energies[particleID-1] + func(energies[particleID+1],coefficients);
-	double energy = energies[particleID-1];
-
-	//std::cout<<"Init: "<<energies[particleID-1]<<std::endl;
-	//std::cout<<"Lost: "<<func(energies[particleID+1],coefficients)<<std::endl;
-	//std::cout<<"Final: "<<energyApprox<<std::endl;
-
-	double momentumMagnitude = momentum(energyApprox,protonMass);
-	double momentumMagnitudeRandom = rand3.Gaus(momentumMagnitude,momentumMagnitude*FWHW);
-
-	double totalMomentumEnergy = totalEnergy(momentumMagnitudeRandom,protonMass);
-
-	unitVector = momentumMagnitudeRandom*unitVector;
-	auto output = TLorentzVector(unitVector,totalMomentumEnergy);
-	auto test = TLorentzVector(unitVector,energy);
-	//std::cout<<output.M()<<":"<<test.M()<<std::endl;
-	return output;
-}
-
-TLorentzVector calculateBeamMomentum() {
-	//Beam momentum
-	const double beamMass = MA;
-	const double beamEnergy = ENERGY * A;
-	const double beamMomentum = momentum(beamEnergy,beamMass);
-	const double totalBeamEnergy = totalEnergy(beamMomentum,beamMass);
-
-	auto output = TLorentzVector(0,0,beamMomentum,totalBeamEnergy);
-	std::cout<<"Mag"<<output.M()<<std::endl;
-	std::cout<<"Mom"<<beamMomentum<<std::endl;
-	return output;
-}
-
-TLorentzVector calculateTargetMomentum() {
-	//Target momentum
-	const double targetMass = protonMass;
-	return TLorentzVector(0,0,0,targetMass);
-}
-
+/*
+ * Checks if the particle data contains a given event ID
+ * Builds array of particles position vectors for that event
+ */
 bool recordHit(int event,eventContainer& data,std::vector<TVector3>& collection,eventContainer::iterator& iter) {
 	iter = data.find(event);
 	if (iter != data.end()){
@@ -107,6 +57,10 @@ bool recordHit(int event,eventContainer& data,std::vector<TVector3>& collection,
 	return false;
 }
 
+/*
+ * Checks if the energy data contains a value for a given event ID
+ * Builds list of energies of each particle for that event
+ */
 bool recordEnergies(int event, std::map<int,std::vector<double>>& data, std::vector<double>& collection, std::map<int,std::vector<double>>::iterator& iter) {
 	iter = data.find(event);
 	if (iter != data.end()) {
@@ -116,14 +70,21 @@ bool recordEnergies(int event, std::map<int,std::vector<double>>& data, std::vec
 	return false;
 }
 
+/*
+ * Plots energy difference vs emission angle
+ * Fits a quadratic and outputs the coefficients
+ */
 std::vector<double> energyLossParameters(int order,double* diff, double* angle,int size) {
+	//Generates plot
 	auto plot = new TGraph(size,angle,diff);
+
+	//Fits quadratic curve
 	std::string poly = "pol" + std::to_string(order);
 	auto formula = poly.c_str();
-
 	auto line = new TF1("gfit",formula);
 	plot->Fit("gfit",formula);
 
+	//builds vector containing parameters
 	std::vector<double> output;
 	for (int i = 0; i < order + 1; i++) {
 		output.push_back(line->GetParameter(i));
@@ -131,7 +92,85 @@ std::vector<double> energyLossParameters(int order,double* diff, double* angle,i
 
 	return output;
 }
+/*Calculates the relativistic momentum from the particle mass and kinetic energy*/
+double momentum(double energy, const double mass){
+	return sqrt((energy*energy)+(2*energy*mass));
+}
 
+/*Calculates a particles total energy from its momentum and mass*/
+double totalEnergy(double momentum,const double mass) {
+	return sqrt((mass*mass) + (momentum*momentum));
+}
+
+/*Quadratic for energy loss correction*/
+double func(double x, std::vector<double> coeff) {
+	return coeff[0] + coeff[1]*x + coeff[2]*x*x;
+}
+/*
+ * Calculates the 4-momentum of the C12 beam
+ */
+TLorentzVector calculateBeamMomentum() {
+	//Beam momentum
+	const double beamMass = MA;	//12 atomic mass units
+	const double beamEnergy = ENERGY * A; //Total energy of beam (energy * 12)
+
+	//Momentum and energy values
+	const double beamMomentum = momentum(beamEnergy,beamMass);
+	const double totalBeamEnergy = totalEnergy(beamMomentum,beamMass);
+
+	//Beam along z axis
+	auto output = TLorentzVector(0,0,beamMomentum,totalBeamEnergy);
+	std::cout<<"Mag"<<output.M()<<std::endl;
+	std::cout<<"Mom"<<beamMomentum<<std::endl;
+	return output;
+}
+
+//Calculates 4-momentum of stationary target proton
+TLorentzVector calculateTargetMomentum() {
+	//Target momentum
+	const double targetMass = protonMass;
+	return TLorentzVector(0,0,0,targetMass);
+}
+
+/*Calculates a particles 4-momentum by:
+ * - Calculates unit vector that represents direction of travel
+ * - Calculates the energy approximation from energy reading and energy loss correction function
+ * - Calculates the relativistic momentum magnitude of the particle
+ * - Applies random 1% FWHW to momentum magnitude
+ * - Calculates total energy of the particles using this momentum value
+ * - Constructs 3-momentum vector using direction of travel vector and momentum magnitude
+ * - Outputs 4-momentum vector with the total energy
+ */
+TLorentzVector calculateLMomentum(
+		int particleID,std::vector<TVector3> points,
+		std::vector<double> energies,TRandom3& rand3,std::vector<double> coefficients) {
+
+	//Particle direction of travel
+	TVector3 unitVector = (points[particleID+1] - points[particleID-1]).Unit();
+
+	//Energy + correction
+	double energyApprox = energies[particleID-1] + func(energies[particleID+1],coefficients);
+
+	//std::cout<<"Init: "<<energies[particleID-1]<<std::endl;
+	//std::cout<<"Lost: "<<func(energies[particleID+1],coefficients)<<std::endl;
+	//std::cout<<"Final: "<<energyApprox<<std::endl;
+
+	//Particle momentum
+	double momentumMagnitude = momentum(energyApprox,protonMass);
+	double momentumMagnitudeRandom = rand3.Gaus(momentumMagnitude,momentumMagnitude*FWHW);
+
+	//Total energy
+	double totalMomentumEnergy = totalEnergy(momentumMagnitudeRandom,protonMass);
+
+	//4-momentum vector
+	unitVector = momentumMagnitudeRandom*unitVector;
+	auto output = TLorentzVector(unitVector,totalMomentumEnergy);
+	return output;
+}
+
+/*
+ * MAIN SCRIPT
+ */
 void q_value() {
 	//Declare histogram
 	TH1F* hist = new TH1F("QHist","Q Value",1000,-10,10);
@@ -142,6 +181,7 @@ void q_value() {
 	TFile tree("../Results/data.root");
 
 	//Get wanted branches from tree
+	//and records the number of entries in each branch
 	TTree* mergedTree= nullptr;
 	tree.GetObject("StaveB",mergedTree);
 	int nB = mergedTree->GetEntries();
@@ -206,11 +246,15 @@ void q_value() {
 	TTreeReaderValue<int> eEvnt = {reader,"CALIFA.Event"};
 
 	//Initialise data containers
+	//Position vectors for each layer
 	eventContainer bData;
 	eventContainer cData;
 	eventContainer dData;
+
+	//Energy data for each layer
 	std::map<int,std::vector<double>> ergyData;
-	std::map<int,std::vector<double>> ergyGenData;
+
+	//Arrays for energy correction plot
 	double e1Diff[nE];
 	double e2Diff[nE];
 	double p1Theta[nE];
@@ -221,25 +265,29 @@ void q_value() {
 	while (reader.Next()) {
 		//Only fill containers until the data from the branch runs out
 		if (c < nB) {
+			//Fill B layer positions
 			fillStaveData(bData,*bEvnt,*bX1,*bY1,*bZ1,
 					*bX2,*bY2,*bZ2);
 		}
 
 		if (c < nC) {
+			//Fill C layer positions
 			fillStaveData(cData,*cEvnt,*cX1,*cY1,*cZ1,
 					*cX2,*cY2,*cZ2);
 		}
 
 		if (c < nD) {
+			//Fill D layer positions
 			fillStaveData(dData,*dEvnt,*dX1,*dY1,*dZ1,
 					*dX2,*dY2,*dZ2);
 		}
 
 		if (c < nE) {
-
+			//Fill energy values and their emission angle
 			std::vector<double> energy{*e1,*e2,*t1,*t2};
-			//std::cout<<*e1<<":"<<*e1Gen<<std::endl;
 			ergyData[*eEvnt] = energy;
+
+			//Fill energy difference arrays
 			e1Diff[c] = *e1Gen - *e1;
 			e2Diff[c] = *e2Gen - *e2;
 			p1Theta[c] = *t1;
@@ -248,27 +296,30 @@ void q_value() {
 		c++;
 	}
 
-
-
 	//Data containers for each event
+	/*
+	 *{eventID : ([energies vector],[position vectors vector]), ...}
+	 */
 	std::map<int,std::pair<std::vector<double>,std::vector<TVector3>>> events;
 
 	//Loop though all values collected from tree
 	for (int i = 0; i < nGenerator; i++) {
+
+		//Map element vectors
 		std::vector<TVector3> particle;
 		std::vector<double> energy;
-		std::vector<double> energyGen;
 
+		//Only add to vector if particle hit layer for given event
 		eventContainer::iterator iter;
 		bool bHit = recordHit(i,bData,particle,iter);
 		bool cHit = recordHit(i,cData,particle,iter);
 		bool dHit = recordHit(i,dData,particle,iter);
 
+		//Only add energy vector if energy value was given for given event
 		std::map<int,std::vector<double>>::iterator eIter;
 		bool calHit = recordEnergies(i,ergyData,energy,eIter);
-		//recordEnergies(i,ergyGenData,energy,eIter);
 
-		//Only add value events to the data container
+		//Only add value to event map if the entire event was valid
 		if ((bHit + cHit + dHit >= 2) && calHit)
 			events[i] = std::make_pair(energy,particle);
 	}
@@ -282,11 +333,11 @@ void q_value() {
 	//Calculate initial momentum
 	TLorentzVector beamLMomentum = calculateBeamMomentum();
 	TLorentzVector targetLMomentum = calculateTargetMomentum();
+	TLorentzVector momentumIn = beamLMomentum + targetLMomentum;
 	std::cout<<beamLMomentum.M()<<",";
 	std::cout<<targetLMomentum.M()<<std::endl;
 
-	TLorentzVector momentumIn = beamLMomentum + targetLMomentum;
-
+	//Get energy loss function parameters for each particle
 	auto p1Fit = energyLossParameters(2,e1Diff,p1Theta,nE);
 	auto p2Fit = energyLossParameters(2,e2Diff,p2Theta,nE);
 
@@ -303,11 +354,12 @@ void q_value() {
 		//Calculate momentum after scattering
 		TLorentzVector momentumOut = p1LMomentum + p2LMomentum;
 
-		//Calulate Q value
+		//Calculate total 4-momentum by finding the difference in initial and final momentum (excluding fragment)
 		TLorentzVector missingLMomentum = momentumIn - momentumOut;
 
+		//Remove mass of the fragment to get final q value
 		double qValue = missingLMomentum.M()-fragMass;
-		//std::cout<<qValue<<std::endl;
+		std::cout<<qValue<<std::endl;
 
 		hist->Fill(qValue);
 
