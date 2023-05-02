@@ -351,7 +351,7 @@ As a sanity check, I wrote a script that would output the exact Q value data fro
 
 The script is below:
 
-```
+```cpp
 //Beam 4-momentum
 const double beamM = MA;
 const double beamEk = ENERGY * A;
@@ -393,7 +393,7 @@ while (reader.Next()) {
 
 Where the momentum and energy functions are as follows:
 
-```
+```cpp
 /*Calculates the relativistic momentum from the particle mass and kinetic energy*/
 double momentum(double energy, const double mass){
 	return std::sqrt((energy*energy)+(2*energy*mass));
