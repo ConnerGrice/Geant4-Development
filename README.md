@@ -345,3 +345,65 @@ I removed the energy correction and got the following result:
 
 As seen, the correction only changes the mean Q value by around 0.5MeV. Therefore, this is not what is cuasing the issue.
 
+### More confusion
+
+As a sanity check, I wrote a script that would output the exact Q value data from the data used for the primary generator of the simulation. However, I have found that doing this results in the invarient mass of the 4-momentum vectors, `(targetMomentum + beamMomentum) - (proton1Momentum + proton2Momentum)` is exactly the same as the mass of the fragment. Therefore, the Q value comes out as 0 for all of the data.
+
+The script is below:
+
+```
+//Beam 4-momentum
+const double beamM = MA;
+const double beamEk = ENERGY * A;
+const double beamP = momentum(beamEk,beamM);
+const double beamE = totalEnergy(beamP,beamM);
+auto lBeam = TLorentzVector(0,0,beamP,beamE);
+
+//Target proton 4-momentum
+const double targetM = Ma;
+auto lTarget = TLorentzVector(0,0,0,targetM);
+
+//Initial system 4-momentum
+auto momIn = lTarget + lBeam;
+
+//Reads each row of tree
+while (reader.Next()) {
+	//Proton 1 4-momentum
+	auto p1 = TVector3(*P1x,*P1y,*P1z);
+	auto e1 = totalEnergy(p1.Mag(),Ma);
+	auto lP1 = TLorentzVector(p1,e1);
+
+	//Proton 2 momentum
+	auto p2 = TVector3(*P2x,*P2y,*P2z);
+	auto e2 = totalEnergy(p2.Mag(),Ma);
+	auto lP2 = TLorentzVector(p2,e2);
+
+	//Final system 4-momentum  (excluding fragment)
+	auto momOut = lP1 + lP2;
+
+	//Difference of start and final 4-momentum
+	auto missing = momIn - momOut;
+
+	//Q value
+	auto qValue = missing.M()-MB; //THESE VALUES ARE THE SAME!!
+	std::cout<<qValue<<std::endl;
+	hist->Fill(qValue);
+}
+```
+
+Where the momentum and energy functions are as follows:
+
+```
+/*Calculates the relativistic momentum from the particle mass and kinetic energy*/
+double momentum(double energy, const double mass){
+	return std::sqrt((energy*energy)+(2*energy*mass));
+}
+
+/*Calculates a particles total energy from its momentum and mass*/
+double totalEnergy(double momentum,const double mass) {
+	return std::sqrt((mass*mass) + (momentum*momentum));
+}
+```
+
+I cannot see any issues with this code apart from the outputting results. This is leading me to think that there might be something wrong with the event generator itself.
+

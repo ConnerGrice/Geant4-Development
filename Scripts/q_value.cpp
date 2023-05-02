@@ -102,6 +102,7 @@ double totalEnergy(double momentum,const double mass) {
 	return std::sqrt((mass*mass) + (momentum*momentum));
 }
 
+
 /*Quadratic for energy loss correction*/
 double func(double x, std::vector<double> coeff) {
 	return coeff[0] + coeff[1]*x + coeff[2]*x*x;
@@ -155,7 +156,7 @@ TLorentzVector calculateLMomentum(
 	 * energies = [energy1,energy2,emissionAngle1,emissionAngle2]
 	 */
 	//Energy + correction
-	double energyApprox = energies[particleID-1];// + func(energies[particleID+1],coefficients);
+	double energyApprox = energies[particleID-1] + func(energies[particleID+1],coefficients);
 
 	//Particle momentum
 	double momentumMagnitude = momentum(energyApprox,protonMass);
@@ -175,7 +176,7 @@ TLorentzVector calculateLMomentum(
  */
 void q_value() {
 	//Declare histogram
-	TH1F* hist = new TH1F("QHist","Q Value",1000,-10,10);
+	TH1F* hist = new TH1F("QHist","Q Value",1000,-1000,1000);
 	hist->GetXaxis()->SetTitle("Q Value (MeV/c^2)");
 	hist->GetYaxis()->SetTitle("Frequency");
 
