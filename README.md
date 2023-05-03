@@ -417,3 +417,11 @@ Though it should not make a difference, instead of just subtrating the mass of t
 
 ![qe2](Results/QValue_Exact_mk2.png)
 
+### Final script investigation
+
+After a lot of further testing and tweaking I have come to the conclusion that my script is working as intended, but the data in the primary generator may be wrong. 
+
+To see if this is the case, I will try and generate a new set of data and redo the entire calculation using that.
+
+
+

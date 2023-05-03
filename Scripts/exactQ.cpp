@@ -25,6 +25,10 @@ double totalEnergy(double momentum,const double mass) {
 	return std::sqrt((mass*mass) + (momentum*momentum));
 }
 
+void printVector(TLorentzVector vec) {
+	std::cout<<"("<<vec.X()<<","<<vec.Y()<<","<<vec.Z()<<") : "<<vec.E();
+}
+
 void exactQ() {
 	auto hist = new TH1F("hist","Exact Q Value",1000,-100,100);
 	hist->GetXaxis()->SetTitle("Q Value (MeV/c^2)");
@@ -46,10 +50,6 @@ void exactQ() {
 	TTreeReaderValue<double> P2y = {reader,"P2y"};
 	TTreeReaderValue<double> P2z = {reader,"P2z"};
 	TTreeReaderValue<double> E2 = {reader,"E2"};
-
-	TTreeReaderValue<double> Bx = {reader,"PBx"};
-	TTreeReaderValue<double> By = {reader,"PBy"};
-	TTreeReaderValue<double> Bz = {reader,"PBz_lab"};
 
 	//Beam 4-momentum
 	const double beamM = MA;
@@ -78,19 +78,15 @@ void exactQ() {
 		auto e2 = totalEnergy(p2.Mag(),Ma);
 		auto lP2 = TLorentzVector(p2,e2);
 
-		auto b = TVector3(*Bx,*By,*Bz);
-		auto eb = totalEnergy(b.Mag(),MB);
-		auto lB = TLorentzVector(b,eb);
-
 		//Final system 4-momentum  (excluding fragment)
-		auto momOut = lP1 + lP2 + lB;
+		auto momOut = lP1 + lP2;
 
 		//Difference of start and final 4-momentum
 		auto missing = momIn - momOut;
-		std::cout<<"Missing: "<<missing.M()<<std::endl;
 
 		//Q value
-		auto qValue = missing.M();
+		auto qValue = missing.M() - MB;
+		std::cout<<qValue<<std::endl;
 		hist->Fill(qValue);
 	}
 	hist->Draw();
