@@ -47,6 +47,10 @@ void exactQ() {
 	TTreeReaderValue<double> P2z = {reader,"P2z"};
 	TTreeReaderValue<double> E2 = {reader,"E2"};
 
+	TTreeReaderValue<double> Bx = {reader,"PBx"};
+	TTreeReaderValue<double> By = {reader,"PBy"};
+	TTreeReaderValue<double> Bz = {reader,"PBz_lab"};
+
 	//Beam 4-momentum
 	const double beamM = MA;
 	const double beamEk = ENERGY * A;
@@ -74,15 +78,19 @@ void exactQ() {
 		auto e2 = totalEnergy(p2.Mag(),Ma);
 		auto lP2 = TLorentzVector(p2,e2);
 
+		auto b = TVector3(*Bx,*By,*Bz);
+		auto eb = totalEnergy(b.Mag(),MB);
+		auto lB = TLorentzVector(b,eb);
+
 		//Final system 4-momentum  (excluding fragment)
-		auto momOut = lP1 + lP2;
+		auto momOut = lP1 + lP2 + lB;
 
 		//Difference of start and final 4-momentum
 		auto missing = momIn - momOut;
 		std::cout<<"Missing: "<<missing.M()<<std::endl;
 
 		//Q value
-		auto qValue = missing.M()-MB;
+		auto qValue = missing.M();
 		hist->Fill(qValue);
 	}
 	hist->Draw();

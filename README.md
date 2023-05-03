@@ -409,3 +409,11 @@ I cannot see any issues with this code apart from the outputting results. This i
 
 However, if this is the case, and the generator actually gives a Q value of 0, then my script calculating the Q value from the measured values may be correct, since it has a mean around 0 when the energy correction was **NOT** applied, shown [here](#without-energy-correction)
 
+## 03/05/2023
+
+### Failed changes
+
+Though it should not make a difference, instead of just subtrating the mass of the fragment at the end of the calculations, I calculated to 4-momentum vector of the fragment and added that to the final 4-momentum vector. As expected, this gave the same results as the old method.
+
+![qe2](Results/QValue_Exact_mk2.png)
+
