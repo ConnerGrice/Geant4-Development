@@ -427,3 +427,13 @@ To see if this is the case, I will try and generate a new set of data and redo t
 
 After generating a new set of particle data, the output is exaclty the same. Now I am not sure what is going on.
 
+## 09/05/2023
+
+### Final results with and without energy correction
+
+After running the Q value script with and without the energy correction function, I get these results:
+
+|Without Correction| With Correction|
+|---|---|
+|![qvwo](Results/QValue_Without.png)|![qvw](Results/QValue_With.png)|
+

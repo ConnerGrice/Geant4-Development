@@ -176,7 +176,7 @@ TLorentzVector calculateLMomentum(
  */
 void q_value() {
 	//Declare histogram
-	TH1F* hist = new TH1F("QHist","Q Value",1000,-1000,1000);
+	TH1F* hist = new TH1F("QHist","Q Value",1000,-20,20);
 	hist->GetXaxis()->SetTitle("Q Value (MeV/c^2)");
 	hist->GetYaxis()->SetTitle("Frequency");
 

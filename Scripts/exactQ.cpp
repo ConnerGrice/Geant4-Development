@@ -84,36 +84,6 @@ void exactQ() {
 		//Difference of start and final 4-momentum
 		auto missing = momIn - momOut;
 
-		std::cout<<"P1: ";
-		printVector(lP1);
-		std::cout<<std::endl;
-
-		std::cout<<"P2: ";
-		printVector(lP2);
-		std::cout<<std::endl;
-
-		std::cout<<"P1 + P2: ";
-		printVector(lP1+lP2);
-		std::cout<<std::endl;
-
-		std::cout<<"T + B: ";
-		printVector(lTarget+lBeam);
-		std::cout<<std::endl;
-
-		std::cout<<"Missing: ";
-		printVector(missing);
-		std::cout<<std::endl;
-
-		std::cout<<"Q: "<<missing.M()<<std::endl;
-		std::cout<<std::endl;
-		/*
-		std::cout<<"P1: "<<lP1.M()<<std::endl;
-		std::cout<<"P2: "<<lP2.M()<<std::endl;
-		std::cout<<"Frag: "<<MB<<std::endl;
-		std::cout<<"Target: "<<lTarget.M()<<std::endl;
-		std::cout<<"Beam: "<<lBeam.M()<<std::endl;
-		std::cout<<"Missing: "<<missing.M()<<std::endl;
-		*/
 		//Q value
 		auto qValue = missing.M() - MB;
 		//std::cout<<qValue<<std::endl;
