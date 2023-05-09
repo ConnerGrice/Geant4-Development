@@ -58,9 +58,9 @@ void energyLoss() {
 		plot->GetXaxis()->SetTitle("Emission angle theta (about x axis)");
 		plot->GetYaxis()->SetTitle("Energy loss (MeV)");
 
-		auto line = new TF1("gfit","pol2");
+		auto line = new TF1("gfit","pol4");
 
-		plot->Fit("gfit","pol2");
+		plot->Fit("gfit","pol4");
 
 		std::cout<<line->GetParameter(0)<<std::endl;
 

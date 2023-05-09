@@ -105,7 +105,7 @@ double totalEnergy(double momentum,const double mass) {
 
 /*Quadratic for energy loss correction*/
 double func(double x, std::vector<double> coeff) {
-	return coeff[0] + coeff[1]*x + coeff[2]*x*x;
+	return coeff[0] + coeff[1]*x + coeff[2]*x*x + coeff[3]*x*x*x + coeff[4]*x*x*x*x;
 }
 
 /*
@@ -339,8 +339,8 @@ void q_value() {
 	TLorentzVector momentumIn = beamLMomentum + targetLMomentum;
 
 	//Get energy loss function parameters for each particle
-	auto p1Fit = energyLossParameters(2,e1Diff,p1Theta,nE);
-	auto p2Fit = energyLossParameters(2,e2Diff,p2Theta,nE);
+	auto p1Fit = energyLossParameters(4,e1Diff,p1Theta,nE);
+	auto p2Fit = energyLossParameters(4,e2Diff,p2Theta,nE);
 
 	//Loop through each valid event
 	for (const auto& event : events) {
