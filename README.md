@@ -441,3 +441,5 @@ After running the Q value script with and without the energy correction function
 
 Trying to improve the energy correction, instead of using a simple quadratic, I used a 4th order polynomial. After running the experiment I found that the results had not changed much as all. This leads me to think that a quadratic is already a very good curve to fit to the data. 
 
+![qvw2](Results/QValue_With_mk2.png)
+
