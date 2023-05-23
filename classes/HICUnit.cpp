@@ -7,15 +7,31 @@
 
 #include "HICUnit.h"
 
-HICUnit::HICUnit(G4LogicalVolume* root,
-		G4String staveName): pWorldVol(root), userName(staveName) {
+HICUnit::HICUnit(G4LogicalVolume* root,G4String staveName, G4bool show) : pWorldVol(root), userName(staveName),
+	pEmpty(Materials::space),
+	pGlue(Materials::carbon),
+	pChips(Materials::silicon),
+	pSolder(Materials::carbon),
+	pConducting(Materials::aluminum),
+	pSubstrate(Materials::kapton),
+	visibleLayers(std::vector<G4bool> {
+		false,	//GlueA
+		true,	//Chips
+		true,	//Passive
+		false,	//GLueB
+		false, 	//SolderA
+		false,	//ConductingA
+		false,	//Substrate
+		false,	//ConductingB
+		false	//SolderB
+	}) {
 
-	pEmpty = Materials::space;
-	pGlue = Materials::carbon;
-	pChips = Materials::silicon;
-	pSolder = Materials::carbon;
-	pConducting = Materials::aluminum;
-	pSubstrate = Materials::kapton;
+	if (!show) {
+		for (size_t i = 0; i < visibleLayers.size(); i++) {
+			visibleLayers[i] = false;
+		}
+
+	}
 
 	pMother = defineMother(false);
 	placeLayers();

@@ -24,8 +24,8 @@
 class HICUnit {
 public:
 	//Constructor
-	HICUnit() = default;
-	HICUnit(G4LogicalVolume* root,G4String staveName);
+	HICUnit() = default; // @suppress("Class members should be properly initialized")
+	HICUnit(G4LogicalVolume* root,G4String staveName,G4bool show);
 
 	//Places layers for a single unit
 	void placeLayers();
@@ -86,20 +86,6 @@ private:
 	static constexpr G4double HICSectionLength = 30*mm;
 	static constexpr G4double     passiveWidth = 1.2*mm;
 	static constexpr G4double       sectionGap = 0.2*mm;
-
-	//visibility settings
-	std::vector<G4bool> visibleLayers {
-		false,	//GlueA
-		true,	//Chips
-		true,	//Passive
-		false,	//GLueB
-		false, 	//SolderA
-		false,	//ConductingA
-		false,	//Substrate
-		false,	//ConductingB
-		false	//SolderB
-	};
-
 	//Materials
 	G4Material* pEmpty;
 	G4Material* pGlue;
@@ -107,6 +93,10 @@ private:
 	G4Material* pSolder;
 	G4Material* pConducting;
 	G4Material* pSubstrate;
+
+	//visibility settings
+	std::vector<G4bool> visibleLayers;
+
 
 };
 

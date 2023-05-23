@@ -7,21 +7,20 @@
 
 #include "DevDetectorConstruction.h"
 
-DevDetectorConstruction::DevDetectorConstruction(): pLogicalWorld(0), pScoringVolume(0){
-	pWorldMat = Materials::space;
-	pTargetMat = Materials::lHydrogen;
-	pMylarMat = Materials::mylar;
-	pCalifaMat = Materials::ceasiumIodide;
-	HICConstructor = HICUnit();
-}
+DevDetectorConstruction::DevDetectorConstruction(): pLogicalWorld(0), pScoringVolume(0),
+	pWorldMat(Materials::space),
+	pTargetMat(Materials::lHydrogen),
+	pMylarMat(Materials::mylar),
+	pCalifaMat(Materials::ceasiumIodide),
+	HICConstructor(HICUnit()) {}
 
 DevDetectorConstruction::~DevDetectorConstruction() {
 }
 
-void DevDetectorConstruction::buildLayer(G4String name, G4int numOfHICs) {
-	HICConstructor = HICUnit(pLogicalWorld,name);
+void DevDetectorConstruction::buildLayer(G4String name, G4int numOfHICs,G4bool show) {
+	HICConstructor = HICUnit(pLogicalWorld,name,show);
 	Stave stave(numOfHICs,HICConstructor,pLogicalWorld);
-	stave.placeStaves();
+	stave.placeStaves(show);
 }
 
 void DevDetectorConstruction::buildSource(G4bool visibility) {
@@ -80,9 +79,9 @@ G4VPhysicalVolume* DevDetectorConstruction::Construct() {
 	G4PVPlacement* pPhysicalWorld = new G4PVPlacement(0,G4ThreeVector(0,0,0),pLogicalWorld,"WorldP",0,false,0,true);
 
 	//Place each layer
-	buildLayer("B",2);
-	buildLayer("C",3);
-	buildLayer("D",4);
+	buildLayer("B",2,true);
+	buildLayer("C",3,true);
+	buildLayer("D",4,true);
 
 	buildSource(true);
 	buildCALIFA(false);
@@ -91,7 +90,6 @@ G4VPhysicalVolume* DevDetectorConstruction::Construct() {
 }
 
 void DevDetectorConstruction::ConstructSDandField() {
-
 	//Defines chips layers in each stave as the sensitive detector
 	auto BSensDet = new DevSensitiveDetector("StaveB","StaveBCollection");
 	G4SDManager::GetSDMpointer()->AddNewDetector(BSensDet);

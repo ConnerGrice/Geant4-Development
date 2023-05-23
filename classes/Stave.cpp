@@ -53,9 +53,8 @@ void Stave::buildPlate(G4bool coldVis, G4bool fleeceVis) {
 	new G4PVPlacement(0,G4ThreeVector(0,-offset,0),fleece,"FleeceBottom",pMother,false,2);
 }
 
-void Stave::buildStave() {
-
-	buildPlate(true,true);
+void Stave::buildStave(G4bool show) {
+	buildPlate(show,show);
 
 	G4double HICWidth = HIC.getWidth();
 	//G4ThreeVector HICPos = G4ThreeVector(-(HICWidth*nHICs/2.0) - HICWidth/2.0,0,HCIZ);
@@ -82,8 +81,8 @@ void Stave::buildStave() {
 	}
 }
 
-void Stave::placeStaves() {
-	buildStave();
+void Stave::placeStaves(G4bool show) {
+	buildStave(show);
 	G4RotationMatrix* staveRot;
 	G4ThreeVector stavePos = G4ThreeVector(staveRadius,0,0);
 	stavePos.rotateZ(offsetAngle);

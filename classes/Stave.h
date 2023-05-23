@@ -29,7 +29,7 @@ public:
 	Stave(G4int numOfHICs,HICUnit unitConstructor,G4LogicalVolume* root);
 
 	//Generates the physical volumes for each stave in the detector layer.
-	void placeStaves();
+	void placeStaves(G4bool show);
 
 private:
 
@@ -56,7 +56,7 @@ private:
 	void buildPlate(G4bool coldVis, G4bool fleeceVis);
 
 	//Generates the physical volume for the stave and the HIC units
-	void buildStave();
+	void buildStave(G4bool show);
 
 	//Stave parameter variables
 	G4int nHICs;
