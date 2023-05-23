@@ -80,8 +80,8 @@ private:
 	static constexpr G4double staveThickness = 850*um;
 	static constexpr G4double fleeceThickness = 20*um;
 	static constexpr G4double plateThickness = 240*um;
-	static constexpr G4double angle = M_PI/3.0;
-	static constexpr G4int nSides = 6;
+	static constexpr G4int nSides = 8;
+	static constexpr G4double angle = (2*M_PI)/nSides;
 };
 
 #endif /* GEANT4_DEVELOPMENT_CLASSES_STAVE_H_ */
