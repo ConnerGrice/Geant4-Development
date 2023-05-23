@@ -24,6 +24,18 @@ To make the system match more closley to the plans, I have added an small angula
 
 ![octagon2](screenshots/Octagon_mk2.png)
 
+### New radii
+
+After adding more staves, the means that the radii of the layers must also change since the number of HICs remains the same. The new lengths are as follows:
+
+|Stave|Old(mm)|New(mm)|
+|---|---|---|
+|B|29.24|40.70|
+|C|41.19|57.36|
+|D|53.14|74.01|
+
+This is a 30% increase for each layer. The radii of the system can be changed by changing the number of HICs on each layer.
+
 ### First test
 
 I have ran the first test to see the distribution of the particles that it could detect. There are some significant changes. 
@@ -46,4 +58,13 @@ The next difference, which I think is a not as intended and should be investigat
 |![oct-z-diff](Results/AvgError_z_Oct.png)|![hex-y-diff](Results/AvgError_z.png)|
 
 The error in the z direction seems to be pretty much unchaged, while the x and y directions have a few much larger errors. I want to reduce these outlier errors as much as possible. It must have something to do with the method that is being used to get the points of the pixels via the volume tree. This will be investigated.
+
+Finally, as expected, the final efficiency has also reduced. This is because with more staves means more padding area and dead space.
+
+|Level of success|Old(%)|New(%)|
+|---|---|---|
+|Valid|71.68|67.34|
+|Good|88.06|87.55|
+|Alright|10.57|11.19|
+|Bad|1.37|1.26|
 
