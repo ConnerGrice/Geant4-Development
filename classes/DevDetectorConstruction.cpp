@@ -80,8 +80,8 @@ G4VPhysicalVolume* DevDetectorConstruction::Construct() {
 
 	//Place each layer
 	buildLayer("B",2,true);
-	buildLayer("C",3,true);
-	buildLayer("D",4,true);
+	buildLayer("C",3,false);
+	buildLayer("D",4,false);
 
 	buildSource(true);
 	buildCALIFA(false);
