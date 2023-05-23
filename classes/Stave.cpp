@@ -84,12 +84,12 @@ void Stave::buildStave() {
 
 void Stave::placeStaves() {
 	buildStave();
-
 	G4RotationMatrix* staveRot;
 	G4ThreeVector stavePos = G4ThreeVector(staveRadius,0,0);
+	stavePos.rotateZ(offsetAngle);
 
 	for (int i = 0; i < nSides; i++) {
-		staveRot = new G4RotationMatrix(0,0,(M_PI/2.0) + (angle*i));
+		staveRot = new G4RotationMatrix(0,0,(M_PI/2.0) + offsetAngle + (angle*i));
 		new G4PVPlacement(staveRot,stavePos,pMother, "Stave" + std::to_string(nHICs),pWorldVol,false,i);
 		stavePos.rotateZ(angle);
 	}

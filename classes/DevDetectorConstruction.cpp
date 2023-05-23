@@ -7,7 +7,7 @@
 
 #include "DevDetectorConstruction.h"
 
-DevDetectorConstruction::DevDetectorConstruction(): pLogicalWorld(0){
+DevDetectorConstruction::DevDetectorConstruction(): pLogicalWorld(0), pScoringVolume(0){
 	pWorldMat = Materials::space;
 	pTargetMat = Materials::lHydrogen;
 	pMylarMat = Materials::mylar;
@@ -93,6 +93,10 @@ G4VPhysicalVolume* DevDetectorConstruction::Construct() {
 void DevDetectorConstruction::ConstructSDandField() {
 
 	//Defines chips layers in each stave as the sensitive detector
+	auto BSensDet = new DevSensitiveDetector("StaveB","StaveBCollection");
+	G4SDManager::GetSDMpointer()->AddNewDetector(BSensDet);
+	SetSensitiveDetector("BChipsPixelL",BSensDet);
+
 	auto CSensDet = new DevSensitiveDetector("StaveC","StaveCCollection");
 	G4SDManager::GetSDMpointer()->AddNewDetector(CSensDet);
 	SetSensitiveDetector("CChipsPixelL",CSensDet);
@@ -100,10 +104,6 @@ void DevDetectorConstruction::ConstructSDandField() {
 	auto DSensDet = new DevSensitiveDetector("StaveD","StaveDCollection");
 	G4SDManager::GetSDMpointer()->AddNewDetector(DSensDet);
 	SetSensitiveDetector("DChipsPixelL",DSensDet);
-
-	auto BSensDet = new DevSensitiveDetector("StaveB","StaveBCollection");
-	G4SDManager::GetSDMpointer()->AddNewDetector(BSensDet);
-	SetSensitiveDetector("BChipsPixelL",BSensDet);
 
 }
 

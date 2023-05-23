@@ -18,3 +18,9 @@ This is the new detector shape as for now:
 
 ![octagon](screenshots/Octagon_mk1.png)
 
+### Adding offset
+
+To make the system match more closley to the plans, I have added an small angular offset to the entire detector. Here is the new orientation:
+
+![octagon2](screenshots/Octagon_mk2.png)
+
