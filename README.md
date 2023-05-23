@@ -26,7 +26,7 @@ To make the system match more closley to the plans, I have added an small angula
 
 ### New radii
 
-After adding more staves, the means that the radii of the layers must also change since the number of HICs remains the same. The new lengths are as follows:
+After adding more staves, this means that the radii of the layers must also change since the number of HICs remains the same. The new lengths are as follows:
 
 |Stave|Old(mm)|New(mm)|
 |---|---|---|
@@ -34,7 +34,7 @@ After adding more staves, the means that the radii of the layers must also chang
 |C|41.19|57.36|
 |D|53.14|74.01|
 
-This is a 30% increase for each layer. The radii of the system can be changed by changing the number of HICs on each layer.
+This is a 39% increase for each layer. The radii of the system can be changed by changing the number of HICs on each layer.
 
 ### First test
 
