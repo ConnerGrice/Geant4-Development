@@ -52,7 +52,9 @@ G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
 
 		//Add current volume rotation to rotation
 		tempRot = vol->GetObjectRotationValue().getDelta();
-		if (stave >= 2 && stave <= 4)
+
+		//Rotation must negate if the stave is on the left side
+		if (stave >= 2 && stave <= 5)
 			rot -= tempRot;
 		else
 			rot += tempRot;
@@ -62,7 +64,7 @@ G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
 	}
 
 	//Get position of particle as it leaves the pixel
-	G4ThreeVector exact = postPoint->GetPosition();
+	G4ThreeVector exact = prePoint->GetPosition();
 	//Gets the particle ID
 	G4int trackID = aStep->GetTrack()->GetTrackID();
 

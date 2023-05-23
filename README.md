@@ -68,3 +68,27 @@ Finally, as expected, the final efficiency has also reduced. This is because wit
 |Alright|10.57|11.19|
 |Bad|1.37|1.26|
 
+## Error reduced
+
+When calculating the orientation of the pixel that was hit, the angle must be negated if the pixel is on a stave that is past the x = 0 line. The staves are numbered from 0 (right most stave), and counts anti-clockwise, as described in [Week 5-8](./Week5-8.md). Therefore, for the hexagon, this condition would be:
+
+```cpp
+//Rotation must negate if the stave is on the left side
+if (stave >= 2 && stave <= 4)
+	rot -= tempRot;
+else
+	rot += tempRot;
+```
+
+While the octagon adds some extra staves, therefore, the new condition is:
+
+```cpp
+//Rotation must negate if the stave is on the left side
+if (stave >= 2 && stave <= 5)
+	rot -= tempRot;
+else
+	rot += tempRot;
+```
+
+After changing this condition the positional errors returned to as they were before changing the geometry.
+

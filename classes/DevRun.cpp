@@ -160,7 +160,6 @@ void DevRun::recordStaveData(const G4Event* anEvent,
 			p2Pos += position;
 			p2Ext += exact;
 		}
-
 	}
 
 	//Check for invalid events
@@ -203,7 +202,7 @@ void DevRun::recordStaveData(const G4Event* anEvent,
 	manager->AddNtupleRow(tupleID);
 }
 
-void DevRun::recordCalifaData(const G4Event* anEvent,G4int tupleID) {
+void DevRun::recordCalifaData(G4int tupleID) {
 	G4AnalysisManager* manager = G4AnalysisManager::Instance();
 
 	manager->FillNtupleDColumn(tupleID,0,p1Energy);
@@ -222,7 +221,7 @@ void DevRun::recordData(const G4Event* anEvent,
 	recordStaveData(anEvent,bCol,0);
 	recordStaveData(anEvent,cCol,1);
 	recordStaveData(anEvent,dCol,2);
-	recordCalifaData(anEvent,3);
+	recordCalifaData(3);
 }
 
 void DevRun::RecordEvent(const G4Event* anEvent) {

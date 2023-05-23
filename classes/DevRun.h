@@ -82,7 +82,7 @@ private:
 			G4VHitsCollection* collection, G4int tupleID);
 
 	//Record data give by CALIFA
-	void recordCalifaData(const G4Event* anEvent,G4int tupleID);
+	void recordCalifaData(G4int tupleID);
 
 	//Records data for all layers
 	void recordData(const G4Event* anEvent,

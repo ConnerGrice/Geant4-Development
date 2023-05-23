@@ -79,8 +79,8 @@ G4VPhysicalVolume* DevDetectorConstruction::Construct() {
 	G4PVPlacement* pPhysicalWorld = new G4PVPlacement(0,G4ThreeVector(0,0,0),pLogicalWorld,"WorldP",0,false,0,true);
 
 	//Place each layer
-	buildLayer("B",2,true);
-	buildLayer("C",3,false);
+	buildLayer("B",2,false);
+	buildLayer("C",3,true);
 	buildLayer("D",4,false);
 
 	buildSource(true);
