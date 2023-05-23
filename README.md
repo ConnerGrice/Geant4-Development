@@ -92,3 +92,9 @@ else
 
 After changing this condition the positional errors returned to as they were before changing the geometry.
 
+## Q Value calculation
+
+I have now run the Q value script using the data produced by this new system. The plot looks correct (it is similar to the old system)
+
+![q1-oct](Results/QValueMk_Oct.svg)
+

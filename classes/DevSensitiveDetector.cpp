@@ -54,7 +54,7 @@ G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
 		tempRot = vol->GetObjectRotationValue().getDelta();
 
 		//Rotation must negate if the stave is on the left side
-		if (stave >= 2 && stave <= 5)
+		if (stave >= 2 && stave <= 5) //For hexagon: (stave >= 2 && stave <= 5)
 			rot -= tempRot;
 		else
 			rot += tempRot;
