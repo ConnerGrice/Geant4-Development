@@ -55,6 +55,7 @@ void Stave::buildPlate(G4bool coldVis, G4bool fleeceVis) {
 
 void Stave::buildStave(G4bool show) {
 	buildPlate(show,show);
+	//buildPlate(false,false);
 
 	G4double HICWidth = HIC.getWidth();
 	//G4ThreeVector HICPos = G4ThreeVector(-(HICWidth*nHICs/2.0) - HICWidth/2.0,0,HCIZ);

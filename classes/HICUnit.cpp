@@ -183,6 +183,7 @@ void HICUnit::placeLayers() {
 
 	G4Colour glueCol = G4Colour(0.0,0.0,1.0);
 	G4Colour chipsCol = G4Colour(0.0,1.0,0.0);
+	G4Colour passiveCol = G4Colour(0.0,0.5,0.0);
 	G4Colour solderCol = G4Colour(1.0,0.0,1.0);
 	G4Colour conductingCol = G4Colour(0.0,1.0,1.0);
 	G4Colour substrateCol = G4Colour(1.0,0.0,0.0);
@@ -190,7 +191,7 @@ void HICUnit::placeLayers() {
 	std::vector<G4Colour> layerCols {
 		glueCol,
 		chipsCol,
-		chipsCol,
+		passiveCol,
 		glueCol,
 		solderCol,
 		conductingCol,

@@ -82,7 +82,7 @@ private:
 	static constexpr G4double plateThickness = 240*um;
 	static constexpr G4int nSides = 8;
 	static constexpr G4double angle = (2*M_PI)/nSides;
-	static constexpr G4double offsetAngle = M_PI/8;
+	static constexpr G4double offsetAngle = M_PI/8; //M_PI/8, 0;
 };
 
 #endif /* GEANT4_DEVELOPMENT_CLASSES_STAVE_H_ */
