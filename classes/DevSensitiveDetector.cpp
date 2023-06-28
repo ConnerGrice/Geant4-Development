@@ -25,7 +25,6 @@ void DevSensitiveDetector::Initialize(G4HCofThisEvent* hce) {
 G4bool DevSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory*) {
 	//Gets preStep point and Post step point of current step
 	G4StepPoint* prePoint = aStep->GetPreStepPoint();
-	G4StepPoint* postPoint = aStep->GetPostStepPoint();
 
 	//Touchable of current step
 	const G4VTouchable* touchable = prePoint->GetTouchable();

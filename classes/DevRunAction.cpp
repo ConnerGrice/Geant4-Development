@@ -112,10 +112,6 @@ void DevRunAction::printTypeEff(const G4Run* aRun) {
 }
 
 void DevRunAction::EndOfRunAction(const G4Run* aRun) {
-	//Entres data into simple data file for special cases
-	std::ofstream eff;
-	eff.open("../Results/Eff.dat",std::ios_base::app);
-	eff<<PADDING<<" "<<((nGood+nAlright+nBad)/100240.0)<<std::endl;
 
 	//Print efficiency
 	printTypeEff(aRun);
@@ -124,9 +120,13 @@ void DevRunAction::EndOfRunAction(const G4Run* aRun) {
 	manager->Write();
 	manager->CloseFile();
 
-	if (IsMaster())
+	if (IsMaster()) {
 		G4cout<<"RUN MASTER END================================"<<G4endl;
-	else
+		//Entres data into simple data file for special cases
+		std::ofstream eff;
+		eff.open("../Results/Eff.dat",std::ios_base::app);
+		eff<<PADDING<<" "<<((nGood+nAlright+nBad)/100240.0)<<std::endl;
+	} else
 		G4cout<<"RUN LOCAL END ================================"<<G4endl;
 }
 
